@@ -1,5 +1,8 @@
 /* Tokens de docs/brief.md §04 — ne rien ajouter hors de cette liste. */
+/* --text-muted : #604735 plein (pas d'opacité) → 7.6:1 sur --bg, 5.8:1 sur --bg-alt (seuil 4.5:1, brief §07). */
+/* Pas de prefers-color-scheme : le registre sombre est un choix de marque (brief §07). */
 :root {
+  color-scheme: light;
   --bg: #f5f1e8;
   --bg-alt: #ded3c2;
   --text: #29251f;
