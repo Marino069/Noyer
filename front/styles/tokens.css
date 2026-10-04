@@ -1,0 +1,17 @@
+/* Tokens de docs/brief.md §04 — ne rien ajouter hors de cette liste. */
+:root {
+  --bg: #f5f1e8;
+  --bg-alt: #ded3c2;
+  --text: #29251f;
+  --text-muted: #604735;
+  --walnut: #604735;
+  --brass: #b08d57;
+  --espresso: #3a3028;
+  --dark-bg: #29251f;
+  --dark-bg-alt: #3a3028;
+  --dark-text: #f5f1e8;
+  --border: rgba(96, 71, 53, 0.16);
+  --radius: 2px;
+  --serif: "Fraunces", Georgia, serif;
+  --sans: "Hanken Grotesk", -apple-system, sans-serif;
+}
