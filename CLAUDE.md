@@ -1,8 +1,9 @@
 # Noyer
 
 Boutique en ligne de lampes artisanales. Monorepo :
-- front/ : Next.js + TypeScript (géré par Claude)
-- back/ : Django + DRF (géré par Diego, NE JAMAIS MODIFIER)
+- front/ : Next.js + TypeScript (géré par Claude, à créer avec le ticket E0-01)
+- api/ : back Django + DRF (géré par Diego, NE JAMAIS MODIFIER)
+- database/ : scripts SQL d'initialisation MariaDB (NE JAMAIS MODIFIER)
 - docs/ : brief.md (charte), api.md (contrat d'API)
 
 ## Règles
