@@ -15,6 +15,6 @@
   --dark-text: #f5f1e8;
   --border: rgba(96, 71, 53, 0.16);
   --radius: 2px;
-  --serif: "Fraunces", Georgia, serif;
-  --sans: "Hanken Grotesk", -apple-system, sans-serif;
+  --serif: var(--font-fraunces), Georgia, serif;
+  --sans: var(--font-hanken), -apple-system, sans-serif;
 }
