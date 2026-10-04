@@ -1,1 +1,1 @@
-npm --prefix front exec lint-staged
+cd front && npx lint-staged
