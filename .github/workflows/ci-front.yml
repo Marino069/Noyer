@@ -1,0 +1,19 @@
+name: front-ci
+on:
+  pull_request:
+    paths: ["front/**"]
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: front/package-lock.json
+      - run: npm --prefix front ci
+      - run: npm --prefix front run lint
+      - run: npm --prefix front run typecheck
+      - run: npm --prefix front run build
+      - run: npm --prefix front run lhci
