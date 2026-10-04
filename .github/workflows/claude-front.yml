@@ -38,5 +38,5 @@ jobs:
           label_trigger: "claude"
           claude_args: |
             --max-turns 60
-            --allowedTools "Bash(npm:*),Bash(npx:*),Bash(node:*)"
-            --append-system-prompt "Travaille uniquement dans front/ et docs/. Respecte CLAUDE.md. Une issue = une PR avec 'Closes #<numéro>'. Avant de terminer, lint, typecheck et build doivent passer."
+            --allowedTools "Bash(npm:*),Bash(npx:*),Bash(node:*),mcp__github__create_pull_request"
+            --append-system-prompt "Travaille uniquement dans front/ et docs/. Respecte CLAUDE.md. Quand lint, typecheck et build passent, ouvre toi-même la pull request vers master avec l'outil create_pull_request : titre '[<id du ticket>] <titre>', description qui commence par 'Closes #<numéro de l'issue>' puis résume ce qui est fait et ce qui reste. Si une action t'est refusée, explique-le dans la description de la PR."
