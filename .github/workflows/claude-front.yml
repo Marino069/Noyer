@@ -7,10 +7,6 @@ on:
   pull_request_review_comment:
     types: [created]
 
-concurrency:
-  group: claude-front
-  cancel-in-progress: false
-
 jobs:
   claude:
     if: |
