@@ -35,6 +35,17 @@ npm --prefix front run format
 - `styles/` : CSS global et tokens (`tokens.css`, issus de `docs/brief.md`)
 - `content/` : contenus éditoriaux
 
+## Lighthouse CI
+
+Après `npm --prefix front run build` :
+
+```bash
+npm --prefix front run lhci
+```
+
+Seuils bloquants (`lighthouserc.json`) : performance ≥ 90, accessibilité ≥ 95, SEO ≥ 95.
+La CI (lint, typecheck, build, Lighthouse, preview) est décrite dans `docs/ci.md`.
+
 ## Pre-commit
 
 Husky lance lint-staged à chaque commit (ESLint sans warning + Prettier) : un commit qui ne passe pas le lint est bloqué.
