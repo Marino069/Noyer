@@ -1,0 +1,35 @@
+name: Ticket frontend
+description: Nouveau ticket frontend au format du backlog Noyer
+title: "[EX-XX] "
+labels: ["frontend"]
+body:
+  - type: textarea
+    id: contexte
+    attributes:
+      label: Contexte
+      description: Section du brief concernée et pourquoi ce ticket existe.
+    validations:
+      required: true
+  - type: textarea
+    id: afaire
+    attributes:
+      label: À faire
+  - type: textarea
+    id: criteres
+    attributes:
+      label: Critères d'acceptation
+      description: Vérifiables, sous forme de cases à cocher. Penser aux états (chargement, vide, erreur), au clavier et aux 3 breakpoints.
+      value: |
+        - [ ] 
+    validations:
+      required: true
+  - type: textarea
+    id: deps
+    attributes:
+      label: Dépendances
+      placeholder: "- [ ] #12"
+  - type: dropdown
+    id: size
+    attributes:
+      label: Taille
+      options: ["S", "M", "L"]
