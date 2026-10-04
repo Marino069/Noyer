@@ -1,0 +1,34 @@
+import type { Metadata } from "next";
+import { notFound } from "next/navigation";
+import { defaultLocale, hasLocale, locales } from "@/i18n/config";
+import { getDictionary } from "@/i18n/get-dictionary";
+
+type Props = { params: Promise<{ locale: string }> };
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { locale } = await params;
+  if (!hasLocale(locale)) return {};
+
+  return {
+    alternates: {
+      canonical: `/${locale}`,
+      languages: {
+        ...Object.fromEntries(locales.map((l) => [l, `/${l}`])),
+        "x-default": `/${defaultLocale}`,
+      },
+    },
+  };
+}
+
+export default async function HomePage({ params }: Props) {
+  const { locale } = await params;
+  if (!hasLocale(locale)) notFound();
+  const { home } = await getDictionary(locale);
+
+  return (
+    <main>
+      <h1>{home.title}</h1>
+      <p>{home.tagline}</p>
+    </main>
+  );
+}

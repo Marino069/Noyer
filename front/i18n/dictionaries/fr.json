@@ -1,0 +1,16 @@
+{
+  "meta": {
+    "title": "Noyer — Lampes semi-artisanales, Genève",
+    "description": "Lampes semi-artisanales fabriquées à Genève : gammes Classic et Premium."
+  },
+  "home": {
+    "title": "Noyer",
+    "tagline": "Lampes semi-artisanales fabriquées à Genève."
+  },
+  "languageSwitcher": {
+    "label": "Langue",
+    "names": {
+      "fr": "Français"
+    }
+  }
+}
