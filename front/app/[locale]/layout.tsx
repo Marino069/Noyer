@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Fraunces, Hanken_Grotesk } from "next/font/google";
 import { notFound } from "next/navigation";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { MocksProvider } from "@/components/MocksProvider";
 import { hasLocale, locales } from "@/i18n/config";
 import { getDictionary } from "@/i18n/get-dictionary";
 import "@/styles/globals.css";
@@ -57,7 +58,7 @@ export default async function LocaleLayout({
           current={locale}
           dictionary={dictionary.languageSwitcher}
         />
-        {children}
+        <MocksProvider>{children}</MocksProvider>
       </body>
     </html>
   );

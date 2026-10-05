@@ -7,6 +7,11 @@
     "title": "Noyer",
     "tagline": "Lampes semi-artisanales fabriquées à Genève."
   },
+  "error": {
+    "title": "Une erreur est survenue",
+    "message": "Le contenu n'a pas pu être chargé. Vérifiez votre connexion et réessayez.",
+    "retry": "Réessayer"
+  },
   "languageSwitcher": {
     "label": "Langue",
     "names": {

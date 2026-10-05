@@ -21,7 +21,14 @@ const config = [
       ],
     },
   },
-  { ignores: [".next/**", "node_modules/**", "next-env.d.ts"] },
+  {
+    ignores: [
+      ".next/**",
+      "node_modules/**",
+      "next-env.d.ts",
+      "public/mockServiceWorker.js",
+    ],
+  },
 ];
 
 export default config;
