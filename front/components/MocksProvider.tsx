@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { API_MOCKS } from "@/lib/env";
+import { startMocks } from "@/lib/mocks";
 
 // Attend que le service worker MSW soit prêt avant d'afficher l'app, pour que
 // aucune requête partie du navigateur n'échappe aux mocks.
@@ -11,10 +12,7 @@ export function MocksProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (!API_MOCKS) return;
     let cancelled = false;
-    import("@/mocks/browser")
-      .then(({ worker }) => worker.start({ quiet: true }))
-      .catch(() => {})
-      .finally(() => !cancelled && setReady(true));
+    startMocks().then(() => !cancelled && setReady(true));
     return () => {
       cancelled = true;
     };

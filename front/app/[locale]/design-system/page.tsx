@@ -6,6 +6,8 @@ import { NewsletterForm } from "@/components/NewsletterForm";
 import { Section } from "@/components/Section";
 import { hasLocale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/get-dictionary";
+import { localePath } from "@/lib/routes";
+import { CartIndicatorDemo } from "./CartIndicatorDemo";
 import styles from "./page.module.css";
 
 type Props = { params: Promise<{ locale: string }> };
@@ -70,6 +72,17 @@ export default async function DesignSystemPage({ params }: Props) {
       <Section>
         <h2>Logo</h2>
         <Logo href="#" label="Noyer" />
+      </Section>
+
+      <Section>
+        <h2>CartIndicator</h2>
+        <p>
+          Affiché dans le header uniquement si NEXT_PUBLIC_SHOP_ENABLED=true.
+        </p>
+        <CartIndicatorDemo
+          href={localePath(locale, "panier")}
+          labels={dictionary.header.cart}
+        />
       </Section>
 
       <Section tone="dark">
