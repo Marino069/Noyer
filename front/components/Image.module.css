@@ -1,0 +1,8 @@
+/* Placeholder ivoire : le fond de la charte se voit pendant le chargement (pas de flou gris). */
+.image {
+  display: block;
+  width: 100%;
+  height: auto;
+  background-color: var(--bg);
+  border-radius: var(--radius);
+}
