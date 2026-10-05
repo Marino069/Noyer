@@ -26,7 +26,7 @@ export default async function HomePage({ params }: Props) {
   const { home } = await getDictionary(locale);
 
   return (
-    <main>
+    <main id="contenu" tabIndex={-1}>
       <h1>{home.title}</h1>
       <p>{home.tagline}</p>
     </main>
