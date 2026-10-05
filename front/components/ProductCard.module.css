@@ -1,0 +1,126 @@
+/* Mêmes dimensions pour Classic et Premium : seul le registre change (brief §01). */
+.card {
+  --card-bg: var(--bg);
+  --card-fg: var(--text);
+  --card-muted: var(--text-muted);
+  --card-accent: var(--walnut);
+  --card-rule: var(--border);
+
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  background: var(--card-bg);
+  color: var(--card-fg);
+  border: 1px solid var(--card-rule);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+/* Registre sombre : le laiton n'est qu'un filet 1px et le mot « Premium », jamais un aplat. */
+.premium {
+  --card-bg: var(--dark-bg);
+  --card-fg: var(--dark-text);
+  --card-muted: color-mix(in srgb, var(--bg-alt) 80%, transparent);
+  --card-accent: var(--brass);
+  --card-rule: var(--brass);
+}
+
+.media {
+  aspect-ratio: 4 / 3;
+  background: var(--bg-alt);
+}
+
+.premium .media {
+  background: var(--dark-bg-alt);
+}
+
+.image,
+.placeholder {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 1.25rem 1.5rem 1.5rem;
+}
+
+.gamme {
+  margin: 0;
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--card-accent);
+}
+
+.name {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+/* Lien unique : son ::after étend la zone cliquable à toute la carte. */
+.link {
+  color: inherit;
+  text-decoration: none;
+}
+
+.link::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+
+.card:hover .link {
+  text-decoration: underline;
+  text-decoration-color: var(--card-accent);
+  text-underline-offset: 0.25em;
+}
+
+/* Focus visible sur la carte entière (l'outline du lien est remplacé, pas supprimé). */
+.link:focus-visible {
+  outline: none;
+}
+
+.card:has(.link:focus-visible) {
+  outline: 2px solid var(--card-accent);
+  outline-offset: 2px;
+}
+
+.price {
+  margin: 0.5rem 0 0;
+  color: var(--card-muted);
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* Empilées < 600px, 2 colonnes en tablette, côte à côte > 900px (brief §07). */
+.grid {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 600px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 900px) {
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+  }
+}
