@@ -34,6 +34,11 @@
       "label": "Navigation principale",
       "open": "Ouvrir le menu",
       "close": "Fermer le menu"
+    },
+    "cart": {
+      "empty": "Panier, vide",
+      "one": "Panier, {count} article",
+      "other": "Panier, {count} articles"
     }
   },
   "footer": {

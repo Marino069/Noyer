@@ -18,6 +18,18 @@
   padding-inline: 1.5rem;
 }
 
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+@media (min-width: 800px) {
+  .actions {
+    gap: 2rem;
+  }
+}
+
 @media (min-width: 600px) {
   .inner {
     padding-inline: 2rem;
