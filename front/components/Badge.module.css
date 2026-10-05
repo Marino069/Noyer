@@ -1,0 +1,17 @@
+/* Filet 1px, jamais d'aplat (brief §02) ; couleurs héritées du registre du parent. */
+.badge {
+  display: inline-block;
+  padding: 0.125rem 0.5rem;
+  border: 1px solid var(--badge-accent, var(--walnut));
+  border-radius: var(--radius);
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.5;
+  color: var(--badge-fg, var(--text));
+}
+
+.soldOut {
+  --badge-accent: var(--border);
+  color: var(--badge-muted, var(--text-muted));
+  font-weight: 500;
+}

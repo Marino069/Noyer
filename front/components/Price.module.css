@@ -1,0 +1,16 @@
+.price {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+}
+
+.amount {
+  margin: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.vat {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--price-muted, var(--text-muted));
+}

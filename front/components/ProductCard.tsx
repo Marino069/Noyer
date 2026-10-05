@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import type { Locale } from "@/i18n/config";
 import { getProductPath } from "@/i18n/slugs";
+import { formatPrice } from "@/lib/format";
 import type { ProduitResume } from "@/lib/api/types";
 import styles from "./ProductCard.module.css";
 
@@ -10,15 +11,6 @@ type ProductCardProps = {
   locale: Locale;
   className?: string;
 };
-
-/** Montant en centimes → « CHF 1'240.– » (docs/api.md : jamais de décimale flottante). */
-function formatPrice(centimes: number, locale: Locale): string {
-  const francs = new Intl.NumberFormat(`${locale}-CH`, {
-    maximumFractionDigits: 0,
-  }).format(Math.floor(centimes / 100));
-  const reste = centimes % 100;
-  return `CHF ${francs}.${reste === 0 ? "–" : String(reste).padStart(2, "0")}`;
-}
 
 /**
  * Carte produit : même silhouette pour les deux gammes, le Premium passe au registre sombre
