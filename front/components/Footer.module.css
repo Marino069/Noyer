@@ -1,0 +1,53 @@
+.grid {
+  display: grid;
+  gap: 3rem;
+}
+
+.brand {
+  margin: 0 0 1rem;
+  font-family: var(--serif);
+  font-size: 1.75rem;
+  font-weight: 500;
+}
+
+.address {
+  display: grid;
+  margin-block-end: 1rem;
+  font-style: normal;
+  color: var(--text-muted);
+}
+
+.link {
+  color: var(--text);
+  text-decoration: underline;
+  text-decoration-color: var(--brass);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.3em;
+}
+
+.legal {
+  margin-block-start: 3rem;
+  padding-block-start: 1.5rem;
+  border-block-start: 1px solid var(--border);
+}
+
+.legal ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 2rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.legal a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+}
+
+@media (min-width: 900px) {
+  .grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}

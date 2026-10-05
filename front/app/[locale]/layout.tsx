@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Fraunces, Hanken_Grotesk } from "next/font/google";
 import { notFound } from "next/navigation";
+import { Footer } from "@/components/Footer";
+import { Header } from "@/components/Header";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { MocksProvider } from "@/components/MocksProvider";
 import { hasLocale, locales } from "@/i18n/config";
@@ -62,11 +64,17 @@ export default async function LocaleLayout({
         <a href="#contenu" className="skip-link">
           {dictionary.a11y.skipToContent}
         </a>
+        <Header locale={locale} dictionary={dictionary.header} />
         <LanguageSwitcher
           current={locale}
           dictionary={dictionary.languageSwitcher}
         />
         <MocksProvider>{children}</MocksProvider>
+        <Footer
+          locale={locale}
+          dictionary={dictionary.footer}
+          newsletter={dictionary.newsletter}
+        />
       </body>
     </html>
   );

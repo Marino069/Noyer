@@ -22,6 +22,43 @@
     "message": "Le contenu n'a pas pu être chargé. Vérifiez votre connexion et réessayez.",
     "retry": "Réessayer"
   },
+  "header": {
+    "home": "Noyer, retour à l'accueil",
+    "nav": {
+      "classic": "Classic",
+      "premium": "Premium",
+      "atelier": "L'atelier",
+      "contact": "Nous contacter"
+    },
+    "menu": {
+      "label": "Navigation principale",
+      "open": "Ouvrir le menu",
+      "close": "Fermer le menu"
+    }
+  },
+  "footer": {
+    "address": ["Noyer", "Genève, Suisse"],
+    "contact": "Nous écrire",
+    "legal": {
+      "label": "Informations légales",
+      "impressum": "Impressum",
+      "cgv": "CGV",
+      "privacy": "Confidentialité"
+    }
+  },
+  "newsletter": {
+    "title": "Nouvelles de l'atelier",
+    "intro": "Nos nouvelles pièces et les coulisses de la fabrication, quelques fois par an.",
+    "email": "Adresse e-mail",
+    "consent": "J'accepte de recevoir la newsletter de Noyer et que mon adresse e-mail soit utilisée à cette fin. Je peux me désinscrire à tout moment.",
+    "submit": "S'inscrire",
+    "success": "Merci ! Un e-mail de confirmation vient de vous être envoyé.",
+    "errors": {
+      "email": "Saisissez une adresse e-mail valide.",
+      "consent": "Votre consentement est nécessaire pour vous inscrire.",
+      "server": "L'inscription n'a pas pu aboutir. Réessayez dans un instant."
+    }
+  },
   "languageSwitcher": {
     "label": "Langue",
     "names": {

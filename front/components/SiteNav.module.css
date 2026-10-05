@@ -1,0 +1,161 @@
+.toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: transparent;
+  color: var(--text);
+  cursor: pointer;
+}
+
+/* Trois barres dessinées avec currentColor ; la barre du milieu disparaît à l'ouverture. */
+.bars,
+.bars::before,
+.bars::after {
+  display: block;
+  width: 20px;
+  height: 2px;
+  background: currentColor;
+  transition:
+    transform 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.bars {
+  position: relative;
+}
+
+.bars::before,
+.bars::after {
+  content: "";
+  position: absolute;
+  inset-inline-start: 0;
+}
+
+.bars::before {
+  transform: translateY(-6px);
+}
+
+.bars::after {
+  transform: translateY(6px);
+}
+
+.toggle[aria-expanded="true"] .bars {
+  background: transparent;
+}
+
+.toggle[aria-expanded="true"] .bars::before {
+  transform: rotate(45deg);
+}
+
+.toggle[aria-expanded="true"] .bars::after {
+  transform: rotate(-45deg);
+}
+
+/* Mobile : panneau plein écran sous l'en-tête (4rem = hauteur minimale de l'en-tête). */
+.menu {
+  position: fixed;
+  inset: 4rem 0 0;
+  overflow-y: auto;
+  padding: 2rem 1.5rem;
+  background: var(--bg);
+  animation: menu-in 0.2s ease;
+}
+
+.menu[hidden] {
+  display: none;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.link {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--text);
+  font-family: var(--serif);
+  font-size: 1.75rem;
+  text-decoration: none;
+}
+
+.link[aria-current="page"] {
+  text-decoration: underline;
+  text-decoration-color: var(--brass);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.4em;
+}
+
+.cta {
+  margin-block-start: 1rem;
+}
+
+@keyframes menu-in {
+  from {
+    opacity: 0;
+    transform: translateY(-0.5rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .menu {
+    animation: none;
+  }
+
+  .bars,
+  .bars::before,
+  .bars::after {
+    transition: none;
+  }
+}
+
+/* Desktop (≥ 800 px, brief §07) : navigation en ligne, burger masqué. */
+@media (min-width: 800px) {
+  .toggle {
+    display: none;
+  }
+
+  .menu,
+  .menu[hidden] {
+    position: static;
+    display: block;
+    overflow: visible;
+    padding: 0;
+    background: transparent;
+    animation: none;
+  }
+
+  .list {
+    flex-direction: row;
+    align-items: center;
+    gap: 2rem;
+  }
+
+  .link {
+    font-family: var(--sans);
+    font-size: 1rem;
+    font-weight: 500;
+  }
+
+  .link:hover {
+    text-decoration: underline;
+    text-decoration-color: var(--brass);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.4em;
+  }
+
+  .cta {
+    margin-block-start: 0;
+  }
+}
