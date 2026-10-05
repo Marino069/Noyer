@@ -29,8 +29,9 @@
     color 0.15s ease;
 }
 
-/* Registre sombre (brief §02) */
-.dark {
+/* Registre sombre (brief §02) : via tone="dark" ou automatiquement dans <Section tone="dark"> */
+.dark,
+:global([data-tone="dark"]) .button {
   --btn-bg: var(--brass);
   --btn-fg: var(--dark-bg);
   --btn-hover-bg: var(--bg-alt);
@@ -51,7 +52,9 @@
 }
 
 .secondary.dark,
-.secondary.dark:hover {
+.secondary.dark:hover,
+:global([data-tone="dark"]) .secondary,
+:global([data-tone="dark"]) .secondary:hover {
   color: var(--dark-text);
 }
 

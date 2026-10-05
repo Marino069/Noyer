@@ -1,0 +1,56 @@
+/* Bascule le registre de couleurs (brief §02) pour tous les enfants via les tokens. */
+.section {
+  background: var(--bg);
+  color: var(--text);
+  padding-block: 4rem;
+}
+
+/* Les tokens surchargés ici sont lus par les enfants (texte, boutons, filets). */
+.inner {
+  box-sizing: border-box;
+  max-width: 72rem;
+  margin-inline: auto;
+  padding-inline: 1.5rem;
+}
+
+.alt {
+  background: var(--bg-alt);
+}
+
+.alt .inner {
+  --bg: var(--bg-alt);
+}
+
+.dark {
+  background: var(--dark-bg);
+  --text: var(--dark-text);
+  /* Texte secondaire 80 %, bordures laiton 20 % (brief §02, registre sombre). */
+  --text-muted: color-mix(in srgb, var(--bg-alt) 80%, transparent);
+  --border: color-mix(in srgb, var(--brass) 20%, transparent);
+}
+
+.dark .inner {
+  --bg: var(--dark-bg);
+  --bg-alt: var(--dark-bg-alt);
+}
+
+/* Tablette puis desktop (brief §07 : 600 / 900 px) */
+@media (min-width: 600px) {
+  .section {
+    padding-block: 5rem;
+  }
+
+  .inner {
+    padding-inline: 2rem;
+  }
+}
+
+@media (min-width: 900px) {
+  .section {
+    padding-block: 7rem;
+  }
+
+  .inner {
+    padding-inline: 3rem;
+  }
+}
