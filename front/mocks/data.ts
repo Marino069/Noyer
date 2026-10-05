@@ -1,4 +1,5 @@
 import type {
+  HeroAccueil,
   Image,
   Modele,
   ProduitDetail,
@@ -14,6 +15,16 @@ const image = (alt: string): Image => ({
     url: `/mocks/lampe-${largeur}.webp`,
   })),
 });
+
+export const heroAccueil: HeroAccueil = {
+  titre: "Une lumière qui prend son temps",
+  mot_italique: "prend son temps",
+  sous_titre:
+    "Lampes semi-artisanales en noyer et laiton, assemblées à Genève. Deux gammes, mêmes formes, matières différentes.",
+  cta_libelle: "Découvrir les lampes",
+  cta_chemin: "/produits/classic",
+  image: image("Lampe en noyer posée sur une table, dans la lumière du matin"),
+};
 
 export const produits: ProduitResume[] = [
   {

@@ -17,6 +17,15 @@ export type ProduitResume = {
   image_principale: Image | null;
 };
 
+export type HeroAccueil = {
+  titre: string;
+  mot_italique: string | null; // fragment de `titre` à mettre en italique
+  sous_titre: string;
+  cta_libelle: string;
+  cta_chemin: string; // chemin public sans préfixe de langue ("/produits/classic")
+  image: Image | null;
+};
+
 export type Page<T> = {
   count: number;
   next: string | null;

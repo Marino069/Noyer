@@ -1,0 +1,64 @@
+.hero {
+  padding-block: 2.5rem;
+}
+
+.layout {
+  display: grid;
+  gap: 2rem;
+  align-items: center;
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.5rem;
+}
+
+.title {
+  margin: 0;
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: clamp(2.25rem, 6vw, 3.75rem);
+  line-height: 1.1;
+  text-wrap: balance;
+}
+
+/* Italique ponctuel autorisé par le brief §03 (Fraunces 400-500). */
+.title em {
+  font-style: italic;
+  font-weight: 400;
+}
+
+.subtitle {
+  margin: 0;
+  max-width: 34rem; /* lignes < 80 caractères */
+  font-size: 1.0625rem;
+  color: var(--text-muted);
+}
+
+/* Ratio réservé : pas de décalage de mise en page pendant le chargement. */
+.media {
+  aspect-ratio: 4 / 3;
+  background: var(--bg-alt);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+@media (min-width: 900px) {
+  .hero {
+    padding-block: 5rem;
+  }
+
+  .layout {
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+  }
+}
