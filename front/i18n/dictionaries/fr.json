@@ -10,6 +10,13 @@
   "a11y": {
     "skipToContent": "Aller au contenu"
   },
+  "price": {
+    "vatIncluded": "TVA incluse ({rate})"
+  },
+  "badge": {
+    "piece": "Pièce n° {numero} / {total}",
+    "soldOut": "Épuisé"
+  },
   "error": {
     "title": "Une erreur est survenue",
     "message": "Le contenu n'a pas pu être chargé. Vérifiez votre connexion et réessayez.",
