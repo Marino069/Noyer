@@ -59,6 +59,9 @@ export default async function LocaleLayout({
       className={`${fraunces.variable} ${hankenGrotesk.variable}`}
     >
       <body>
+        <a href="#contenu" className="skip-link">
+          {dictionary.a11y.skipToContent}
+        </a>
         <LanguageSwitcher
           current={locale}
           dictionary={dictionary.languageSwitcher}
