@@ -1,0 +1,20 @@
+.grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.heading {
+  max-width: 72rem;
+  margin-inline: auto;
+  padding: 4rem 1.5rem 0;
+}
+
+.muted {
+  color: var(--text-muted);
+}
