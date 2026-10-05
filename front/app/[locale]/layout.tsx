@@ -5,6 +5,7 @@ import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { MocksProvider } from "@/components/MocksProvider";
 import { hasLocale, locales } from "@/i18n/config";
 import { getDictionary } from "@/i18n/get-dictionary";
+import { SITE_URL } from "@/lib/env";
 import "@/styles/globals.css";
 
 const fraunces = Fraunces({
@@ -34,7 +35,11 @@ export async function generateMetadata({
   const { locale } = await params;
   if (!hasLocale(locale)) return {};
   const { meta } = await getDictionary(locale);
-  return { title: meta.title, description: meta.description };
+  return {
+    metadataBase: new URL(SITE_URL),
+    title: meta.title,
+    description: meta.description,
+  };
 }
 
 export default async function LocaleLayout({
