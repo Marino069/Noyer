@@ -12,3 +12,6 @@ Boutique en ligne de lampes artisanales. Monorepo :
   npm --prefix front run lint / typecheck / build
 - Ne jamais ajouter de couleur, de police ou de rayon hors des tokens de docs/brief.md.
 - Tant que le back n'est pas prêt, utiliser les mocks MSW conformes à docs/api.md.
+
+## Décisions prises
+- Vente en ligne directe : oui (panier, commande, paiement TWINT/carte/virement).
