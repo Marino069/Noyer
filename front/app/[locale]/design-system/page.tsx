@@ -1,8 +1,11 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Button } from "@/components/Button";
+import { Logo } from "@/components/Logo";
+import { NewsletterForm } from "@/components/NewsletterForm";
 import { Section } from "@/components/Section";
 import { hasLocale } from "@/i18n/config";
+import { getDictionary } from "@/i18n/get-dictionary";
 import styles from "./page.module.css";
 
 type Props = { params: Promise<{ locale: string }> };
@@ -41,6 +44,7 @@ export default async function DesignSystemPage({ params }: Props) {
   if (process.env.NODE_ENV === "production") notFound();
   const { locale } = await params;
   if (!hasLocale(locale)) notFound();
+  const dictionary = await getDictionary(locale);
 
   return (
     <main>
@@ -61,6 +65,17 @@ export default async function DesignSystemPage({ params }: Props) {
         <h2>Button dans une section sombre</h2>
         <p>Le bouton prend automatiquement le registre sombre.</p>
         <ButtonVariants tone="light" />
+      </Section>
+
+      <Section>
+        <h2>Logo</h2>
+        <Logo href="#" label="Noyer" />
+      </Section>
+
+      <Section tone="dark">
+        <h2>NewsletterForm</h2>
+        <p>Tous les états (erreurs, chargement, succès) via la soumission.</p>
+        <NewsletterForm dictionary={dictionary.newsletter} />
       </Section>
 
       <h2 className={styles.heading}>Section</h2>
