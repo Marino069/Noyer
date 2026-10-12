@@ -5,7 +5,10 @@
   },
   "home": {
     "title": "Noyer",
-    "tagline": "Lampes semi-artisanales fabriquées à Genève."
+    "tagline": "Lampes semi-artisanales fabriquées à Genève.",
+    "hero": {
+      "cta": "Découvrir les lampes"
+    }
   },
   "a11y": {
     "skipToContent": "Aller au contenu"

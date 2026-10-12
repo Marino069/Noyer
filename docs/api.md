@@ -106,6 +106,26 @@ Premium :
 }
 ```
 
+## Contenu éditable
+
+### `GET /contenu/accueil/hero/`
+
+Hero de la homepage, modifiable depuis le back-office (source du CMS : point ouvert n° 3).
+
+```json
+{
+  "titre": "Une lumière qui prend son temps",
+  "mot_italique": "prend son temps",
+  "sous_titre": "Lampes semi-artisanales en noyer et laiton, assemblées à Genève.",
+  "cta_libelle": "Découvrir les lampes",
+  "cta_chemin": "/produits/classic",
+  "image": { /* Image, ou null */ }
+}
+```
+
+`mot_italique` est un fragment de `titre` (ou `null`) mis en italique ; `cta_chemin` est un chemin
+public sans préfixe de langue. L'image doit être en contexte, jamais sur fond blanc (brief §06).
+
 ## Panier
 
 ### `GET /panier/`

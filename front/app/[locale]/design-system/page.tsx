@@ -1,12 +1,14 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Button } from "@/components/Button";
+import { Hero } from "@/components/Hero";
 import { Logo } from "@/components/Logo";
 import { NewsletterForm } from "@/components/NewsletterForm";
 import { Section } from "@/components/Section";
 import { hasLocale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/get-dictionary";
 import { localePath } from "@/lib/routes";
+import { heroAccueil } from "@/mocks/data";
 import { CartIndicatorDemo } from "./CartIndicatorDemo";
 import styles from "./page.module.css";
 
@@ -68,6 +70,22 @@ export default async function DesignSystemPage({ params }: Props) {
         <p>Le bouton prend automatiquement le registre sombre.</p>
         <ButtonVariants tone="light" />
       </Section>
+
+      <h2 className={styles.heading}>Hero</h2>
+      <Hero
+        contenu={{ ...heroAccueil, mot_italique: "prend son temps" }}
+        ctaHref="#"
+      />
+      <Hero
+        contenu={{
+          titre: dictionary.home.title,
+          mot_italique: null,
+          sous_titre: dictionary.home.tagline,
+          cta_libelle: dictionary.home.hero.cta,
+          image: null,
+        }}
+        ctaHref="#"
+      />
 
       <Section>
         <h2>Logo</h2>

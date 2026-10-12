@@ -6,6 +6,7 @@ import type {
   ContactMessage,
   Disponibilite,
   Gamme,
+  HeroAccueil,
   Modele,
   Page,
   Paiement,
@@ -62,5 +63,7 @@ export const api = {
     request<null>("/contact/", { method: "POST", body }),
   newsletter: (body: { email: string; consentement: boolean }) =>
     request<null>("/newsletter/", { method: "POST", body }),
+  heroAccueil: (opts?: Signal) =>
+    request<HeroAccueil>("/contenu/accueil/hero/", opts),
   health: (opts?: Signal) => request<{ statut: string }>("/health/", opts),
 };
