@@ -24,8 +24,23 @@ npm --prefix front run dev        # http://localhost:3000
 npm --prefix front run lint
 npm --prefix front run typecheck
 npm --prefix front run build
+npm --prefix front run test
 npm --prefix front run format
 ```
+
+## Tests
+
+Tests unitaires avec Vitest, Testing Library et jsdom (aucun navigateur requis).
+
+```bash
+npm --prefix front run test
+```
+
+La commande lance les tests une seule fois (pas de mode surveillance) et retourne un code de sortie non nul si un test échoue.
+
+- Placer chaque test à côté du fichier testé, nommé `<Fichier>.test.tsx` (ou `.test.ts`), p. ex. `components/Button.test.tsx`.
+- Configuration : `vitest.config.mts` ; `vitest.setup.ts` charge les matchers `jest-dom` et nettoie le DOM entre les tests.
+- L'alias `@/` fonctionne comme dans l'application.
 
 ## Arborescence
 
