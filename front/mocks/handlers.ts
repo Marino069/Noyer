@@ -1,7 +1,13 @@
 import { http, HttpResponse } from "msw";
 import { API_URL } from "@/lib/env";
 import type { CommandeCreation, Disponibilite, Panier } from "@/lib/api/types";
-import { detailDe, heroAccueil, modeleComplet, produits } from "./data";
+import {
+  detailDe,
+  heroAccueil,
+  matiereAccueil,
+  modeleComplet,
+  produits,
+} from "./data";
 
 const base = API_URL.replace(/\/$/, "");
 const url = (path: string) => `${base}${path}`;
@@ -47,6 +53,10 @@ export const handlers = [
   http.get(url("/health/"), () => HttpResponse.json({ statut: "ok" })),
 
   http.get(url("/contenu/accueil/hero/"), () => HttpResponse.json(heroAccueil)),
+
+  http.get(url("/contenu/accueil/matiere/"), () =>
+    HttpResponse.json(matiereAccueil),
+  ),
 
   http.get(url("/produits/"), ({ request }) => {
     const params = new URL(request.url).searchParams;

@@ -126,6 +126,22 @@ Hero de la homepage, modifiable depuis le back-office (source du CMS : point ouv
 `mot_italique` est un fragment de `titre` (ou `null`) mis en italique ; `cta_chemin` est un chemin
 public sans préfixe de langue. L'image doit être en contexte, jamais sur fond blanc (brief §06).
 
+### `GET /contenu/accueil/matiere/`
+
+Les 4 gros plans « La matière » de la homepage (brief §05.3), modifiables depuis le back-office.
+
+```json
+{
+  "titre": "La matière",
+  "gros_plans": [
+    { "legende": "Noyer", "image": { /* Image */ } }
+  ]
+}
+```
+
+`gros_plans` contient 4 éléments, triés par ordre. L'`alt` de chaque image décrit la matière
+(« Grain de noyer huilé, gros plan »).
+
 ## Panier
 
 ### `GET /panier/`

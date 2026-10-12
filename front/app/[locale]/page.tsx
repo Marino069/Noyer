@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Hero } from "@/components/Hero";
+import { Matiere } from "@/components/Matiere";
 import { defaultLocale, hasLocale, locales } from "@/i18n/config";
 import { getDictionary } from "@/i18n/get-dictionary";
 import { api } from "@/lib/api";
@@ -40,6 +41,8 @@ export default async function HomePage({ params }: Props) {
         image: null,
       };
 
+  const matiere = await api.matiereAccueil();
+
   return (
     <main id="contenu" tabIndex={-1}>
       <Hero
@@ -48,6 +51,9 @@ export default async function HomePage({ params }: Props) {
           contenu.cta_chemin.startsWith("/") ? contenu.cta_chemin : ""
         }`}
       />
+      {matiere.ok && matiere.data.gros_plans.length > 0 ? (
+        <Matiere contenu={matiere.data} />
+      ) : null}
     </main>
   );
 }

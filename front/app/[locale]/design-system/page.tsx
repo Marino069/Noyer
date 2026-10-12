@@ -3,12 +3,13 @@ import { notFound } from "next/navigation";
 import { Button } from "@/components/Button";
 import { Hero } from "@/components/Hero";
 import { Logo } from "@/components/Logo";
+import { Matiere } from "@/components/Matiere";
 import { NewsletterForm } from "@/components/NewsletterForm";
 import { Section } from "@/components/Section";
 import { hasLocale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/get-dictionary";
 import { localePath } from "@/lib/routes";
-import { heroAccueil } from "@/mocks/data";
+import { heroAccueil, matiereAccueil } from "@/mocks/data";
 import { CartIndicatorDemo } from "./CartIndicatorDemo";
 import styles from "./page.module.css";
 
@@ -86,6 +87,9 @@ export default async function DesignSystemPage({ params }: Props) {
         }}
         ctaHref="#"
       />
+
+      <h2 className={styles.heading}>Matière</h2>
+      <Matiere contenu={matiereAccueil} />
 
       <Section>
         <h2>Logo</h2>
