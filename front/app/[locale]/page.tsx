@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { DeuxGammes } from "@/components/DeuxGammes";
 import { Hero } from "@/components/Hero";
 import { Matiere } from "@/components/Matiere";
 import { defaultLocale, hasLocale, locales } from "@/i18n/config";
@@ -42,6 +43,16 @@ export default async function HomePage({ params }: Props) {
       };
 
   const matiere = await api.matiereAccueil();
+  const produits = await api.produits({ mis_en_avant: true });
+  const classic = produits.ok
+    ? produits.data.results.find((p) => p.gamme === "Classic")
+    : undefined;
+  const premium =
+    classic && produits.ok
+      ? produits.data.results.find(
+          (p) => p.gamme === "Premium" && p.modele === classic.modele,
+        )
+      : undefined;
 
   return (
     <main id="contenu" tabIndex={-1}>
@@ -53,6 +64,15 @@ export default async function HomePage({ params }: Props) {
       />
       {matiere.ok && matiere.data.gros_plans.length > 0 ? (
         <Matiere contenu={matiere.data} />
+      ) : null}
+      {classic && premium ? (
+        <DeuxGammes
+          classic={classic}
+          premium={premium}
+          locale={locale}
+          title={home.gammes.title}
+          intro={home.gammes.intro}
+        />
       ) : null}
     </main>
   );

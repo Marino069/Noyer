@@ -8,6 +8,10 @@
     "tagline": "Lampes semi-artisanales fabriquées à Genève.",
     "hero": {
       "cta": "Découvrir les lampes"
+    },
+    "gammes": {
+      "title": "Deux gammes, une même forme",
+      "intro": "Mêmes formes, matières différentes : le Premium reprend la silhouette du Classic, en matières et finitions supérieures."
     }
   },
   "a11y": {
