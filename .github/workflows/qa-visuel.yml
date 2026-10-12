@@ -1,0 +1,64 @@
+name: QA visuel
+on:
+  pull_request:
+    paths: ["front/**"]
+
+jobs:
+  qa:
+    if: github.actor != 'dependabot[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+      pull-requests: write
+      id-token: write
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+      - name: Installer le front
+        run: npm --prefix front ci
+      - name: Démarrer le front avec les mocks
+        run: |
+          NEXT_PUBLIC_API_MOCKS=true npm --prefix front run dev > /tmp/front.log 2>&1 &
+          npx -y wait-on http://localhost:3000/fr --timeout 180000
+      - name: Captures d'écran (ordinateur et mobile)
+        working-directory: .github/qa
+        run: |
+          npm init -y > /dev/null
+          npm install playwright@1 > /dev/null
+          npx playwright install --with-deps chromium
+          node captures.mjs
+      - name: Joindre les captures à la PR
+        uses: actions/upload-artifact@v4
+        with:
+          name: captures-pr-${{ github.event.pull_request.number }}
+          path: .github/qa/captures/
+      - name: Revue visuelle par Claude
+        uses: anthropics/claude-code-action@v1
+        env:
+          GH_TOKEN: ${{ github.token }}
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          allowed_bots: "claude,claude[bot],github-actions,github-actions[bot]"
+          prompt: |
+            Tu es l'agent QA visuel du projet Noyer (boutique de lampes artisanales).
+            Les captures d'écran de la PR #${{ github.event.pull_request.number }} sont dans .github/qa/captures/
+            (une version "desktop" à 1280 px et une version "mobile" à 390 px par page).
+
+            1. Lis docs/brief.md, sections 02 à 07.
+            2. Ouvre chaque capture avec l'outil Read et vérifie :
+               - palette et typographies du brief (fond ivoire, Fraunces pour les titres, Hanken Grotesk pour le texte) ;
+               - laiton (#B08D57) uniquement en accent, jamais en aplat de fond ;
+               - textes lisibles, rien de tronqué ni de superposé ;
+               - mobile : éléments empilés, aucun débordement horizontal, menu burger présent ;
+               - aucune page d'erreur ou page vide.
+            3. Écris ton rapport dans /tmp/qa.md puis publie-le avec
+               `gh pr comment ${{ github.event.pull_request.number }} --body-file /tmp/qa.md`.
+               Format : un tableau (page, ordinateur, mobile : OK ou À corriger), puis la liste des problèmes
+               concrets avec la capture concernée. Si tout est conforme, une seule ligne suffit.
+            N'invente rien : ne signale que ce que tu vois réellement sur les captures.
+          claude_args: |
+            --max-turns 30
+            --allowedTools "Read,Write,Glob,Bash(gh pr comment:*)"

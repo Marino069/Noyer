@@ -1,0 +1,47 @@
+name: Gardien du contrat d'API
+on:
+  pull_request:
+    paths:
+      - "docs/api.md"
+      - "front/lib/api/**"
+      - "front/mocks/**"
+      - "api/**"
+
+jobs:
+  contrat:
+    if: github.actor != 'dependabot[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+      pull-requests: write
+      id-token: write
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: anthropics/claude-code-action@v1
+        env:
+          GH_TOKEN: ${{ github.token }}
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          allowed_bots: "claude,claude[bot],github-actions,github-actions[bot]"
+          prompt: |
+            Tu es le gardien du contrat d'API du projet Noyer. docs/api.md est la référence.
+
+            1. Regarde les changements de la PR avec `gh pr diff ${{ github.event.pull_request.number }}`.
+            2. Vérifie que ces quatre éléments disent la même chose :
+               - docs/api.md ;
+               - les types et le client du front (front/lib/api) ;
+               - les mocks MSW (front/mocks) ;
+               - le back Django s'il existe (api/ : urls, serializers, vues).
+            3. Signale toute divergence : route, champ, type, code d'erreur, format (montants en centimes entiers,
+               dates ISO 8601, format d'erreur {"erreur": {"code", "message"}}), et toute modification du contrat
+               qui n'est pas répercutée de l'autre côté (par exemple une nouvelle route ajoutée au contrat
+               mais pas encore au back : rappelle-la comme travail à faire).
+            4. Écris ton rapport dans /tmp/contrat.md puis publie-le avec
+               `gh pr comment ${{ github.event.pull_request.number }} --body-file /tmp/contrat.md`.
+               Si tout est cohérent, une seule ligne suffit.
+          claude_args: |
+            --max-turns 30
+            --allowedTools "Read,Write,Glob,Grep,Bash(gh pr diff:*),Bash(gh pr comment:*)"

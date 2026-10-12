@@ -1,0 +1,63 @@
+name: Agent testeur
+on:
+  pull_request:
+    types: [closed]
+    branches: [master]
+
+jobs:
+  tests:
+    if: >
+      github.event.pull_request.merged == true &&
+      !startsWith(github.event.pull_request.head.ref, 'tests/') &&
+      github.event.pull_request.user.login != 'dependabot[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
+      id-token: write
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: master
+          fetch-depth: 0
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          allowed_bots: "claude,claude[bot],github-actions,github-actions[bot]"
+          prompt: |
+            Tu es l'agent testeur indépendant du projet Noyer. La PR #${{ github.event.pull_request.number }}
+            vient d'être fusionnée dans master. Tu n'as pas écrit ce code : ton rôle est de vérifier qu'il respecte
+            ce que les tickets demandaient.
+
+            1. Trouve les issues fermées par cette PR :
+               `gh pr view ${{ github.event.pull_request.number }} --json closingIssuesReferences,body`.
+               Si aucune issue n'est liée, arrête-toi sans rien faire.
+            2. Lis les critères d'acceptation de chaque issue avec `gh issue view <numéro>`.
+               Tes tests vérifient ces critères. Ne te contente pas de reproduire le comportement du code existant.
+            3. Front (label frontend) : tests Vitest + Testing Library dans front/.
+               Back (label backend) : tests pytest dans api/.
+               Si l'outillage n'est pas encore installé (pas de script "test" dans front/package.json,
+               ou pas de pytest configuré dans api/), n'installe rien : commente sur la PR
+               #${{ github.event.pull_request.number }} que les tests attendront E0-07 (front) ou B0-05 (back),
+               puis arrête-toi.
+            4. Ne modifie jamais le code de production : uniquement des fichiers de test et des données de test.
+            5. Lance les tests. Si un test échoue parce que le code ne respecte pas un critère :
+               - crée une issue avec `gh issue create` : titre "[Bug] <id du ticket> : <critère non respecté>",
+                 labels frontend ou backend, et prio:P1 ;
+               - garde le test mais marque-le comme échec attendu (`it.fails` avec Vitest,
+                 `@pytest.mark.xfail(strict=True, reason="#<numéro de l'issue bug>")` avec pytest),
+                 pour que la suite de tests reste verte.
+            6. Crée la branche tests/<id du ticket>, commite, pousse, puis ouvre une PR vers master avec
+               `gh pr create` : titre "Tests : [<id>] <titre du ticket>", description qui liste les critères
+               couverts, les bugs ouverts et les critères impossibles à tester automatiquement.
+          claude_args: |
+            --max-turns 80
+            --allowedTools "Read,Write,Edit,Glob,Grep,Bash(gh pr view:*),Bash(gh pr comment:*),Bash(gh pr create:*),Bash(gh issue view:*),Bash(gh issue create:*),Bash(git:*),Bash(npm:*),Bash(npx:*),Bash(pip:*),Bash(python:*),Bash(python3:*),Bash(pytest:*)"

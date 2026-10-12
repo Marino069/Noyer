@@ -1,0 +1,4 @@
+# Pages capturées par l'agent QA visuel, une par ligne.
+# Ajoute ici chaque nouvelle page du site.
+/fr
+/fr/design-system

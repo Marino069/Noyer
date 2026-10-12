@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         with:
           node-version: 22
           cache: npm
@@ -15,5 +15,6 @@ jobs:
       - run: npm --prefix front ci
       - run: npm --prefix front run lint
       - run: npm --prefix front run typecheck
+      - run: npm --prefix front run test --if-present
       - run: npm --prefix front run build
       - run: npm --prefix front run lhci

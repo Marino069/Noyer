@@ -1,0 +1,56 @@
+name: Revue de sécurité
+on:
+  pull_request:
+    paths:
+      - "api/**"
+      - "front/lib/**"
+      - "front/proxy.ts"
+      - "front/next.config.ts"
+      - "front/app/**/panier/**"
+      - "front/app/**/commande/**"
+      - "front/app/**/paiement/**"
+      - ".github/workflows/**"
+
+jobs:
+  securite:
+    if: github.actor != 'dependabot[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+      pull-requests: write
+      id-token: write
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: anthropics/claude-code-action@v1
+        env:
+          GH_TOKEN: ${{ github.token }}
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          allowed_bots: "claude,claude[bot],github-actions,github-actions[bot]"
+          prompt: |
+            Tu es l'agent de revue de sécurité du projet Noyer, une boutique en ligne suisse
+            (Django + DRF, Next.js, paiement Stripe avec TWINT et carte, données clients soumises à la nLPD).
+
+            1. Lis les changements avec `gh pr diff ${{ github.event.pull_request.number }}`, et ouvre les fichiers
+               concernés pour comprendre le contexte.
+            2. Cherche en priorité :
+               - injections (SQL, commandes), XSS, redirections ouvertes ;
+               - secrets ou mots de passe écrits en dur ;
+               - montants ou prix acceptés depuis le client au lieu d'être recalculés par le back ;
+               - webhooks Stripe sans vérification de signature ou sans protection contre les doublons ;
+               - vente possible d'une même pièce numérotée deux fois (transactions, verrous) ;
+               - données personnelles exposées, journalisées ou conservées sans nécessité (nLPD) ;
+               - administration ou routes sensibles accessibles sans authentification, CORS trop large ;
+               - workflows GitHub avec des permissions trop larges ou qui exécutent du contenu non fiable.
+            3. Ne signale que les problèmes réels et probables, avec : gravité (critique, élevée, moyenne),
+               fichier et ligne, scénario d'attaque en une phrase, correction proposée.
+               Pas de conseils génériques.
+            4. Écris ton rapport dans /tmp/securite.md puis publie-le avec
+               `gh pr comment ${{ github.event.pull_request.number }} --body-file /tmp/securite.md`.
+               Si tu ne trouves rien, une seule ligne suffit.
+          claude_args: |
+            --max-turns 40
+            --allowedTools "Read,Write,Glob,Grep,Bash(gh pr diff:*),Bash(gh pr comment:*)"
