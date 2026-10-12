@@ -26,6 +26,11 @@ export type HeroAccueil = {
   image: Image | null;
 };
 
+export type MatiereAccueil = {
+  titre: string;
+  gros_plans: { legende: string; image: Image }[];
+};
+
 export type Page<T> = {
   count: number;
   next: string | null;

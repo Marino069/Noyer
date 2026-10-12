@@ -1,6 +1,7 @@
 import type {
   HeroAccueil,
   Image,
+  MatiereAccueil,
   Modele,
   ProduitDetail,
   ProduitResume,
@@ -24,6 +25,25 @@ export const heroAccueil: HeroAccueil = {
   cta_libelle: "Découvrir les lampes",
   cta_chemin: "/produits/classic",
   image: image("Lampe en noyer posée sur une table, dans la lumière du matin"),
+};
+
+export const matiereAccueil: MatiereAccueil = {
+  titre: "La matière",
+  gros_plans: [
+    { legende: "Noyer", image: image("Grain de noyer huilé, gros plan") },
+    {
+      legende: "Laiton",
+      image: image("Laiton brossé, reflet doux, gros plan"),
+    },
+    {
+      legende: "Assemblage",
+      image: image("Assemblage noyer et laiton, gros plan"),
+    },
+    {
+      legende: "Finition",
+      image: image("Surface de noyer huilée à la main, gros plan"),
+    },
+  ],
 };
 
 export const produits: ProduitResume[] = [
