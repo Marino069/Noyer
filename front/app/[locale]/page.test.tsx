@@ -4,7 +4,13 @@ import { heroAccueil } from "@/mocks/data";
 import frDict from "@/i18n/dictionaries/fr.json";
 
 const heroAccueilMock = vi.hoisted(() => vi.fn());
-vi.mock("@/lib/api", () => ({ api: { heroAccueil: heroAccueilMock } }));
+vi.mock("@/lib/api", () => ({
+  api: {
+    heroAccueil: heroAccueilMock,
+    matiereAccueil: vi.fn().mockResolvedValue({ ok: false }),
+    produits: vi.fn().mockResolvedValue({ ok: false }),
+  },
+}));
 vi.mock("react-dom", async (importOriginal) => ({
   ...(await importOriginal<typeof import("react-dom")>()),
   preload: vi.fn(),
