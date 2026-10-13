@@ -4,7 +4,15 @@ import { heroAccueil } from "@/mocks/data";
 import frDict from "@/i18n/dictionaries/fr.json";
 
 const heroAccueilMock = vi.hoisted(() => vi.fn());
-vi.mock("@/lib/api", () => ({ api: { heroAccueil: heroAccueilMock } }));
+const matiereAccueilMock = vi.hoisted(() => vi.fn());
+const produitsMock = vi.hoisted(() => vi.fn());
+vi.mock("@/lib/api", () => ({
+  api: {
+    heroAccueil: heroAccueilMock,
+    matiereAccueil: matiereAccueilMock,
+    produits: produitsMock,
+  },
+}));
 vi.mock("react-dom", async (importOriginal) => ({
   ...(await importOriginal<typeof import("react-dom")>()),
   preload: vi.fn(),
@@ -16,7 +24,11 @@ async function renderHome() {
   render(await HomePage({ params: Promise.resolve({ locale: "fr" }) }));
 }
 
-beforeEach(() => heroAccueilMock.mockReset());
+beforeEach(() => {
+  heroAccueilMock.mockReset();
+  matiereAccueilMock.mockReset().mockResolvedValue({ ok: false });
+  produitsMock.mockReset().mockResolvedValue({ ok: false });
+});
 
 describe("[E3-01] Homepage : contenu éditable via l'API", () => {
   it("affiche le contenu (texte, image, CTA) fourni par l'API", async () => {
