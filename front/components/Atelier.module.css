@@ -1,0 +1,41 @@
+.content {
+  max-width: 40rem;
+}
+
+/* Filet laiton 1px : accent, jamais un aplat (brief §02). */
+.rule {
+  display: block;
+  width: 3rem;
+  height: 1px;
+  margin-bottom: 1.5rem;
+  background: var(--brass);
+}
+
+.title {
+  margin: 0 0 1.5rem;
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  line-height: 1.15;
+}
+
+.text {
+  margin: 0 0 1.25rem;
+  color: var(--text-muted);
+}
+
+.link {
+  display: inline-block;
+  margin-top: 0.75rem;
+  color: var(--text);
+  font-weight: 500;
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.3em;
+}
+
+.link:hover,
+.link:focus-visible {
+  text-decoration-color: var(--brass);
+}

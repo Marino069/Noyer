@@ -9,6 +9,14 @@
     "hero": {
       "cta": "Découvrir les lampes"
     },
+    "atelier": {
+      "title": "L'atelier",
+      "paragraphs": [
+        "Chaque lampe est assemblée à la main à Genève : le bois est taillé, poncé et huilé, le laiton ajusté pièce après pièce.",
+        "Des gestes simples, des outils qui durent, et le temps nécessaire pour que la matière trouve sa forme."
+      ],
+      "link": "Découvrir l'atelier"
+    },
     "gammes": {
       "title": "Deux gammes, une même forme",
       "intro": "Mêmes formes, matières différentes : le Premium reprend la silhouette du Classic, en matières et finitions supérieures."

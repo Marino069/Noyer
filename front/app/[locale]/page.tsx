@@ -1,11 +1,13 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { Atelier } from "@/components/Atelier";
 import { DeuxGammes } from "@/components/DeuxGammes";
 import { Hero } from "@/components/Hero";
 import { Matiere } from "@/components/Matiere";
 import { defaultLocale, hasLocale, locales } from "@/i18n/config";
 import { getDictionary } from "@/i18n/get-dictionary";
 import { api } from "@/lib/api";
+import { localePath } from "@/lib/routes";
 
 type Props = { params: Promise<{ locale: string }> };
 
@@ -74,6 +76,14 @@ export default async function HomePage({ params }: Props) {
           intro={home.gammes.intro}
         />
       ) : null}
+      <Atelier
+        title={home.atelier.title}
+        paragraphs={home.atelier.paragraphs}
+        link={{
+          href: localePath(locale, "atelier"),
+          label: home.atelier.link,
+        }}
+      />
     </main>
   );
 }

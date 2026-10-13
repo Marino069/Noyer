@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { Atelier } from "@/components/Atelier";
 import { Button } from "@/components/Button";
 import { Hero } from "@/components/Hero";
 import { Logo } from "@/components/Logo";
@@ -90,6 +91,16 @@ export default async function DesignSystemPage({ params }: Props) {
 
       <h2 className={styles.heading}>Matière</h2>
       <Matiere contenu={matiereAccueil} />
+
+      <h2 className={styles.heading}>Atelier</h2>
+      <Atelier
+        title={dictionary.home.atelier.title}
+        paragraphs={dictionary.home.atelier.paragraphs}
+        link={{
+          href: localePath(locale, "atelier"),
+          label: dictionary.home.atelier.link,
+        }}
+      />
 
       <Section>
         <h2>Logo</h2>
