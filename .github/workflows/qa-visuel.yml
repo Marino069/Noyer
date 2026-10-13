@@ -31,7 +31,7 @@ jobs:
           npx playwright install --with-deps chromium
           node captures.mjs
       - name: Joindre les captures à la PR
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: captures-pr-${{ github.event.pull_request.number }}
           path: .github/qa/captures/
