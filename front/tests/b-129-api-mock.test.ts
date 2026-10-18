@@ -47,8 +47,8 @@ describe("[B-129] Tests de la homepage : ne mocker que les fonctions vérifiées
     expect(md).toContain("importOriginal");
   });
 
-  // Bug 134 : app/[locale]/page.gammes.test.tsx remplace tout le module.
-  it.fails("aucun test ne remplace tout le module @/lib/api", () => {
+  // Bug 134 corrigé : page.gammes.test.tsx surcharge désormais l'API via importOriginal.
+  it("aucun test ne remplace tout le module @/lib/api", () => {
     expect(filesReplacingWholeApiModule()).toEqual([]);
   });
 });

@@ -7,10 +7,12 @@ import { Logo } from "@/components/Logo";
 import { Matiere } from "@/components/Matiere";
 import { NewsletterForm } from "@/components/NewsletterForm";
 import { Section } from "@/components/Section";
+import { Selection, SelectionSkeleton } from "@/components/Selection";
 import { hasLocale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/get-dictionary";
+import { networkError, type ProduitResume } from "@/lib/api";
 import { localePath } from "@/lib/routes";
-import { heroAccueil, matiereAccueil } from "@/mocks/data";
+import { heroAccueil, matiereAccueil, produits } from "@/mocks/data";
 import { CartIndicatorDemo } from "./CartIndicatorDemo";
 import styles from "./page.module.css";
 
@@ -51,6 +53,20 @@ export default async function DesignSystemPage({ params }: Props) {
   const { locale } = await params;
   if (!hasLocale(locale)) notFound();
   const dictionary = await getDictionary(locale);
+  const { selection: texts } = dictionary.home;
+  const selection = {
+    locale,
+    title: texts.title,
+    empty: texts.empty,
+    errorTitle: texts.errorTitle,
+    errorMessage: texts.errorMessage,
+  };
+  const page = (results: ProduitResume[]) => ({
+    count: results.length,
+    next: null,
+    previous: null,
+    results,
+  });
 
   return (
     <main>
@@ -91,6 +107,19 @@ export default async function DesignSystemPage({ params }: Props) {
 
       <h2 className={styles.heading}>Matière</h2>
       <Matiere contenu={matiereAccueil} />
+
+      <h2 className={styles.heading}>Sélection</h2>
+      <h3 className={styles.heading}>chargée</h3>
+      <Selection {...selection} produits={{ ok: true, data: page(produits) }} />
+      <h3 className={styles.heading}>vide</h3>
+      <Selection {...selection} produits={{ ok: true, data: page([]) }} />
+      <h3 className={styles.heading}>erreur</h3>
+      <Selection
+        {...selection}
+        produits={{ ok: false, error: networkError() }}
+      />
+      <h3 className={styles.heading}>chargement</h3>
+      <SelectionSkeleton label={dictionary.home.selection.loading} />
 
       <h2 className={styles.heading}>Atelier</h2>
       <Atelier
