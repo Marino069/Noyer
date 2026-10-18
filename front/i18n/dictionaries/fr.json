@@ -13,6 +13,13 @@
       "title": "Deux gammes, une même forme",
       "intro": "Mêmes formes, matières différentes : le Premium reprend la silhouette du Classic, en matières et finitions supérieures."
     },
+    "selection": {
+      "title": "Notre sélection",
+      "empty": "Notre sélection arrive bientôt.",
+      "loading": "Chargement de la sélection",
+      "errorTitle": "Sélection indisponible",
+      "errorMessage": "La sélection n'a pas pu être chargée. Rechargez la page dans un instant."
+    },
     "atelier": {
       "title": "L'atelier",
       "text": "Chaque lampe est tournée, assemblée et finie à la main à Genève. Le bois est travaillé à l'outil, le laiton poli à la pièce : ici, les gestes comptent autant que la forme.",

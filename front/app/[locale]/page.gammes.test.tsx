@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, within } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { heroAccueil, produits } from "@/mocks/data";
 
@@ -7,7 +7,10 @@ const api = vi.hoisted(() => ({
   matiereAccueil: vi.fn(),
   produits: vi.fn(),
 }));
-vi.mock("@/lib/api", () => ({ api }));
+vi.mock("@/lib/api", async (importOriginal) => {
+  const original = await importOriginal<typeof import("@/lib/api")>();
+  return { ...original, api: { ...original.api, ...api } };
+});
 vi.mock("react-dom", async (importOriginal) => ({
   ...(await importOriginal<typeof import("react-dom")>()),
   preload: vi.fn(),
@@ -31,7 +34,10 @@ describe("[E3-03] Homepage : section Deux gammes", () => {
     expect(
       screen.getByRole("heading", { name: "Deux gammes, une même forme" }),
     ).toBeInTheDocument();
-    const liens = screen.getAllByRole("link", { name: /Lucerne/ });
+    const region = screen.getByRole("region", {
+      name: "Deux gammes, une même forme",
+    });
+    const liens = within(region).getAllByRole("link", { name: /Lucerne/ });
     expect(liens.map((l) => l.getAttribute("href"))).toEqual([
       "/fr/produits/lucerne-classic",
       "/fr/produits/lucerne-premium",

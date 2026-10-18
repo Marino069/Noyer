@@ -70,6 +70,9 @@ export const produits: ProduitResume[] = [
   },
 ];
 
+/** Produits portant le drapeau « mis en avant » (`?mis_en_avant=true`). */
+export const slugsMisEnAvant = ["lucerne-classic", "lucerne-premium"];
+
 const modeles: Record<string, Omit<Modele, "produits">> = {
   lucerne: {
     slug: "lucerne",

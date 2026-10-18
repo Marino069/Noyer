@@ -4,12 +4,16 @@ import { Atelier } from "@/components/Atelier";
 import { DeuxGammes } from "@/components/DeuxGammes";
 import { Hero } from "@/components/Hero";
 import { Matiere } from "@/components/Matiere";
+import { Selection } from "@/components/Selection";
 import { defaultLocale, hasLocale, locales } from "@/i18n/config";
 import { getDictionary } from "@/i18n/get-dictionary";
 import { api } from "@/lib/api";
 import { localePath } from "@/lib/routes";
 
 type Props = { params: Promise<{ locale: string }> };
+
+// ISR : page rendue côté serveur, régénérée toutes les 5 minutes (SEO, catalogue à jour).
+export const revalidate = 300;
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
@@ -76,6 +80,14 @@ export default async function HomePage({ params }: Props) {
           intro={home.gammes.intro}
         />
       ) : null}
+      <Selection
+        produits={produits}
+        locale={locale}
+        title={home.selection.title}
+        empty={home.selection.empty}
+        errorTitle={home.selection.errorTitle}
+        errorMessage={home.selection.errorMessage}
+      />
       <Atelier
         href={localePath(locale, "atelier")}
         title={home.atelier.title}

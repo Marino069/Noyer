@@ -1,0 +1,27 @@
+.title {
+  margin: 0 0 2rem;
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  line-height: 1.15;
+}
+
+.empty {
+  max-width: 40rem;
+  margin: 0;
+  color: var(--text-muted);
+}
+
+.skeletonTitle {
+  width: min(16rem, 60%);
+  height: 2.5rem;
+  margin: 0 0 2rem;
+  background: var(--bg-alt);
+  border-radius: var(--radius);
+}
+
+.skeletonCard {
+  aspect-ratio: 4 / 5;
+  background: var(--bg-alt);
+  border-radius: var(--radius);
+}

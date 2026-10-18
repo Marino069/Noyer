@@ -7,6 +7,7 @@ import {
   matiereAccueil,
   modeleComplet,
   produits,
+  slugsMisEnAvant,
 } from "./data";
 
 const base = API_URL.replace(/\/$/, "");
@@ -61,7 +62,12 @@ export const handlers = [
   http.get(url("/produits/"), ({ request }) => {
     const params = new URL(request.url).searchParams;
     const gamme = params.get("gamme");
-    const results = produits.filter((p) => !gamme || p.gamme === gamme);
+    const misEnAvant = params.get("mis_en_avant") === "true";
+    const results = produits.filter(
+      (p) =>
+        (!gamme || p.gamme === gamme) &&
+        (!misEnAvant || slugsMisEnAvant.includes(p.slug)),
+    );
     return HttpResponse.json({
       count: results.length,
       next: null,
