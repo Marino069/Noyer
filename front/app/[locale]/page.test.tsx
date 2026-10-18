@@ -6,13 +6,18 @@ import frDict from "@/i18n/dictionaries/fr.json";
 const heroAccueilMock = vi.hoisted(() => vi.fn());
 const matiereAccueilMock = vi.hoisted(() => vi.fn());
 const produitsMock = vi.hoisted(() => vi.fn());
-vi.mock("@/lib/api", () => ({
-  api: {
-    heroAccueil: heroAccueilMock,
-    matiereAccueil: matiereAccueilMock,
-    produits: produitsMock,
-  },
-}));
+vi.mock("@/lib/api", async (importOriginal) => {
+  const original = await importOriginal<typeof import("@/lib/api")>();
+  return {
+    ...original,
+    api: {
+      ...original.api,
+      heroAccueil: heroAccueilMock,
+      matiereAccueil: matiereAccueilMock,
+      produits: produitsMock,
+    },
+  };
+});
 vi.mock("react-dom", async (importOriginal) => ({
   ...(await importOriginal<typeof import("react-dom")>()),
   preload: vi.fn(),
