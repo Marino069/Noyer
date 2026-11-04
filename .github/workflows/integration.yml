@@ -1,0 +1,79 @@
+name: Intégration front + back
+# Chaque nuit : démarre le vrai back et le vrai front ensemble et teste les parcours clés.
+on:
+  schedule:
+    - cron: "0 2 * * *"
+  workflow_dispatch:
+
+jobs:
+  integration:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    permissions:
+      contents: read
+      issues: write
+      id-token: write
+    services:
+      mariadb:
+        image: mariadb:11.4
+        env:
+          MARIADB_ROOT_PASSWORD: root
+          MARIADB_DATABASE: noyer
+        ports: ["3306:3306"]
+        options: >-
+          --health-cmd="healthcheck.sh --connect --innodb_initialized"
+          --health-interval=10s --health-timeout=5s --health-retries=10
+    env:
+      DATABASE_URL: mysql://root:root@127.0.0.1:3306/noyer
+      DJANGO_SECRET_KEY: ci-uniquement
+      DJANGO_DEBUG: "true"
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Démarrer le back
+        if: hashFiles('api/manage.py') != ''
+        working-directory: api
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq libmariadb-dev pkg-config
+          pip install -r requirements.txt
+          python manage.py migrate
+          nohup python manage.py runserver 0.0.0.0:8000 > /tmp/back.log 2>&1 &
+          sleep 5
+      - name: Démarrer le front sur le vrai back
+        run: |
+          npm --prefix front ci
+          NEXT_PUBLIC_API_MOCKS=false NEXT_PUBLIC_API_URL=http://localhost:8000/api \
+            nohup npm --prefix front run dev > /tmp/front.log 2>&1 &
+          npx -y wait-on http://localhost:3000/fr --timeout 180000
+      - uses: anthropics/claude-code-action@v1
+        env:
+          GH_TOKEN: ${{ github.token }}
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          prompt: |
+            Tu es l'agent d'intégration du projet Noyer. Le back Django tourne sur http://localhost:8000
+            (s'il existe) et le front Next.js sur http://localhost:3000, branché sur le vrai back, sans mocks.
+            Logs : /tmp/back.log et /tmp/front.log.
+
+            1. Liste les tickets fermés (`gh issue list --state closed --limit 200`) : ne teste que ce qui est censé
+               exister. Une route ou une page dont le ticket n'est pas encore fermé n'est pas un bug.
+            2. Si le back existe, crée des données de démonstration avec `python api/manage.py shell -c "..."`
+               (un modèle, un produit Classic et un Premium, une série de pièces, un stock).
+            3. Pour chaque route du contrat docs/api.md dont le ticket backend est fermé, appelle-la avec curl
+               et compare la réponse au contrat (champs, types, montants en centimes, format d'erreur).
+            4. Ouvre les pages du front déjà livrées (au minimum /fr) avec curl et vérifie qu'elles répondent 200,
+               qu'elles affichent les données du back et pas un état d'erreur ; consulte /tmp/front.log pour
+               les erreurs serveur.
+            5. Pour chaque vrai problème : vérifie qu'aucune issue ouverte ne le décrit déjà
+               (`gh issue list --search "<mots clés>"`), puis crée-la :
+               `gh issue create --title "[Bug] Intégration : <problème>" --label backend (ou frontend) --label prio:P0 --body "..."`
+               avec les étapes pour reproduire, le résultat attendu et le résultat obtenu.
+            6. Termine par un résumé dans le log du job. N'invente aucun problème.
+          claude_args: |
+            --max-turns 60
+            --allowedTools "Read,Glob,Grep,Bash(curl:*),Bash(python:*),Bash(python3:*),Bash(cat:*),Bash(tail:*),Bash(gh issue list:*),Bash(gh issue view:*),Bash(gh issue create:*)"

@@ -1,0 +1,60 @@
+name: Claude Dev
+# Agent développeur front ET back.
+# Démarre quand le label "claude" est posé sur un ticket (frontend ou backend),
+# ou quand quelqu'un écrit "@claude" dans un commentaire.
+on:
+  issues:
+    types: [labeled]
+  issue_comment:
+    types: [created]
+  pull_request_review_comment:
+    types: [created]
+
+jobs:
+  claude:
+    if: |
+      (github.event_name == 'issues' && github.event.label.name == 'claude' &&
+        (contains(github.event.issue.labels.*.name, 'frontend') || contains(github.event.issue.labels.*.name, 'backend'))) ||
+      (github.event_name != 'issues' && contains(github.event.comment.body, '@claude'))
+    runs-on: ubuntu-latest
+    timeout-minutes: 75
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
+      id-token: write
+      actions: read
+    services:
+      mariadb:
+        image: mariadb:11.4
+        env:
+          MARIADB_ROOT_PASSWORD: root
+          MARIADB_DATABASE: noyer
+        ports: ["3306:3306"]
+        options: >-
+          --health-cmd="healthcheck.sh --connect --innodb_initialized"
+          --health-interval=10s --health-timeout=5s --health-retries=10
+    env:
+      DATABASE_URL: mysql://root:root@127.0.0.1:3306/noyer
+      DJANGO_SECRET_KEY: ci-uniquement
+      DJANGO_DEBUG: "true"
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Librairies système pour mysqlclient
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq libmariadb-dev pkg-config
+      - uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          label_trigger: "claude"
+          claude_args: |
+            --max-turns 80
+            --allowedTools "Bash(npm:*),Bash(npx:*),Bash(node:*),Bash(python:*),Bash(python3:*),Bash(pip:*),Bash(pytest:*),Bash(ruff:*),mcp__github__create_pull_request"
+            --append-system-prompt "Tu es le développeur du projet Noyer. Lis CLAUDE.md à la racine. Détermine le côté du ticket : label frontend → tu travailles UNIQUEMENT dans front/ (et docs/ si besoin) et tu respectes front/CLAUDE.md ; label backend → tu travailles UNIQUEMENT dans api/ et tu respectes api/CLAUDE.md (docs/api.md peut être complété mais jamais cassé). Pour un commentaire sur une PR, déduis le côté de l'issue liée ou des fichiers de la PR, et pousse sur la branche de cette PR sans en ouvrir de nouvelle. Écris les tests qui couvrent les critères d'acceptation. Avant de terminer : côté front, npm --prefix front run lint, typecheck, test et build doivent passer ; côté back, depuis api/ : pip install -r requirements.txt, ruff check ., python manage.py makemigrations --check, python manage.py test doivent passer (MariaDB est disponible via DATABASE_URL). Quand tout passe, ouvre toi-même la PR vers master avec create_pull_request : titre '[<id du ticket>] <titre>', description qui commence par 'Closes #<numéro de l'issue>', puis ce qui est fait et ce qui reste. Si une action t'est refusée, explique-le dans la description de la PR."

@@ -1,0 +1,26 @@
+name: Chef d'orchestre
+# Toutes les 30 minutes : fusionne les PR vertes, fait réparer les PR en échec,
+# et lance le ticket front et le ticket back suivants.
+on:
+  schedule:
+    - cron: "*/30 * * * *"
+  workflow_dispatch:
+
+concurrency:
+  group: orchestrateur
+  cancel-in-progress: false
+
+jobs:
+  orchestrer:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          sparse-checkout: .github/orchestrateur
+      - name: Orchestrer
+        env:
+          GH_TOKEN: ${{ secrets.NOYER_BOT_TOKEN }}
+          REPO: ${{ github.repository }}
+          LIMITE_JOUR: "8"
+        run: bash .github/orchestrateur/orchestrer.sh
