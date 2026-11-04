@@ -7,7 +7,7 @@ import { getDictionary } from "@/i18n/get-dictionary";
 import { getProductKey, getProductPath } from "@/i18n/slugs";
 import { api } from "@/lib/api";
 import { SHOP_ENABLED } from "@/lib/env";
-import { languageAlternates, ogImage } from "@/lib/seo";
+import { languageAlternates, ogImage, productJsonLd } from "@/lib/seo";
 
 type Props = { params: Promise<{ locale: string; slug: string }> };
 
@@ -70,8 +70,24 @@ export default async function FicheProduitPage({ params }: Props) {
     );
   }
 
+  const { meta } = dictionary;
+  const jsonLd = productJsonLd({
+    produit: produit.data,
+    disponibilite: disponibilite.ok ? disponibilite.data : null,
+    url: getProductPath(key, locale),
+    description: `${produit.data.modele.description} ${meta.productSuffix.replace("{gamme}", produit.data.gamme)}`,
+    brand: "Noyer",
+  });
+
   return (
     <main id="contenu" tabIndex={-1}>
+      <script
+        type="application/ld+json"
+        // "<" échappé pour qu'aucune valeur ne puisse fermer la balise.
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c"),
+        }}
+      />
       <FicheProduit
         produit={produit.data}
         disponibilite={disponibilite}
