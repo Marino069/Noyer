@@ -96,7 +96,12 @@ for pr in $(gh pr list --repo "$REPO" --state open --json number,isDraft --jq '.
     fi
     continue
   fi
-  if [ "$(nb_marqueurs "$pr" "[auto-reparation $sha")" -eq 0 ]; then
+  # Redemande si rien n'a bougé depuis plus d'une heure (Claude a abandonné).
+  dernier=$(gh api "repos/$REPO/issues/$pr/comments" --paginate \
+    --jq "[.[] | select(.user.login==\"$MOI\" and (.body | contains(\"[auto-reparation $sha\")))] | last | .created_at // empty" 2>/dev/null | tail -1)
+  age_rep=9999
+  [ -n "$dernier" ] && age_rep=$(( ( $(date +%s) - $(date -d "$dernier" +%s) ) / 60 ))
+  if [ -z "$dernier" ] || [ "$age_rep" -ge 60 ]; then
     if [ "$probleme" = "conflit" ]; then
       consigne="cette PR a un conflit avec master. Mets la branche à jour avec master, résous le conflit"
     else
