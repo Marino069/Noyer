@@ -1,6 +1,7 @@
 """Règles métier de l'inventaire. `reserver` est la règle la plus critique du projet :
 tout se passe dans une transaction, sur des lignes verrouillées."""
 
+import logging
 from datetime import timedelta
 
 from django.db import IntegrityError, transaction
@@ -17,7 +18,9 @@ from config.exceptions import (
 
 from .models import Piece, Reservation, StockClassic
 
-DUREE_RESERVATION = timedelta(minutes=15)
+logger = logging.getLogger("noyer.inventaire")
+
+DUREE_RESERVATION =timedelta(minutes=15)
 
 
 def reserver(produit, quantite, panier_id, numero=None):
@@ -80,11 +83,12 @@ def _reserver_classic(produit, quantite, panier_id):
     )
 
 
-def liberer(reservation):
+def liberer(reservation, statut_final=Reservation.Statut.ANNULEE):
     """Libère une réservation active : l'article redevient disponible.
 
     Idempotente : une réservation déjà annulée ou expirée n'est pas touchée.
     ReservationNonLiberable (409) si elle est confirmée (vendue).
+    `statut_final` : Annulee (par défaut) ou Expiree (expiration automatique).
     """
     with transaction.atomic():
         # relecture verrouillée : l'instance reçue peut être périmée
@@ -103,6 +107,33 @@ def liberer(reservation):
             stock = StockClassic.objects.select_for_update().get(produit_id=reservation.produit_id)
             stock.quantite_reservee = max(0, stock.quantite_reservee - reservation.quantite)
             stock.save(update_fields=["quantite_reservee", "date_modification"])
-        reservation.statut = Reservation.Statut.ANNULEE
+        reservation.statut = statut_final
         reservation.save(update_fields=["statut"])
         return reservation
+
+
+def expirer_reservations(maintenant=None):
+    """Passe en Expiree et libère les réservations Active dont `expire_le` est dépassé.
+
+    Chaque réservation a sa propre transaction (dans `liberer`) : une erreur sur l'une
+    est journalisée et n'empêche pas de traiter les autres. Retourne le nombre expiré.
+    """
+    maintenant = maintenant or timezone.now()
+    ids = list(
+        Reservation.objects.filter(statut=Reservation.Statut.ACTIVE, expire_le__lte=maintenant)
+        .order_by("expire_le")
+        .values_list("pk", flat=True)
+    )
+    expirees = 0
+    for pk in ids:
+        try:
+            with transaction.atomic():
+                reservation = Reservation.objects.select_for_update().get(pk=pk)
+                # relue sous verrou : peut avoir été confirmée ou libérée entre-temps
+                if reservation.statut != Reservation.Statut.ACTIVE or reservation.expire_le > maintenant:
+                    continue
+                liberer(reservation, Reservation.Statut.EXPIREE)
+                expirees += 1
+        except Exception:
+            logger.exception("Expiration de la réservation %s en échec", pk)
+    return expirees
