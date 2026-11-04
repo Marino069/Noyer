@@ -10,6 +10,21 @@ const nextConfig: NextConfig = {
     // Grain du bois : pas de qualité inférieure à 80.
     qualities: [80],
   },
+  async redirects() {
+    // Anciens chemins par gamme → listing filtré (le filtre vit dans l'URL).
+    return [
+      {
+        source: "/:locale/produits/classic",
+        destination: "/:locale/produits?gamme=Classic",
+        permanent: false,
+      },
+      {
+        source: "/:locale/produits/premium",
+        destination: "/:locale/produits?gamme=Premium",
+        permanent: false,
+      },
+    ];
+  },
   turbopack: {
     // msw/browser exclut la condition "node" ; le passage SSR du composant client
     // MocksProvider ne pourrait donc pas le résoudre (il n'est jamais exécuté côté serveur).
