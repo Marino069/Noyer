@@ -181,7 +181,7 @@ describe("[E4-02] Fiche produit — bloc infos", () => {
       within(select)
         .getAllByRole("option")
         .map((o) => o.textContent),
-    ).toEqual(["3", "8", "15"]);
+    ).toEqual(["Attribution automatique", "3", "8", "15"]);
   });
 });
 

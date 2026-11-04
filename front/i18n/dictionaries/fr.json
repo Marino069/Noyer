@@ -80,10 +80,51 @@
       "adding": "Ajout en cours",
       "added": "Ajouté au panier.",
       "numero": "Numéro de la pièce",
+      "numeroAuto": "Attribution automatique",
       "viewCart": "Voir le panier",
       "contact": "Nous contacter",
       "errorGeneric": "L'ajout au panier a échoué. Réessayez dans un instant.",
       "errorUnavailable": "Cette pièce vient d'être réservée. Choisissez un autre numéro."
+    },
+    "soldOut": {
+      "title": "Série épuisée",
+      "message": "Toutes les pièces de cette série sont réservées. Laissez-nous votre adresse e-mail : nous vous prévenons dès qu'une nouvelle série ou une pièce se libère.",
+      "email": "Adresse e-mail",
+      "consent": "J'accepte que Noyer utilise mon adresse e-mail pour me prévenir de la disponibilité de nouvelles pièces. Je peux me désinscrire à tout moment.",
+      "submit": "Me prévenir",
+      "success": "Merci ! Un e-mail de confirmation vient de vous être envoyé.",
+      "errorEmail": "Saisissez une adresse e-mail valide.",
+      "errorConsent": "Votre consentement est nécessaire pour être prévenu.",
+      "errorServer": "L'inscription n'a pas pu aboutir. Réessayez dans un instant."
+    },
+    "process": {
+      "title": "Le processus de fabrication",
+      "intro": "Chaque lampe Premium est fabriquée en série limitée, à la main, dans notre atelier genevois.",
+      "steps": [
+        {
+          "title": "Le bois",
+          "text": "Un noyer choisi pour son grain, séché lentement avant d'être travaillé."
+        },
+        {
+          "title": "Le façonnage",
+          "text": "Le pied est taillé et poncé à la main, jusqu'à la forme définitive."
+        },
+        {
+          "title": "La finition",
+          "text": "Huile sur le bois, laiton poli : la matière est travaillée à la main."
+        },
+        {
+          "title": "L'assemblage",
+          "text": "Montage, câblage et contrôle de chaque pièce, à Genève."
+        }
+      ],
+      "numbering": {
+        "title": "Une pièce numérotée",
+        "text": "Chaque lampe porte son numéro dans la série. Choisissez le vôtre parmi les numéros libres, ou laissez-nous vous attribuer le prochain.",
+        "available": "Numéros disponibles",
+        "piece": "N° {numero} / {total}",
+        "complete": "Tous les numéros de la série sont attribués."
+      }
     },
     "errorTitle": "Fiche indisponible",
     "errorMessage": "Cette fiche n'a pas pu être chargée. Rechargez la page dans un instant."

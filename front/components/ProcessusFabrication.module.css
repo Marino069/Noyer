@@ -1,0 +1,92 @@
+/* Filet laiton 1 px pour séparer de la fiche, elle-même sombre en Premium (brief §02). */
+.processus {
+  border-top: 1px solid var(--brass);
+}
+
+.title {
+  margin: 0 0 1rem;
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  line-height: 1.15;
+}
+
+.intro {
+  max-width: 60ch;
+  margin: 0 0 2rem;
+}
+
+.subtitle {
+  margin: 0 0 0.5rem;
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: 1.25rem;
+}
+
+.etapes {
+  display: grid;
+  gap: 2rem;
+  margin: 0 0 2.5rem;
+  padding: 0;
+  list-style: none;
+  counter-reset: etape;
+}
+
+@media (min-width: 600px) {
+  .etapes {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 900px) {
+  .etapes {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.etape {
+  counter-increment: etape;
+  padding-top: 0.75rem;
+  border-top: 1px solid currentColor;
+}
+
+.etape::before {
+  content: counter(etape, decimal-leading-zero);
+  display: block;
+  margin-bottom: 0.5rem;
+  font-size: 0.875rem;
+  letter-spacing: 0.04em;
+  color: var(--brass);
+}
+
+.etape p {
+  margin: 0;
+}
+
+.numerotation {
+  max-width: 60ch;
+}
+
+.numerotation > p {
+  margin: 0 0 1rem;
+}
+
+.numeros {
+  margin-top: 1rem;
+}
+
+.numerosListe {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.numero {
+  padding: 0.25rem 0.75rem;
+  border: 1px solid var(--brass);
+  border-radius: var(--radius);
+  font-size: 0.875rem;
+}

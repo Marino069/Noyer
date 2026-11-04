@@ -12,6 +12,7 @@ export type AjoutPanierTextes = {
   adding: string;
   added: string;
   numero: string;
+  numeroAuto: string;
   viewCart: string;
   errorGeneric: string;
   errorUnavailable: string;
@@ -25,9 +26,14 @@ type Props = {
   disabled?: boolean;
   panierHref: string;
   textes: AjoutPanierTextes;
+  /** Appelé quand l'API refuse une pièce déjà réservée (pour rafraîchir la disponibilité). */
+  onUnavailable?: () => void;
 };
 
-/** CTA « Ajouter au panier » : Classic = quantité 1, Premium = choix du numéro de pièce. */
+/**
+ * CTA « Ajouter au panier » : Classic = quantité 1, Premium = numéro choisi dans la liste
+ * des numéros libres, ou attribué automatiquement par le back (choix par défaut).
+ */
 export function AjoutPanier({
   slug,
   gamme,
@@ -35,15 +41,18 @@ export function AjoutPanier({
   disabled = false,
   panierHref,
   textes,
+  onUnavailable,
 }: Props) {
   const premium = gamme === "Premium";
-  const [numero, setNumero] = useState<number | undefined>(numeros[0]);
+  const [choix, setChoix] = useState<number | null>(null); // null = automatique
   const [etat, setEtat] = useState<"repos" | "envoi" | "ajoute" | "erreur">(
     "repos",
   );
   const [message, setMessage] = useState("");
 
-  const sansPiece = premium && numero === undefined;
+  // Un numéro choisi puis réservé par quelqu'un d'autre retombe sur l'attribution automatique.
+  const numero = choix !== null && numeros.includes(choix) ? choix : null;
+  const sansPiece = premium && numeros.length === 0;
 
   async function ajouter() {
     setEtat("envoi");
@@ -51,13 +60,14 @@ export function AjoutPanier({
     const result = await api.ajouterLigne({
       produit_slug: slug,
       quantite: 1,
-      ...(premium ? { numero } : {}),
+      ...(premium && numero !== null ? { numero } : {}),
     });
     if (result.ok) {
       publishCart(result.data);
       setEtat("ajoute");
       setMessage(textes.added);
     } else {
+      if (result.error.code === "piece_indisponible") onUnavailable?.();
       setEtat("erreur");
       setMessage(
         result.error.code === "piece_indisponible"
@@ -77,9 +87,12 @@ export function AjoutPanier({
           <select
             id={`numero-${slug}`}
             className={styles.select}
-            value={numero}
-            onChange={(e) => setNumero(Number(e.target.value))}
+            value={numero ?? ""}
+            onChange={(e) =>
+              setChoix(e.target.value === "" ? null : Number(e.target.value))
+            }
           >
+            <option value="">{textes.numeroAuto}</option>
             {numeros.map((n) => (
               <option key={n} value={n}>
                 {n}
