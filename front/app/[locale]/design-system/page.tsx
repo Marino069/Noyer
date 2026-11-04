@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { AjoutPanier } from "@/components/AjoutPanier";
 import { Atelier } from "@/components/Atelier";
 import { Button } from "@/components/Button";
+import { Galerie } from "@/components/Galerie";
 import { Hero } from "@/components/Hero";
 import { Logo } from "@/components/Logo";
 import { Matiere } from "@/components/Matiere";
@@ -12,7 +14,7 @@ import { hasLocale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/get-dictionary";
 import { networkError, type ProduitResume } from "@/lib/api";
 import { localePath } from "@/lib/routes";
-import { heroAccueil, matiereAccueil, produits } from "@/mocks/data";
+import { detailDe, heroAccueil, matiereAccueil, produits } from "@/mocks/data";
 import { CartIndicatorDemo } from "./CartIndicatorDemo";
 import styles from "./page.module.css";
 
@@ -132,6 +134,49 @@ export default async function DesignSystemPage({ params }: Props) {
       <Section>
         <h2>Logo</h2>
         <Logo href="#" label="Noyer" />
+      </Section>
+
+      <Section>
+        <h2>Galerie</h2>
+        <p>Plusieurs photos (vignettes, plein écran, flèches, swipe).</p>
+        <Galerie
+          medias={detailDe(produits[0]).medias}
+          textes={dictionary.fiche.gallery}
+        />
+        <h3>Une seule photo</h3>
+        <Galerie
+          medias={detailDe(produits[0]).medias.slice(0, 1)}
+          textes={dictionary.fiche.gallery}
+        />
+        <h3>Sans photo</h3>
+        <Galerie medias={[]} textes={dictionary.fiche.gallery} />
+      </Section>
+
+      <Section>
+        <h2>AjoutPanier</h2>
+        <p>Classic (quantité 1) puis Premium (choix du numéro de pièce).</p>
+        <div className={styles.row}>
+          <AjoutPanier
+            slug="lucerne-classic"
+            gamme="Classic"
+            panierHref={localePath(locale, "panier")}
+            textes={dictionary.fiche.cart}
+          />
+          <AjoutPanier
+            slug="lucerne-premium"
+            gamme="Premium"
+            numeros={[3, 8, 15]}
+            panierHref={localePath(locale, "panier")}
+            textes={dictionary.fiche.cart}
+          />
+          <AjoutPanier
+            slug="lucerne-classic"
+            gamme="Classic"
+            disabled
+            panierHref={localePath(locale, "panier")}
+            textes={dictionary.fiche.cart}
+          />
+        </div>
       </Section>
 
       <Section>

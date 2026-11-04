@@ -104,7 +104,13 @@ export function detailDe(p: ProduitResume): ProduitDetail {
       { nom: "Noyer", role: "Pied", entretien: "Huiler une fois par an." },
       { nom: "Laiton", role: "Finition", entretien: "Chiffon doux et sec." },
     ],
-    medias: p.image_principale ? [p.image_principale] : [],
+    medias: p.image_principale
+      ? [
+          p.image_principale,
+          image(`${p.image_principale.alt}, vue de détail du pied en noyer`),
+          image(`${p.image_principale.alt}, allumée dans une pièce`),
+        ]
+      : [],
     autre_gamme: autre?.slug ?? null,
   };
 }
