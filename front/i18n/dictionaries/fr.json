@@ -26,6 +26,23 @@
       "cta": "Découvrir l'atelier"
     }
   },
+  "catalogue": {
+    "title": "Nos lampes",
+    "filterLabel": "Filtrer par gamme",
+    "all": "Toutes",
+    "results": {
+      "zero": "Aucun résultat",
+      "one": "{count} résultat",
+      "other": "{count} résultats"
+    },
+    "empty": "Aucune lampe ne correspond à ce filtre.",
+    "errorTitle": "Catalogue indisponible",
+    "errorMessage": "Les lampes n'ont pas pu être chargées. Rechargez la page dans un instant.",
+    "paginationLabel": "Pagination",
+    "previous": "Précédent",
+    "next": "Suivant",
+    "pageLabel": "Page {page}"
+  },
   "a11y": {
     "skipToContent": "Aller au contenu"
   },
