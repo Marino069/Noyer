@@ -2,3 +2,5 @@ django>=6.1.2,<7
 djangorestframework>=3.18.3
 django-environ>=0.14.0
 mysqlclient==2.2.7
+drf-spectacular==0.30.0
+django-cors-headers==4.9.0

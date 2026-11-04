@@ -18,6 +18,8 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "rest_framework",
+    "drf_spectacular",
+    "corsheaders",
     "catalogue",
     "inventaire",
     "panier",
@@ -26,6 +28,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -101,6 +104,33 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.1/howto/static-files/
 
 STATIC_URL = 'static/'
+
+
+# API : format d'erreur standard et documentation OpenAPI
+
+REST_FRAMEWORK = {
+    "EXCEPTION_HANDLER": "config.exceptions.exception_handler",
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+}
+
+SPECTACULAR_SETTINGS = {
+    "TITLE": "API Noyer",
+    "DESCRIPTION": "Boutique en ligne de lampes artisanales (Genève).",
+    "VERSION": "1.0.0",
+    "SERVE_INCLUDE_SCHEMA": False,
+}
+
+# CORS : seule l'URL du front est autorisée
+FRONT_URL = env("FRONT_URL", default="http://localhost:3000").rstrip("/")
+CORS_ALLOWED_ORIGINS = [FRONT_URL]
+
+# Les erreurs 500 sont journalisées, jamais renvoyées au client
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {"console": {"class": "logging.StreamHandler"}},
+    "loggers": {"noyer.api": {"handlers": ["console"], "level": "ERROR", "propagate": True}},
+}
 
 
 # Email
