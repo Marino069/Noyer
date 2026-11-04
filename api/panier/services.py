@@ -63,6 +63,28 @@ def ouvrir(valeur_cookie) -> tuple[uuid.UUID, dict, bool]:
     return panier_id, {"lignes": []}, True
 
 
+def ajouter_ligne(panier_id, contenu: dict, produit, quantite: int, numero=None) -> dict:
+    """Réserve l'article (B2-02) puis l'ajoute au panier. Le prix n'est jamais stocké.
+
+    PieceIndisponible / StockInsuffisant (409) : le panier n'est pas modifié.
+    """
+    from inventaire.services import reserver
+
+    reservation = reserver(produit, quantite, str(panier_id), numero)
+    contenu.setdefault("lignes", []).append(
+        {
+            "id": uuid.uuid4().hex[:8],
+            "produit_id": produit.pk,
+            "quantite": reservation.quantite,
+            "numero_piece": reservation.piece.numero if reservation.piece_id else None,
+            "reservation_id": reservation.pk,
+            "reservation_expire_le": reservation.expire_le.isoformat(),
+        }
+    )
+    enregistrer(panier_id, contenu)
+    return contenu
+
+
 def tva_incluse(total_centimes: int) -> int:
     """TVA contenue dans un total TTC, arrondie au centime (calcul entier)."""
     base = 10000 + TAUX_TVA_CENTIEMES
