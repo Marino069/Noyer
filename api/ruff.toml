@@ -1,2 +1,6 @@
 line-length = 100
 extend-exclude = ["*/migrations/*"]
+
+[lint]
+# Les listes `constraints` / `indexes` de Meta sont l'idiome Django.
+ignore = ["RUF012"]
