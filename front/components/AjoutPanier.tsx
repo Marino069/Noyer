@@ -75,12 +75,24 @@ export function AjoutPanier({
       publishCart(result.data);
       setConflit(null);
       setEtat("ajoute");
-      const ligne = result.data.lignes.find(
-        (l) =>
-          l.produit.slug === slug &&
-          l.reservation_expire_le &&
-          (numeroVoulu === null || l.numero_piece === numeroVoulu),
-      );
+      // La pièce qui vient d'être ajoutée est celle dont la réservation expire le plus tard
+      // (les réservations plus anciennes de la même fiche sont déjà entamées).
+      const ligne = result.data.lignes
+        .filter(
+          (l) =>
+            l.produit.slug === slug &&
+            l.reservation_expire_le &&
+            (numeroVoulu === null || l.numero_piece === numeroVoulu),
+        )
+        .reduce<(typeof result.data.lignes)[number] | undefined>(
+          (recente, l) =>
+            !recente ||
+            new Date(l.reservation_expire_le!).getTime() >
+              new Date(recente.reservation_expire_le!).getTime()
+              ? l
+              : recente,
+          undefined,
+        );
       setMessage(
         ligne?.reservation_expire_le && ligne.numero_piece !== null
           ? interpolate(textes.reserved, {
