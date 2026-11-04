@@ -5,6 +5,10 @@ on:
   schedule:
     - cron: "*/30 * * * *"
   workflow_dispatch:
+  # Réagit aussi dès qu'une vérification ou un agent a fini : pas besoin d'attendre le tour suivant.
+  workflow_run:
+    workflows: ["front-ci", "back-ci", "Claude Dev"]
+    types: [completed]
 
 concurrency:
   group: orchestrateur
