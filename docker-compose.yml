@@ -1,0 +1,97 @@
+# Application complète : docker compose up --build (copier d'abord .env.example en .env)
+x-back-env: &back_env
+  DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY:?à définir dans .env}
+  DJANGO_ALLOWED_HOSTS: ${DJANGO_ALLOWED_HOSTS:-localhost,127.0.0.1,back}
+  DATABASE_URL: mysql://app_noyer:${NOYER_APP_PASSWORD:?à définir dans .env}@mariadb:3306/noyer
+  REDIS_URL: redis://redis:6379/0
+  FRONT_URL: ${FRONT_URL:-http://localhost:3000}
+  MEDIA_ROOT: /data/media
+  STATIC_ROOT: /data/static
+
+services:
+  mariadb:
+    image: mariadb:11.4
+    restart: unless-stopped
+    environment:
+      MARIADB_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWORD:?à définir dans .env}
+      NOYER_ADM_PASSWORD: ${NOYER_ADM_PASSWORD:?à définir dans .env}
+      NOYER_APP_PASSWORD: ${NOYER_APP_PASSWORD:?à définir dans .env}
+    volumes:
+      - mariadb_data:/var/lib/mysql
+      - ./database/compose-init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  back:
+    build: ./api
+    restart: unless-stopped
+    environment:
+      <<: *back_env
+      NOYER_ADM_PASSWORD: ${NOYER_ADM_PASSWORD:?à définir dans .env}
+    # migrate avec le compte adm_noyer, puis l'application tourne avec app_noyer
+    command: >
+      sh -c "DATABASE_URL=mysql://adm_noyer:$${NOYER_ADM_PASSWORD}@mariadb:3306/noyer python manage.py migrate --noinput
+      && python manage.py collectstatic --noinput
+      && exec gunicorn config.wsgi:application --bind 0.0.0.0:8000 --workers 3"
+    ports:
+      - "8000:8000"
+    volumes:
+      - media:/data/media
+      - static:/data/static
+    depends_on:
+      mariadb:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request as u; u.urlopen('http://localhost:8000/api/health/', timeout=3)"]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+      start_period: 40s
+
+  worker:
+    build: ./api
+    restart: unless-stopped
+    environment: *back_env
+    command: python manage.py worker
+    volumes:
+      - media:/data/media
+    depends_on:
+      back:
+        condition: service_healthy
+
+  front:
+    build:
+      context: ./front
+      args:
+        NEXT_PUBLIC_API_URL: ${API_PUBLIC_URL:-http://localhost:8000/api}
+        NEXT_PUBLIC_SITE_URL: ${FRONT_URL:-http://localhost:3000}
+        NEXT_PUBLIC_API_MOCKS: "false"
+        NEXT_PUBLIC_SHOP_ENABLED: "true"
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    depends_on:
+      back:
+        condition: service_healthy
+
+volumes:
+  mariadb_data:
+  redis_data:
+  media:
+  static:
