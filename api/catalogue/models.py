@@ -36,6 +36,7 @@ class Produit(models.Model):
     prix_ttc_centimes = models.PositiveIntegerField()
     caracteristiques = models.JSONField(null=True, blank=True)
     actif = models.BooleanField(default=True)
+    mis_en_avant = models.BooleanField(default=False)
     date_creation = models.DateTimeField(auto_now_add=True)
     date_modification = models.DateTimeField(auto_now=True)
     modele = models.ForeignKey(
