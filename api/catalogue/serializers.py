@@ -30,6 +30,13 @@ class ModeleSerializer(serializers.ModelSerializer):
         fields = ["slug", "nom", "description"]
 
 
+class ModeleDetailSerializer(ModeleSerializer):
+    produits = ProduitResumeSerializer(many=True, source="produits_actifs")
+
+    class Meta(ModeleSerializer.Meta):
+        fields = [*ModeleSerializer.Meta.fields, "produits"]
+
+
 class ProduitDetailSerializer(serializers.ModelSerializer):
     modele = ModeleSerializer()
     gamme = serializers.CharField(source="gamme.code")
