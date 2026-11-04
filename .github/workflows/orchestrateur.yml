@@ -5,10 +5,21 @@ on:
   schedule:
     - cron: "*/30 * * * *"
   workflow_dispatch:
+  # Réagit aussi dès qu'une vérification ou un agent a fini : pas besoin d'attendre le tour suivant.
+  workflow_run:
+    workflows: ["front-ci", "back-ci", "Claude Dev"]
+    types: [completed]
 
 concurrency:
   group: orchestrateur
   cancel-in-progress: false
+
+permissions:
+  contents: read
+  checks: read
+  statuses: read
+  pull-requests: read
+  actions: read
 
 jobs:
   orchestrer:
@@ -21,6 +32,7 @@ jobs:
       - name: Orchestrer
         env:
           GH_TOKEN: ${{ secrets.NOYER_BOT_TOKEN }}
+          LECTURE_TOKEN: ${{ github.token }}
           REPO: ${{ github.repository }}
           LIMITE_JOUR: "8"
         run: bash .github/orchestrateur/orchestrer.sh
