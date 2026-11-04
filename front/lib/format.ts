@@ -33,3 +33,11 @@ export function interpolate(
     String(values[key] ?? ""),
   );
 }
+
+/** Millisecondes restantes → « 14 min 05 s » (arrondi à la seconde supérieure). */
+export function formatDuree(ms: number): string {
+  const total = Math.max(0, Math.ceil(ms / 1000));
+  const minutes = Math.floor(total / 60);
+  const secondes = String(total % 60).padStart(2, "0");
+  return `${minutes} min ${secondes} s`;
+}

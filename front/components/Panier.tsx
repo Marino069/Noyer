@@ -1,9 +1,14 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { api, type LignePanier, type Panier as PanierData } from "@/lib/api";
 import { publishCart } from "@/lib/cart";
-import { formatPrice, formatVatRate, interpolate } from "@/lib/format";
+import {
+  formatDuree,
+  formatPrice,
+  formatVatRate,
+  interpolate,
+} from "@/lib/format";
 import { startMocks } from "@/lib/mocks";
 import { Button } from "./Button";
 import { ErrorState } from "./ErrorState";
@@ -25,6 +30,8 @@ export type PanierTextes = {
   remove: string;
   removeLabel: string;
   expires: string;
+  remaining: string;
+  expired: string;
   updateError: string;
   stockError: string;
   summary: string;
@@ -82,6 +89,54 @@ export function Panier({ locale, textes, catalogueHref, commandeHref }: Props) {
     return () => controller.abort();
   }, [tentative]);
 
+  // Chaque seconde : les lignes dont la réservation est écoulée sont retirées et signalées.
+  const panierCourant = etat.statut === "pret" ? etat.panier : null;
+  const resynchro = useRef(false);
+  useEffect(() => {
+    if (!panierCourant) return;
+    const verifier = () => {
+      const maintenant = Date.now();
+      const perimees = panierCourant.lignes.filter(
+        (l) =>
+          l.reservation_expire_le &&
+          new Date(l.reservation_expire_le).getTime() <= maintenant,
+      );
+      if (perimees.length === 0) return;
+      const ids = new Set(perimees.map((l) => l.id));
+      setEtat({
+        statut: "pret",
+        panier: {
+          ...panierCourant,
+          lignes: panierCourant.lignes.filter((l) => !ids.has(l.id)),
+        },
+      });
+      setMessage(
+        perimees
+          .map((l) =>
+            interpolate(textes.expired, {
+              numero: l.numero_piece ?? "",
+              nom: `${l.produit.modele} ${l.produit.gamme}`,
+            }),
+          )
+          .join(" "),
+      );
+      // Le back fait foi (totaux, autres lignes) : on relit le panier.
+      if (!resynchro.current) {
+        resynchro.current = true;
+        void api.panier().then((result) => {
+          resynchro.current = false;
+          if (result.ok) {
+            publishCart(result.data);
+            setEtat({ statut: "pret", panier: result.data });
+          }
+        });
+      }
+    };
+    verifier();
+    const timer = setInterval(verifier, 1000);
+    return () => clearInterval(timer);
+  }, [panierCourant, textes.expired]);
+
   async function muter(
     id: string,
     action: () => ReturnType<typeof api.modifierLigne>,
@@ -134,6 +189,9 @@ export function Panier({ locale, textes, catalogueHref, commandeHref }: Props) {
     return (
       <div className={styles.page}>
         <h1 className={styles.title}>{textes.title}</h1>
+        <div role="status" className={styles.message}>
+          {message}
+        </div>
         <div className={styles.empty}>
           <h2>{textes.emptyTitle}</h2>
           <p>{textes.emptyMessage}</p>
@@ -232,6 +290,13 @@ function Ligne({
           </p>
         ) : null}
         {ligne.reservation_expire_le ? (
+          <Decompte
+            expireLe={ligne.reservation_expire_le}
+            modele={textes.remaining}
+            className={styles.detail}
+          />
+        ) : null}
+        {ligne.reservation_expire_le ? (
           <p className={styles.detail}>
             {interpolate(textes.expires, {
               heure: new Intl.DateTimeFormat(`${locale}-CH`, {
@@ -279,5 +344,28 @@ function Ligne({
         {textes.remove}
       </Button>
     </li>
+  );
+}
+
+/** Durée restante de la réservation, mise à jour chaque seconde (non annoncée à chaque tick). */
+function Decompte({
+  expireLe,
+  modele,
+  className,
+}: {
+  expireLe: string;
+  modele: string;
+  className: string;
+}) {
+  const [maintenant, setMaintenant] = useState(() => Date.now());
+  useEffect(() => {
+    const timer = setInterval(() => setMaintenant(Date.now()), 1000);
+    return () => clearInterval(timer);
+  }, []);
+  const reste = new Date(expireLe).getTime() - maintenant;
+  return (
+    <p className={className} data-testid="decompte">
+      {interpolate(modele, { duree: formatDuree(reste) })}
+    </p>
   );
 }
