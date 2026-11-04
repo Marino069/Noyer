@@ -185,3 +185,4 @@ for cote in frontend backend; do
   done
   [ -z "$lance" ] && log "🎉 $cote : aucun ticket prêt (tout est fait, bloqué ou en attente d'une dépendance)"
 done
+exit 0
