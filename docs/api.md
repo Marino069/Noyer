@@ -92,6 +92,8 @@ responsives viendront avec le traitement d'images.
 { "slug": "lucerne", "nom": "Lucerne", "description": "…", "produits": [ /* ProduitResume[] */ ] }
 ```
 
+`produits` ne contient que les produits actifs du modèle (une ou deux versions, Classic puis Premium). 404 si le modèle n'a aucun produit actif.
+
 ### `GET /produits/{slug}/disponibilite/`
 
 Classic :
