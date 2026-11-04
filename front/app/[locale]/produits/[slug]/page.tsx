@@ -2,11 +2,12 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ErrorState } from "@/components/ErrorState";
 import { FicheProduit } from "@/components/FicheProduit";
-import { hasLocale } from "@/i18n/config";
+import { defaultLocale, hasLocale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/get-dictionary";
 import { getProductKey, getProductPath } from "@/i18n/slugs";
 import { api } from "@/lib/api";
 import { SHOP_ENABLED } from "@/lib/env";
+import { languageAlternates, ogImage } from "@/lib/seo";
 
 type Props = { params: Promise<{ locale: string; slug: string }> };
 
@@ -16,11 +17,32 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const key = getProductKey(slug, locale);
   const result = await api.produit(key);
   if (!result.ok) return {};
-  const { modele, gamme } = result.data;
+  const { modele, gamme, medias } = result.data;
+  const { meta } = await getDictionary(locale);
+  const title = `${modele.nom} ${gamme}`;
+  // La description du modèle est commune aux deux gammes : on la complète
+  // pour que chaque page produit ait une meta description unique.
+  const description = `${modele.description} ${meta.productSuffix.replace("{gamme}", gamme)}`;
+  const canonical = getProductPath(key, locale);
   return {
-    title: `${modele.nom} ${gamme}`,
-    description: modele.description,
-    alternates: { canonical: getProductPath(key, locale) },
+    title,
+    description,
+    alternates: {
+      canonical,
+      languages: languageAlternates(
+        (l) => getProductPath(key, l),
+        defaultLocale,
+      ),
+    },
+    openGraph: {
+      type: "website",
+      title,
+      description,
+      url: canonical,
+      locale,
+      images: ogImage(medias[0]),
+    },
+    twitter: { card: "summary_large_image", title, description },
   };
 }
 
