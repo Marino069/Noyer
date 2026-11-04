@@ -8,7 +8,12 @@ from django.db.models import F
 from django.utils import timezone
 
 from catalogue.models import Gamme
-from config.exceptions import DonneesInvalides, PieceIndisponible, StockInsuffisant
+from config.exceptions import (
+    DonneesInvalides,
+    PieceIndisponible,
+    ReservationNonLiberable,
+    StockInsuffisant,
+)
 
 from .models import Piece, Reservation, StockClassic
 
@@ -73,3 +78,31 @@ def _reserver_classic(produit, quantite, panier_id):
         expire_le=timezone.now() + DUREE_RESERVATION,
         statut=Reservation.Statut.ACTIVE,
     )
+
+
+def liberer(reservation):
+    """Libère une réservation active : l'article redevient disponible.
+
+    Idempotente : une réservation déjà annulée ou expirée n'est pas touchée.
+    ReservationNonLiberable (409) si elle est confirmée (vendue).
+    """
+    with transaction.atomic():
+        # relecture verrouillée : l'instance reçue peut être périmée
+        reservation = Reservation.objects.select_for_update().get(pk=reservation.pk)
+        if reservation.statut == Reservation.Statut.CONFIRMEE:
+            raise ReservationNonLiberable()
+        if reservation.statut != Reservation.Statut.ACTIVE:
+            return reservation
+        if reservation.piece_id is not None:
+            piece = Piece.objects.select_for_update().get(pk=reservation.piece_id)
+            if piece.statut == Piece.Statut.RESERVEE:
+                piece.statut = Piece.Statut.DISPONIBLE
+                piece.version += 1
+                piece.save(update_fields=["statut", "version"])
+        else:
+            stock = StockClassic.objects.select_for_update().get(produit_id=reservation.produit_id)
+            stock.quantite_reservee = max(0, stock.quantite_reservee - reservation.quantite)
+            stock.save(update_fields=["quantite_reservee", "date_modification"])
+        reservation.statut = Reservation.Statut.ANNULEE
+        reservation.save(update_fields=["statut"])
+        return reservation
