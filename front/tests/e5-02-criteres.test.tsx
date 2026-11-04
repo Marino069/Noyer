@@ -142,6 +142,23 @@ describe("E5-02 · critère 1 : réservation avec durée restante affichée", ()
       await screen.findByText(/Pièce n° 8 réservée pour vous/),
     ).toBeInTheDocument();
   });
+
+  // Bug #174 : la nouvelle pièce peut avoir un numéro plus petit et venir en premier dans la liste.
+  it("attribution automatique : annonce la pièce la plus récemment réservée, quel que soit l'ordre", async () => {
+    api.ajouterLigne.mockResolvedValue({
+      ok: true,
+      data: panierAvec([
+        { id: "b", numero: 3, expire: new Date(Date.now() + 15 * 60_000) },
+        { id: "a", numero: 7, expire: new Date(Date.now() + 5 * 60_000) },
+      ]),
+    });
+    const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
+    rendreAjout([3, 9]);
+    await user.click(screen.getByRole("button", { name: "Ajouter au panier" }));
+    expect(
+      await screen.findByText(/Pièce n° 3 réservée pour vous, encore 15 min/),
+    ).toBeInTheDocument();
+  });
 });
 
 describe("E5-02 · critère 2 : expiration → message clair et retrait", () => {
