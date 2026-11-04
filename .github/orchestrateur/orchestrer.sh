@@ -4,6 +4,7 @@
 set -uo pipefail
 REPO="${REPO:?}"
 LIMITE_JOUR="${LIMITE_JOUR:-8}"
+LECTURE_TOKEN="${LECTURE_TOKEN:-$GH_TOKEN}" # jeton Actions : seul capable de lire les vérifications
 MOI=$(gh api user --jq .login)
 AUJOURDHUI=$(TZ=Europe/Zurich date +%F)
 REGEX_TICKET='^\\[(E[0-9]-[0-9]{2}|B[0-9]-[0-9]{2}|Bug)\\]'
@@ -34,7 +35,7 @@ nb_marqueurs() { # $1 = numéro (PR ou issue), $2 = texte du marqueur
 }
 
 checks_en_echec() {
-  gh pr checks "$1" --repo "$REPO" --json name,bucket \
+  GH_TOKEN="$LECTURE_TOKEN" gh pr checks "$1" --repo "$REPO" --json name,bucket \
     --jq '[.[] | select(.bucket=="fail") | .name] | join(",")' 2>/dev/null
 }
 
@@ -48,7 +49,7 @@ for pr in $(gh pr list --repo "$REPO" --state open --json number,isDraft --jq '.
   mergeable=$(echo "$info" | jq -r .mergeable)
   issues_liees=$(echo "$info" | jq -r '[.closingIssuesReferences[].number] | join(" ")')
 
-  gh pr checks "$pr" --repo "$REPO" > /dev/null 2>&1
+  GH_TOKEN="$LECTURE_TOKEN" gh pr checks "$pr" --repo "$REPO" > /dev/null 2>&1
   etat=$?
   echecs=$(checks_en_echec "$pr")
   # Seuls les échecs de CI (front ou back, job « ci ») bloquent. Un agent en panne ne bloque pas.
@@ -59,7 +60,7 @@ for pr in $(gh pr list --repo "$REPO" --state open --json number,isDraft --jq '.
     log "⏳ #$pr en cours de vérification : $titre"
     continue
   fi
-  if [ -z "$(gh pr checks "$pr" --repo "$REPO" --json name --jq '.[].name' 2>/dev/null)" ]; then
+  if [ -z "$(GH_TOKEN="$LECTURE_TOKEN" gh pr checks "$pr" --repo "$REPO" --json name --jq '.[].name' 2>/dev/null)" ]; then
     log "⏳ #$pr pas encore vérifiée : $titre"
     continue
   fi
@@ -183,6 +184,6 @@ for cote in frontend backend; do
       break
     fi
   done
-  [ -z "$lance" ] && log "🎉 $cote : aucun ticket prêt (tout est fait, bloqué ou en attente d'une dépendance)"
+  if [ -z "$lance" ]; then log "🎉 $cote : aucun ticket prêt (tout est fait, bloqué ou en attente d'une dépendance)"; fi
 done
 exit 0
