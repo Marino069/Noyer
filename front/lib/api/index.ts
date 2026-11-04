@@ -61,6 +61,8 @@ export const api = {
     request<Paiement>(`/commandes/${reference}/paiement/`, {
       method: "POST",
       body: { methode },
+      // La création de la session Stripe peut être plus lente qu'un GET.
+      timeoutMs: 15000,
     }),
 
   contact: (body: ContactMessage) =>

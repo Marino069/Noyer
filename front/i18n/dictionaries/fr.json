@@ -209,6 +209,28 @@
       "server": "La commande n'a pas pu être enregistrée. Réessayez dans un instant."
     }
   },
+  "paiement": {
+    "title": "Paiement",
+    "intro": "Votre commande {reference} est enregistrée. Vous allez régler sur la page sécurisée de notre prestataire de paiement, par TWINT ou par carte bancaire.",
+    "methods": "TWINT (QR code sur ordinateur, application sur mobile) ou carte bancaire.",
+    "secure": "Aucune donnée de carte ne transite par notre site : la saisie se fait sur la page hébergée par Stripe.",
+    "pay": "Payer par TWINT ou carte",
+    "redirecting": "Redirection vers la page de paiement…",
+    "missingTitle": "Commande introuvable",
+    "missingMessage": "Aucune commande à payer n'a été indiquée. Reprenez depuis votre panier.",
+    "backToCart": "Retour au panier",
+    "alreadyPaidTitle": "Commande déjà payée",
+    "alreadyPaidMessage": "Cette commande est déjà réglée : vous n'avez rien de plus à faire.",
+    "cancelledTitle": "Paiement annulé",
+    "cancelledMessage": "Vous avez quitté la page de paiement. Votre commande est conservée : vous pouvez reprendre le paiement.",
+    "failedTitle": "Paiement refusé",
+    "failedMessage": "Le paiement n'a pas abouti. Aucun montant n'a été débité. Vous pouvez réessayer, par TWINT ou avec une autre carte.",
+    "timeoutTitle": "Le prestataire met trop de temps à répondre",
+    "timeoutMessage": "La page de paiement n'a pas pu être ouverte à temps. Votre commande est conservée : réessayez.",
+    "errorTitle": "Paiement indisponible",
+    "errorMessage": "La page de paiement n'a pas pu être ouverte. Votre commande est conservée : réessayez dans un instant.",
+    "retry": "Reprendre le paiement"
+  },
   "price": {
     "vatIncluded": "TVA incluse ({rate})"
   },

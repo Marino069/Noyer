@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import { api, type ModeLivraison, type Panier } from "@/lib/api";
 import { publishCart } from "@/lib/cart";
 import { formatPrice, formatVatRate, interpolate } from "@/lib/format";
@@ -119,6 +119,7 @@ export function Checkout({
   const [erreurs, setErreurs] = useState<Erreurs>({});
   const [envoi, setEnvoi] = useState(false);
   const [erreurServeur, setErreurServeur] = useState("");
+  const envoiEnCours = useRef(false);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -203,6 +204,8 @@ export function Checkout({
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    // Double clic : une seule commande, le state `envoi` n'est pas encore à jour.
+    if (envoiEnCours.current) return;
     const form = event.currentTarget;
     setErreurServeur("");
 
@@ -218,6 +221,7 @@ export function Checkout({
     }
 
     const valeur = (c: Champ) => String(lire(form, c)).trim();
+    envoiEnCours.current = true;
     setEnvoi(true);
     const result = await api.creerCommande({
       email: valeur("email"),
@@ -237,6 +241,7 @@ export function Checkout({
       router.push(`${paiementHref}?reference=${reference}`);
       return;
     }
+    envoiEnCours.current = false;
     setEnvoi(false);
     setErreurServeur(
       result.error.code === "reservation_expiree"
