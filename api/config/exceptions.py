@@ -38,6 +38,12 @@ class ReservationExpiree(ErreurMetier):
     default_detail = "Votre réservation a expiré."
 
 
+class ReservationNonLiberable(ErreurMetier):
+    status_code = status.HTTP_409_CONFLICT
+    default_code = "reservation_non_liberable"
+    default_detail = "Une réservation confirmée ne peut pas être libérée."
+
+
 class DonneesInvalides(ErreurMetier):
     status_code = status.HTTP_422_UNPROCESSABLE_ENTITY
     default_code = "validation"
