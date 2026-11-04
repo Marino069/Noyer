@@ -133,6 +133,33 @@
   "a11y": {
     "skipToContent": "Aller au contenu"
   },
+  "panier": {
+    "title": "Votre panier",
+    "loading": "Chargement du panier…",
+    "errorTitle": "Panier indisponible",
+    "errorMessage": "Le panier n'a pas pu être chargé. Vérifiez votre connexion et réessayez.",
+    "retry": "Réessayer",
+    "emptyTitle": "Votre panier est vide",
+    "emptyMessage": "Parcourez nos lampes artisanales pour trouver celle qui éclairera votre intérieur.",
+    "emptyCta": "Découvrir les lampes",
+    "numero": "Pièce n° {numero}",
+    "quantity": "Quantité, {nom}",
+    "decrease": "Diminuer la quantité, {nom}",
+    "increase": "Augmenter la quantité, {nom}",
+    "remove": "Retirer",
+    "removeLabel": "Retirer {nom} du panier",
+    "expires": "Pièce réservée jusqu'à {heure}",
+    "updateError": "La modification a échoué. Réessayez dans un instant.",
+    "stockError": "Stock insuffisant pour cette quantité.",
+    "summary": "Récapitulatif",
+    "subtotalHt": "Sous-total HT",
+    "vat": "TVA ({rate})",
+    "shipping": "Livraison",
+    "shippingFree": "Offerte",
+    "total": "Total TTC",
+    "totalVat": "TVA incluse ({rate})",
+    "checkout": "Passer la commande"
+  },
   "price": {
     "vatIncluded": "TVA incluse ({rate})"
   },

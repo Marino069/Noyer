@@ -8,6 +8,7 @@ import { Hero } from "@/components/Hero";
 import { Logo } from "@/components/Logo";
 import { Matiere } from "@/components/Matiere";
 import { NewsletterForm } from "@/components/NewsletterForm";
+import { Panier } from "@/components/Panier";
 import { Section } from "@/components/Section";
 import { Selection, SelectionSkeleton } from "@/components/Selection";
 import { hasLocale } from "@/i18n/config";
@@ -187,6 +188,20 @@ export default async function DesignSystemPage({ params }: Props) {
         <CartIndicatorDemo
           href={localePath(locale, "panier")}
           labels={dictionary.header.cart}
+        />
+      </Section>
+
+      <Section>
+        <h2>Panier</h2>
+        <p>
+          Chargement, lignes Classic (quantité) et Premium, récapitulatif, état
+          vide et erreur : l&apos;état affiché dépend du panier des mocks.
+        </p>
+        <Panier
+          locale={locale}
+          textes={dictionary.panier}
+          catalogueHref={`/${locale}/produits`}
+          commandeHref={`/${locale}/panier/commande`}
         />
       </Section>
 
