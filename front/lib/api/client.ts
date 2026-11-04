@@ -18,6 +18,8 @@ export type RequestOptions = {
   body?: unknown;
   timeoutMs?: number;
   signal?: AbortSignal;
+  /** Jamais de cache HTTP (données de stock). */
+  noStore?: boolean;
 };
 
 function buildUrl(path: string, query: RequestOptions["query"]): string {
@@ -47,6 +49,7 @@ async function attempt<T>(
     body,
     timeoutMs = DEFAULT_TIMEOUT_MS,
     signal,
+    noStore,
   }: RequestOptions,
 ): Promise<ApiResult<T>> {
   const timeout = AbortSignal.timeout(timeoutMs);
@@ -54,6 +57,7 @@ async function attempt<T>(
     const response = await fetch(buildUrl(path, query), {
       method,
       credentials: "include",
+      ...(noStore && { cache: "no-store" as const }),
       headers: {
         Accept: "application/json",
         ...(body !== undefined && { "Content-Type": "application/json" }),

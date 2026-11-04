@@ -31,7 +31,10 @@ export const api = {
   modele: (slug: string, opts?: Signal) =>
     request<Modele>(`/modeles/${slug}/`, opts),
   disponibilite: (slug: string, opts?: Signal) =>
-    request<Disponibilite>(`/produits/${slug}/disponibilite/`, opts),
+    request<Disponibilite>(`/produits/${slug}/disponibilite/`, {
+      noStore: true,
+      ...opts,
+    }),
 
   panier: (opts?: Signal) => request<Panier>("/panier/", opts),
   ajouterLigne: (body: {
