@@ -246,4 +246,4 @@ Corps : `{ "email": "…", "consentement": true }`. Réponse : 202 (un email de 
 
 ### `GET /health/`
 
-`{ "statut": "ok" }`
+`{ "statut": "ok", "base": "ok", "redis": "ok" }` (503 avec `"statut": "erreur"` si la base ou Redis ne répond pas).

@@ -1,8 +1,11 @@
 from django.contrib import admin
+from django.core.cache import cache
 from django.db import DatabaseError, connection
 from django.http import JsonResponse
 from django.urls import path
+from django_redis.exceptions import ConnectionInterrupted
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
+from redis.exceptions import RedisError
 
 
 def health(request):
@@ -11,8 +14,16 @@ def health(request):
         base = "ok"
     except DatabaseError:
         base = "erreur"
-    statut = 200 if base == "ok" else 503
-    return JsonResponse({"statut": "ok" if statut == 200 else "erreur", "base": base}, status=statut)
+    try:
+        cache.set("health:ping", "pong", timeout=10)
+        redis = "ok" if cache.get("health:ping") == "pong" else "erreur"
+    except (RedisError, ConnectionInterrupted, OSError):
+        redis = "erreur"
+    statut = 200 if base == "ok" and redis == "ok" else 503
+    return JsonResponse(
+        {"statut": "ok" if statut == 200 else "erreur", "base": base, "redis": redis},
+        status=statut,
+    )
 
 
 urlpatterns = [
