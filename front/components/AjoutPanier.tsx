@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { api, type Gamme } from "@/lib/api";
 import { publishCart } from "@/lib/cart";
+import { formatDuree, interpolate } from "@/lib/format";
 import { Button } from "./Button";
 import styles from "./AjoutPanier.module.css";
 
@@ -16,6 +17,8 @@ export type AjoutPanierTextes = {
   viewCart: string;
   errorGeneric: string;
   errorUnavailable: string;
+  reserved: string;
+  suggest: string;
 };
 
 type Props = {
@@ -49,25 +52,50 @@ export function AjoutPanier({
     "repos",
   );
   const [message, setMessage] = useState("");
+  // Numéro refusé (-1 = attribution automatique) : sert à proposer un autre numéro.
+  const [conflit, setConflit] = useState<number | null>(null);
 
   // Un numéro choisi puis réservé par quelqu'un d'autre retombe sur l'attribution automatique.
   const numero = choix !== null && numeros.includes(choix) ? choix : null;
   const sansPiece = premium && numeros.length === 0;
 
-  async function ajouter() {
+  // Autre numéro libre à proposer après un conflit.
+  const suggestion =
+    conflit !== null ? (numeros.find((n) => n !== conflit) ?? null) : null;
+
+  async function ajouter(numeroVoulu: number | null = numero) {
     setEtat("envoi");
     setMessage("");
     const result = await api.ajouterLigne({
       produit_slug: slug,
       quantite: 1,
-      ...(premium && numero !== null ? { numero } : {}),
+      ...(premium && numeroVoulu !== null ? { numero: numeroVoulu } : {}),
     });
     if (result.ok) {
       publishCart(result.data);
+      setConflit(null);
       setEtat("ajoute");
-      setMessage(textes.added);
+      const ligne = result.data.lignes.find(
+        (l) =>
+          l.produit.slug === slug &&
+          l.reservation_expire_le &&
+          (numeroVoulu === null || l.numero_piece === numeroVoulu),
+      );
+      setMessage(
+        ligne?.reservation_expire_le && ligne.numero_piece !== null
+          ? interpolate(textes.reserved, {
+              numero: ligne.numero_piece,
+              duree: formatDuree(
+                new Date(ligne.reservation_expire_le).getTime() - Date.now(),
+              ),
+            })
+          : textes.added,
+      );
     } else {
-      if (result.error.code === "piece_indisponible") onUnavailable?.();
+      if (result.error.code === "piece_indisponible") {
+        setConflit(numeroVoulu ?? -1);
+        onUnavailable?.();
+      }
       setEtat("erreur");
       setMessage(
         result.error.code === "piece_indisponible"
@@ -102,7 +130,7 @@ export function AjoutPanier({
         </div>
       ) : null}
       <Button
-        onClick={ajouter}
+        onClick={() => ajouter()}
         loading={etat === "envoi"}
         disabled={disabled || sansPiece}
       >
@@ -117,6 +145,11 @@ export function AjoutPanier({
           </>
         ) : null}
       </div>
+      {etat === "erreur" && suggestion !== null ? (
+        <Button variant="secondary" onClick={() => ajouter(suggestion)}>
+          {interpolate(textes.suggest, { numero: suggestion })}
+        </Button>
+      ) : null}
     </div>
   );
 }

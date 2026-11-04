@@ -85,7 +85,9 @@
       "viewCart": "Voir le panier",
       "contact": "Nous contacter",
       "errorGeneric": "L'ajout au panier a échoué. Réessayez dans un instant.",
-      "errorUnavailable": "Cette pièce vient d'être réservée. Choisissez un autre numéro."
+      "errorUnavailable": "Cette pièce vient d'être réservée. Choisissez un autre numéro.",
+      "reserved": "Pièce n° {numero} réservée pour vous, encore {duree}.",
+      "suggest": "Réserver plutôt le n° {numero}"
     },
     "soldOut": {
       "title": "Série épuisée",
@@ -149,6 +151,8 @@
     "remove": "Retirer",
     "removeLabel": "Retirer {nom} du panier",
     "expires": "Pièce réservée jusqu'à {heure}",
+    "remaining": "Réservation : encore {duree}",
+    "expired": "La réservation de la pièce n° {numero} ({nom}) a expiré : l'article a été retiré de votre panier.",
     "updateError": "La modification a échoué. Réessayez dans un instant.",
     "stockError": "Stock insuffisant pour cette quantité.",
     "summary": "Récapitulatif",
