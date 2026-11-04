@@ -1,5 +1,6 @@
 import { locales, type Locale } from "@/i18n/config";
-import type { Image } from "@/lib/api";
+import { SITE_URL } from "@/lib/env";
+import type { Disponibilite, Image, ProduitDetail } from "@/lib/api";
 
 // hreflang : une entrée par langue active (+ x-default). `pathFor` donne le
 // chemin public d'une page pour une langue donnée.
@@ -23,4 +24,64 @@ export function ogImage(image: Image | undefined | null) {
     (source.largeur * image.hauteur_origine) / image.largeur_origine,
   );
   return [{ url: source.url, width: source.largeur, height, alt: image.alt }];
+}
+
+// Centimes entiers → « 1240.00 » sans passer par un flottant.
+export function priceDecimal(centimes: number): string {
+  return `${Math.floor(centimes / 100)}.${String(centimes % 100).padStart(2, "0")}`;
+}
+
+// Google exige des URL absolues dans les données structurées.
+function absoluteUrl(url: string): string {
+  return /^https?:\/\//.test(url) ? url : `${SITE_URL}${url}`;
+}
+
+function inStock(disponibilite: Disponibilite): boolean {
+  return disponibilite.gamme === "Classic"
+    ? disponibilite.quantite_disponible > 0
+    : disponibilite.series.some((s) => s.pieces_restantes > 0);
+}
+
+// JSON-LD schema.org `Product` d'une fiche produit. Sans information de
+// stock (appel échoué), `availability` est omis plutôt que deviné.
+export function productJsonLd({
+  produit,
+  disponibilite,
+  url,
+  description,
+  brand,
+}: {
+  produit: ProduitDetail;
+  disponibilite: Disponibilite | null;
+  url: string;
+  description: string;
+  brand: string;
+}) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: `${produit.modele.nom} ${produit.gamme}`,
+    description,
+    image: produit.medias.flatMap((m) =>
+      m.sources.length === 0
+        ? []
+        : [
+            absoluteUrl(
+              m.sources.reduce((a, b) => (b.largeur > a.largeur ? b : a)).url,
+            ),
+          ],
+    ),
+    brand: { "@type": "Brand", name: brand },
+    offers: {
+      "@type": "Offer",
+      url: absoluteUrl(url),
+      priceCurrency: "CHF",
+      price: priceDecimal(produit.prix_ttc_centimes),
+      ...(disponibilite && {
+        availability: inStock(disponibilite)
+          ? "https://schema.org/InStock"
+          : "https://schema.org/OutOfStock",
+      }),
+    },
+  };
 }
