@@ -19,6 +19,7 @@ permissions:
   checks: read
   statuses: read
   pull-requests: read
+  issues: write
   actions: read
 
 jobs:
@@ -34,5 +35,5 @@ jobs:
           GH_TOKEN: ${{ secrets.NOYER_BOT_TOKEN }}
           LECTURE_TOKEN: ${{ github.token }}
           REPO: ${{ github.repository }}
-          LIMITE_JOUR: "8"
+          LIMITE_JOUR: "1000" # pas de limite : enchaîne tant qu'il y a des tickets
         run: bash .github/orchestrateur/orchestrer.sh

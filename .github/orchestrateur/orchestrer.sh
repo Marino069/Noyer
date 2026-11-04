@@ -11,6 +11,12 @@ REGEX_TICKET='^\\[(E[0-9]-[0-9]{2}|B[0-9]-[0-9]{2}|Bug)\\]'
 
 log() { echo "$*"; }
 
+# Prévient le propriétaire : écrit avec le jeton Actions (github-actions[bot]),
+# car GitHub ne notifie pas quelqu'un de ses propres actions.
+prevenir() { # $1 = numéro d'issue, $2 = texte
+  GH_TOKEN="$LECTURE_TOKEN" gh issue comment "$1" --repo "$REPO" --body "@$MOI $2" > /dev/null 2>&1
+}
+
 # --- 0. Pause ----------------------------------------------------------------
 if [ "$(gh issue list --repo "$REPO" --state open --label pause --json number --jq length)" != "0" ]; then
   log "⏸️  Une issue porte le label « pause » : rien à faire."
@@ -130,11 +136,13 @@ pr_ouverte_pour() { # $1 = numéro d'issue → numéro de PR ouverte ou vide
     --jq ".[] | select([.closingIssuesReferences[].number] | index($1)) | .number" | head -1
 }
 
+actifs=0
 for cote in frontend backend; do
   en_cours=$(gh issue list --repo "$REPO" --state open --label "$cote" --label claude --limit 50 \
     --json number,title --jq ".[] | select(.title | test(\"$REGEX_TICKET\")) | .number" | head -1)
 
   if [ -n "$en_cours" ]; then
+    actifs=1
     if [ -n "$(pr_ouverte_pour "$en_cours")" ]; then
       log "🤖 $cote : #$en_cours en cours, sa PR attend vérification ou fusion"
       continue
@@ -150,7 +158,7 @@ for cote in frontend backend; do
     tentatives=$(nb_marqueurs "$en_cours" "[auto-relance]")
     if [ "$tentatives" -ge 2 ]; then
       gh issue edit "$en_cours" --repo "$REPO" --remove-label claude --add-label bloqué-agent > /dev/null
-      gh issue comment "$en_cours" --repo "$REPO" --body "Le chef d'orchestre met ce ticket de côté (bloqué-agent) : 3 tentatives sans PR. Il a besoin d'un regard humain." > /dev/null
+      prevenir "$en_cours" "le chef d'orchestre met ce ticket de côté (bloqué-agent) : 3 tentatives sans PR. Il a besoin d'un regard humain."
       log "🛑 $cote : #$en_cours mis de côté après 3 tentatives"
     else
       gh issue comment "$en_cours" --repo "$REPO" --body "[auto-relance] Aucune PR après $age_min minutes : ticket relancé." > /dev/null
@@ -163,6 +171,7 @@ for cote in frontend backend; do
   fi
 
   if [ "$lances" -ge "$LIMITE_JOUR" ]; then
+    actifs=1
     log "🧮 $cote : limite du jour atteinte, reprise demain"
     continue
   fi
@@ -184,6 +193,7 @@ for cote in frontend backend; do
     if [ "$pret" -eq 1 ]; then
       gh issue edit "$n" --repo "$REPO" --add-label claude > /dev/null
       lance="$n"
+      actifs=1
       lances=$((lances + 1))
       log "🚀 $cote : lancé #$n $(gh issue view "$n" --repo "$REPO" --json title --jq .title)"
       break
@@ -191,4 +201,26 @@ for cote in frontend backend; do
   done
   if [ -z "$lance" ]; then log "🎉 $cote : aucun ticket prêt (tout est fait, bloqué ou en attente d'une dépendance)"; fi
 done
+
+# --- 4. Fin : plus rien à lancer ni à fusionner → prévenir une seule fois ----
+prs_claude=$(gh pr list --repo "$REPO" --state open --json headRefName --jq '[.[] | select(.headRefName | startswith("claude/"))] | length')
+fin=$(gh issue list --repo "$REPO" --state open --label pilote-fini --json number --jq '.[0].number // empty')
+if [ "$actifs" -eq 0 ] && [ "$prs_claude" = "0" ]; then
+  if [ -z "$fin" ]; then
+    restants=$(gh issue list --repo "$REPO" --state open --limit 200 --json number,title,labels \
+      --jq "[.[] | select(.title | test(\"$REGEX_TICKET\"))] | map(\"- #\\(.number) \\(.title) (\\([.labels[].name] | map(select(startswith(\"bloqué\"))) | join(\", \")))\") | join(\"\\n\")")
+    gh label create pilote-fini --repo "$REPO" --color 0E8A16 --description "Le pilote n'a plus rien à faire" > /dev/null 2>&1
+    GH_TOKEN="$LECTURE_TOKEN" gh issue create --repo "$REPO" --label pilote-fini \
+      --title "[Pilote] Plus rien à faire" \
+      --body "@$MOI Le chef d'orchestre a fini tout ce qu'il pouvait faire seul.
+
+Tickets restants (bloqués ou en attente d'une dépendance) :
+${restants:-aucun, tout est fait 🎉}
+
+Ferme cette issue quand tu as débloqué quelque chose : il reprendra tout seul." > /dev/null \
+      && log "📣 Terminé : propriétaire prévenu"
+  fi
+elif [ -n "$fin" ]; then
+  gh issue close "$fin" --repo "$REPO" --comment "Le pilote a repris du travail." > /dev/null
+fi
 exit 0
