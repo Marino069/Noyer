@@ -69,6 +69,21 @@ DATABASES = {
 DATABASES["default"]["OPTIONS"] = {"charset": "utf8mb4"}
 
 
+# Cache : Redis (paniers, cache, compteurs de limitation)
+# REDIS_URL : redis://redis:6379/0
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": env("REDIS_URL", default="redis://127.0.0.1:6379/0"),
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+            "SOCKET_CONNECT_TIMEOUT": 2,
+            "SOCKET_TIMEOUT": 2,
+        },
+    },
+}
+
+
 # Password validation
 # https://docs.djangoproject.com/en/6.1/ref/settings/#auth-password-validators
 
