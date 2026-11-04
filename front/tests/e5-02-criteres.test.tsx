@@ -125,28 +125,23 @@ describe("E5-02 · critère 1 : réservation avec durée restante affichée", ()
     ).toBeInTheDocument();
   });
 
-  // Bug #174 : le message annonce la première ligne réservée au lieu de la nouvelle.
-  it.fails(
-    "attribution automatique : annonce le numéro de la pièce qui vient d'être réservée",
-    async () => {
-      // Le panier contenait déjà le n° 7 ; le back attribue le n° 8 à ce nouvel ajout.
-      api.ajouterLigne.mockResolvedValue({
-        ok: true,
-        data: panierAvec([
-          { id: "a", numero: 7, expire: new Date(Date.now() + 5 * 60_000) },
-          { id: "b", numero: 8, expire: new Date(Date.now() + 15 * 60_000) },
-        ]),
-      });
-      const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
-      rendreAjout([8, 9]);
-      await user.click(
-        screen.getByRole("button", { name: "Ajouter au panier" }),
-      );
-      expect(
-        await screen.findByText(/Pièce n° 8 réservée pour vous/),
-      ).toBeInTheDocument();
-    },
-  );
+  // Bug #174 : le message doit annoncer la nouvelle ligne, pas la première réservée.
+  it("attribution automatique : annonce le numéro de la pièce qui vient d'être réservée", async () => {
+    // Le panier contenait déjà le n° 7 ; le back attribue le n° 8 à ce nouvel ajout.
+    api.ajouterLigne.mockResolvedValue({
+      ok: true,
+      data: panierAvec([
+        { id: "a", numero: 7, expire: new Date(Date.now() + 5 * 60_000) },
+        { id: "b", numero: 8, expire: new Date(Date.now() + 15 * 60_000) },
+      ]),
+    });
+    const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
+    rendreAjout([8, 9]);
+    await user.click(screen.getByRole("button", { name: "Ajouter au panier" }));
+    expect(
+      await screen.findByText(/Pièce n° 8 réservée pour vous/),
+    ).toBeInTheDocument();
+  });
 });
 
 describe("E5-02 · critère 2 : expiration → message clair et retrait", () => {
