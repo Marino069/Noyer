@@ -149,6 +149,12 @@ SPECTACULAR_SETTINGS = {
 # CORS : seule l'URL du front est autorisée
 FRONT_URL = env("FRONT_URL", default="http://localhost:3000").rstrip("/")
 CORS_ALLOWED_ORIGINS = [FRONT_URL]
+# Le front envoie le cookie du panier (credentials: "include")
+CORS_ALLOW_CREDENTIALS = True
+
+# Cookie du panier : domaine partagé entre front et API (ex. ".noyer.ch"), vide en local
+PANIER_COOKIE_DOMAIN = env("PANIER_COOKIE_DOMAIN", default="") or None
+PANIER_COOKIE_SECURE = env.bool("PANIER_COOKIE_SECURE", default=not DEBUG)
 
 # Les erreurs 500 sont journalisées, jamais renvoyées au client
 LOGGING = {
