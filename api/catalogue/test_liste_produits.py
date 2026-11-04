@@ -67,6 +67,26 @@ class ListeProduitsTests(TestCase):
         self.assertIsNotNone(r["next"])
         self.assertEqual(len(self.client.get("/api/produits/?page=2").json()["results"]), 8)
 
+    def test_mis_en_avant_seuls_actifs_et_mis_en_avant(self):
+        Produit.objects.filter(pk=self.c.pk).update(mis_en_avant=True)
+        autre = Modele.objects.create(slug="berne", nom="Berne")
+        Produit.objects.create(
+            slug="berne-classic",
+            prix_ttc_centimes=1,
+            modele=autre,
+            gamme=self.classic,
+            actif=False,
+            mis_en_avant=True,
+        )
+        r = self.client.get("/api/produits/?mis_en_avant=true")
+        self.assertEqual(r.status_code, 200)
+        self.assertEqual(r.json()["count"], 1)
+        self.assertEqual(r.json()["results"][0]["slug"], "lucerne-classic")
+
+    def test_mis_en_avant_aucun(self):
+        r = self.client.get("/api/produits/?mis_en_avant=true")
+        self.assertEqual(r.json()["count"], 0)
+
     def test_nombre_de_requetes_constant(self):
         # count + produits (avec modele et gamme) + medias préchargés
         with self.assertNumQueries(3):
