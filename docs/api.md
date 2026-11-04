@@ -61,7 +61,10 @@ type ProduitResume = {
 ### `GET /produits/`
 
 Paramètres : `gamme` (`Classic` | `Premium`), `mis_en_avant` (`true`), `page`.
-Réponse : pagination de `ProduitResume`. Seuls les produits actifs.
+Réponse : pagination de `ProduitResume` (24 par page). Seuls les produits actifs.
+Une valeur de `gamme` inconnue renvoie une 400 `validation`.
+Pour l'instant `image_principale` vaut `{ "url": "…", "alt": "…" }` (ou `null`) ; les `sources`
+responsives viendront avec le traitement d'images.
 
 ### `GET /produits/{slug}/`
 
