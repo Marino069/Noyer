@@ -1,0 +1,4 @@
+{% extends "commande/emails/base.html" %}
+{% block titre %}Virement en attente{% endblock %}
+{% block titre_page %}Virement en attente{% endblock %}
+{% block message %}<p>Votre commande <strong>{{ commande.reference }}</strong> est réservée. Nous l'enverrons dès réception de votre virement de <strong>CHF {{ total }}</strong>, avec la référence {{ commande.reference }}.</p>{% endblock %}

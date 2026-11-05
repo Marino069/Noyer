@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block titre %}{% endblock %}</title>
+<style>
+  body { margin: 0; padding: 0; background: #f6f1ea; font-family: Arial, Helvetica, sans-serif; color: #2b2118; }
+  .conteneur { width: 100%; max-width: 600px; margin: 0 auto; background: #ffffff; }
+  .contenu { padding: 24px 20px; font-size: 16px; line-height: 1.5; }
+  table.lignes { width: 100%; border-collapse: collapse; }
+  table.lignes td { padding: 8px 0; border-bottom: 1px solid #e6ddd0; font-size: 15px; }
+  @media only screen and (max-width: 480px) { .contenu { padding: 16px 12px !important; } }
+</style>
+</head>
+<body>
+<div class="conteneur">
+  <div class="contenu">
+    <h1 style="font-size: 22px; margin: 0 0 16px;">{% block titre_page %}{% endblock %}</h1>
+    {% block message %}{% endblock %}
+    <table class="lignes" role="presentation">
+      {% for ligne in lignes %}
+      <tr>
+        <td>{{ ligne.nom }} × {{ ligne.quantite }}{% if ligne.numero_piece %}<br><strong>Pièce n° {{ ligne.numero_piece }}</strong>{% endif %}</td>
+        <td style="text-align: right;">CHF {{ ligne.prix_unitaire }}</td>
+      </tr>
+      {% endfor %}
+      <tr><td>Livraison</td><td style="text-align: right;">CHF {{ frais_livraison }}</td></tr>
+      <tr><td><strong>Total TTC</strong></td><td style="text-align: right;"><strong>CHF {{ total }}</strong></td></tr>
+    </table>
+    <p style="margin-top: 24px;">L'atelier Noyer, Genève</p>
+  </div>
+</div>
+</body>
+</html>

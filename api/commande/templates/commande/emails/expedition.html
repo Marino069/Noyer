@@ -1,0 +1,4 @@
+{% extends "commande/emails/base.html" %}
+{% block titre %}Votre commande est expédiée{% endblock %}
+{% block titre_page %}Votre commande est expédiée{% endblock %}
+{% block message %}<p>Votre commande <strong>{{ commande.reference }}</strong> vient d'être expédiée. Elle arrive bientôt.</p>{% endblock %}

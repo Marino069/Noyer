@@ -1,0 +1,1 @@
+{% extends "commande/emails/base.txt" %}{% block message %}Merci ! Paiement confirmé pour la commande {{ commande.reference }}.{% endblock %}
