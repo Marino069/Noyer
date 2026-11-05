@@ -11,11 +11,18 @@ import { NewsletterForm } from "@/components/NewsletterForm";
 import { Panier } from "@/components/Panier";
 import { Section } from "@/components/Section";
 import { Selection, SelectionSkeleton } from "@/components/Selection";
+import { TexteRiche } from "@/components/TexteRiche";
 import { hasLocale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/get-dictionary";
 import { networkError, type ProduitResume } from "@/lib/api";
 import { localePath } from "@/lib/routes";
-import { detailDe, heroAccueil, matiereAccueil, produits } from "@/mocks/data";
+import {
+  detailDe,
+  heroAccueil,
+  matiereAccueil,
+  pagesContenu,
+  produits,
+} from "@/mocks/data";
 import { CartIndicatorDemo } from "./CartIndicatorDemo";
 import styles from "./page.module.css";
 
@@ -110,6 +117,9 @@ export default async function DesignSystemPage({ params }: Props) {
 
       <h2 className={styles.heading}>Matière</h2>
       <Matiere contenu={matiereAccueil} />
+
+      <h2 className={styles.heading}>Texte riche</h2>
+      <TexteRiche blocs={pagesContenu.atelier.contenu.blocs} locale={locale} />
 
       <h2 className={styles.heading}>Sélection</h2>
       <h3 className={styles.heading}>chargée</h3>

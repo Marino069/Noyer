@@ -31,6 +31,28 @@ export type MatiereAccueil = {
   gros_plans: { legende: string; image: Image }[];
 };
 
+/** Fragment de texte riche ; les marques sont combinables. */
+export type SegmentTexte = {
+  texte: string;
+  italique?: boolean;
+  gras?: boolean;
+  /** Lien : chemin public sans préfixe de langue ("/atelier") ou URL https. */
+  lien?: string;
+};
+
+export type BlocTexte =
+  | { type: "titre"; niveau: 2 | 3; segments: SegmentTexte[] }
+  | { type: "paragraphe"; segments: SegmentTexte[] }
+  | { type: "citation"; segments: SegmentTexte[]; auteur?: string | null }
+  | { type: "liste"; ordonnee: boolean; items: SegmentTexte[][] };
+
+export type PageContenu = {
+  slug: string;
+  titre: string;
+  description: string;
+  blocs: BlocTexte[];
+};
+
 export type Page<T> = {
   count: number;
   next: string | null;
