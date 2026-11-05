@@ -156,6 +156,10 @@ CORS_ALLOW_CREDENTIALS = True
 PANIER_COOKIE_DOMAIN = env("PANIER_COOKIE_DOMAIN", default="") or None
 PANIER_COOKIE_SECURE = env.bool("PANIER_COOKIE_SECURE", default=not DEBUG)
 
+# Montants du panier (centimes entiers). TVA en centièmes de pour cent : 810 = 8,1 %.
+TVA_TAUX_CENTIEMES = env.int("TVA_TAUX_CENTIEMES", default=810)
+FRAIS_LIVRAISON_CENTIMES = env.int("FRAIS_LIVRAISON_CENTIMES", default=0)
+
 # Les erreurs 500 sont journalisées, jamais renvoyées au client
 LOGGING = {
     "version": 1,
