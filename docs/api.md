@@ -17,17 +17,22 @@ Quand le back sera en place, le schéma OpenAPI généré (`/api/schema/`) fera 
 ### Format d'erreur (toutes les routes)
 
 ```json
-{ "erreur": { "code": "piece_indisponible", "message": "Cette pièce vient d'être réservée." } }
+{
+  "erreur": {
+    "code": "piece_indisponible",
+    "message": "Cette pièce vient d'être réservée."
+  }
+}
 ```
 
-| HTTP | Quand |
-|---|---|
+| HTTP      | Quand                                                              |
+| --------- | ------------------------------------------------------------------ |
 | 400 / 422 | Données invalides (`code: "validation"`, avec `details` par champ) |
-| 404 | Ressource introuvable |
-| 409 | Conflit : pièce ou stock indisponible, commande déjà payée |
-| 410 | Réservation expirée |
-| 429 | Trop de requêtes |
-| 500 | Erreur interne (aucun détail technique) |
+| 404       | Ressource introuvable                                              |
+| 409       | Conflit : pièce ou stock indisponible, commande déjà payée         |
+| 410       | Réservation expirée                                                |
+| 429       | Trop de requêtes                                                   |
+| 500       | Erreur interne (aucun détail technique)                            |
 
 ### Pagination
 
@@ -48,8 +53,8 @@ type Image = {
 };
 
 type ProduitResume = {
-  slug: string;              // "lucerne-premium"
-  modele: string;            // "Lucerne"
+  slug: string; // "lucerne-premium"
+  modele: string; // "Lucerne"
   gamme: Gamme;
   prix_ttc_centimes: number;
   image_principale: Image | null;
@@ -62,9 +67,11 @@ type ProduitResume = {
 
 Paramètres : `gamme` (`Classic` | `Premium`), `mis_en_avant` (`true`), `page`.
 Réponse : pagination de `ProduitResume` (24 par page). Seuls les produits actifs.
+`mis_en_avant=true` ne renvoie que les produits actifs mis en avant (page d'accueil).
 Une valeur de `gamme` inconnue renvoie une 400 `validation`.
-Pour l'instant `image_principale` vaut `{ "url": "…", "alt": "…" }` (ou `null`) ; les `sources`
-responsives viendront avec le traitement d'images.
+`image_principale` vaut `{ "url": "…", "alt": "…" }` (ou `null`). Pour une photo téléversée,
+l'objet contient en plus `largeur_origine`, `hauteur_origine` et `sources` (WebP en 480, 960 et
+1600 px, jamais agrandies au-delà de l'original) ; `url` pointe alors vers la version 960 px.
 
 ### `GET /produits/{slug}/`
 
@@ -79,7 +86,7 @@ responsives viendront avec le traitement d'images.
     { "nom": "Noyer", "role": "Pied", "entretien": "Huiler une fois par an." },
     { "nom": "Laiton", "role": "Finition", "entretien": "Chiffon doux et sec." }
   ],
-  "medias": [ /* Image[], triées par ordre */ ],
+  "medias": [/* Image[], triées par ordre */],
   "autre_gamme": "lucerne-classic"
 }
 ```
@@ -89,22 +96,36 @@ responsives viendront avec le traitement d'images.
 ### `GET /modeles/{slug}/`
 
 ```json
-{ "slug": "lucerne", "nom": "Lucerne", "description": "…", "produits": [ /* ProduitResume[] */ ] }
+{
+  "slug": "lucerne",
+  "nom": "Lucerne",
+  "description": "…",
+  "produits": [/* ProduitResume[] */]
+}
 ```
+
+`produits` ne contient que les produits actifs du modèle (une ou deux versions, Classic puis Premium). 404 si le modèle n'a aucun produit actif.
 
 ### `GET /produits/{slug}/disponibilite/`
 
 Classic :
+
 ```json
 { "gamme": "Classic", "quantite_disponible": 7 }
 ```
 
 Premium :
+
 ```json
 {
   "gamme": "Premium",
   "series": [
-    { "id": 1, "taille_serie": 50, "pieces_restantes": 12, "numeros_disponibles": [3, 8, 15] }
+    {
+      "id": 1,
+      "taille_serie": 50,
+      "pieces_restantes": 12,
+      "numeros_disponibles": [3, 8, 15]
+    }
   ]
 }
 ```
@@ -122,7 +143,7 @@ Hero de la homepage, modifiable depuis le back-office (source du CMS : point ouv
   "sous_titre": "Lampes semi-artisanales en noyer et laiton, assemblées à Genève.",
   "cta_libelle": "Découvrir les lampes",
   "cta_chemin": "/produits/classic",
-  "image": { /* Image, ou null */ }
+  "image": {/* Image, ou null */}
 }
 ```
 
@@ -136,14 +157,66 @@ Les 4 gros plans « La matière » de la homepage (brief §05.3), modifiables de
 ```json
 {
   "titre": "La matière",
-  "gros_plans": [
-    { "legende": "Noyer", "image": { /* Image */ } }
-  ]
+  "gros_plans": [{ "legende": "Noyer", "image": {/* Image */} }]
 }
 ```
 
 `gros_plans` contient 4 éléments, triés par ordre. L'`alt` de chaque image décrit la matière
 (« Grain de noyer huilé, gros plan »).
+
+### `GET /contenu/pages/{slug}/`
+
+Page éditoriale (atelier, À propos…) avec texte riche **structuré** (pas de HTML brut).
+
+```json
+{
+  "slug": "atelier",
+  "titre": "L'atelier",
+  "description": "Là où naissent les lampes Noyer, à Genève.",
+  "mis_a_jour": "2026-11-01",
+  "blocs": [
+    { "type": "titre", "niveau": 2, "segments": [{ "texte": "Le geste" }] },
+    {
+      "type": "paragraphe",
+      "segments": [
+        { "texte": "En " },
+        { "texte": "noyer", "gras": true },
+        { "texte": "voir", "lien": "/produits" }
+      ]
+    },
+    {
+      "type": "citation",
+      "segments": [{ "texte": "…" }],
+      "auteur": "L'atelier"
+    },
+    {
+      "type": "liste",
+      "ordonnee": false,
+      "items": [[{ "texte": "Noyer suisse" }]]
+    }
+  ]
+}
+```
+
+`mis_a_jour` (date `AAAA-MM-JJ`, optionnel) est affichée par le front sous le titre ; elle est
+obligatoire pour les pages légales `impressum`, `cgv` et `confidentialite` (liées depuis le pied de page).
+
+Blocs : `titre` (`niveau` 2 ou 3), `paragraphe`, `citation` (`auteur` optionnel), `liste`. Un segment
+porte `texte` et, au choix, `italique`, `gras`, `lien` (chemin public sans préfixe de langue, ou URL
+`https`). Le front ignore les types de bloc inconnus.
+
+Deux blocs complètent la mise en page éditoriale (atelier, notre histoire) :
+`{ "type": "image", "image": {/* Image */}, "legende": "…" }` (photo documentaire, `alt` obligatoire,
+`legende` optionnelle) et `{ "type": "section", "ton": "clair" | "alt" | "sombre", "blocs": [/* blocs */] }`
+(section à registre propre, sans `section` imbriquée). Les blocs hors `section` sont regroupés en
+section claire. 404 si la page n'existe pas ou n'est pas publiée.
+
+**Aperçu** : avec `?apercu=<jeton>`, le back renvoie le brouillon s'il le connaît (jeton partagé avec le
+front, variable `PREVIEW_SECRET`), sinon 401. Le front n'envoie ce jeton que côté serveur.
+
+**Webhook de publication** : à chaque publication, le back appelle
+`POST <site>/api/revalidate` avec l'en-tête `x-webhook-secret: <REVALIDATE_SECRET>` et le corps
+`{ "slug": "atelier" }` (sans corps : tous les contenus). Le front invalide alors son cache.
 
 ## Panier
 
@@ -154,7 +227,7 @@ Les 4 gros plans « La matière » de la homepage (brief §05.3), modifiables de
   "lignes": [
     {
       "id": "a1b2",
-      "produit": { /* ProduitResume */ },
+      "produit": {/* ProduitResume */},
       "quantite": 1,
       "numero_piece": 7,
       "reservation_expire_le": "2026-10-05T14:45:00+02:00"
@@ -188,7 +261,13 @@ Réponse : le panier complet.
 ```json
 {
   "email": "client@exemple.ch",
-  "adresse_livraison": { "nom": "…", "rue": "…", "npa": "1204", "localite": "Genève", "pays": "CH" },
+  "adresse_livraison": {
+    "nom": "…",
+    "rue": "…",
+    "npa": "1204",
+    "localite": "Genève",
+    "pays": "CH"
+  },
   "adresse_facturation": null,
   "mode_livraison": "livraison",
   "cgv_acceptees": true
@@ -197,10 +276,22 @@ Réponse : le panier complet.
 
 `mode_livraison` : `livraison` | `retrait_atelier`.
 Réponse 201 :
+
 ```json
-{ "reference": "NOY-2026-00042", "statut": "EnAttente", "total_centimes": 124000 }
+{
+  "reference": "NOY-2026-00042",
+  "statut": "EnAttente",
+  "total_centimes": 124000
+}
 ```
+
 Erreur : 410 `reservation_expiree`.
+
+Précisions : le panier est lu via le cookie. `adresse_facturation` vaut l'adresse de livraison si
+elle est `null`. NPA suisse (`pays` = `CH`) : 4 chiffres. `cgv_acceptees` doit être `true`. Panier
+vide ou données invalides : 422/400 `validation`. Si une réservation n'est plus active, aucune
+commande n'est créée (410). Sinon les réservations sont prolongées de 30 minutes (paiement),
+les prix et noms sont copiés dans la commande et le panier est vidé.
 
 ### `GET /commandes/{reference}/?email=…`
 
@@ -210,8 +301,13 @@ Erreur : 410 `reservation_expiree`.
   "statut": "Payee",
   "cree_le": "2026-10-05T14:30:00+02:00",
   "lignes": [
-    { "nom_produit": "Lucerne Premium", "gamme": "Premium", "numero_piece": 7,
-      "prix_unitaire_centimes": 124000, "quantite": 1 }
+    {
+      "nom_produit": "Lucerne Premium",
+      "gamme": "Premium",
+      "numero_piece": 7,
+      "prix_unitaire_centimes": 124000,
+      "quantite": 1
+    }
   ],
   "total_centimes": 124000
 }
@@ -224,16 +320,47 @@ Erreur : 410 `reservation_expiree`.
 Corps : `{ "methode": "stripe" }` ou `{ "methode": "virement" }`.
 
 Stripe (TWINT et cartes) :
+
 ```json
 { "methode": "stripe", "url_paiement": "https://checkout.stripe.com/…" }
 ```
 
 Virement (Premium uniquement) :
+
 ```json
-{ "methode": "virement", "iban": "CH…", "beneficiaire": "Noyer", "reference": "NOY-2026-00042", "delai_jours": 5 }
+{
+  "methode": "virement",
+  "iban": "CH…",
+  "beneficiaire": "Noyer",
+  "reference": "NOY-2026-00042",
+  "delai_jours": 5
+}
 ```
 
-Erreur : 409 `deja_payee`.
+Réponse stripe : 201. Le montant est recalculé par le back (CHF) ; le client est redirigé vers
+`url_paiement` (page hébergée par Stripe), puis revient sur `/fr/panier/confirmation?reference=…`
+(ou `/fr/panier/paiement?reference=…&retour=annule`).
+
+Réponse virement : 201. Crée une transaction `Virement`, prolonge les réservations de 5 jours ouvrés
+et envoie un email au client. Sans validation de l'atelier dans ce délai, la commande est annulée
+et la pièce libérée. Un second appel renvoie les mêmes coordonnées sans rien prolonger.
+Réservé aux commandes contenant du Premium : sinon 422 `virement_indisponible`.
+
+Erreurs : 409 `deja_payee`, 409 `commande_annulee`, 404 (référence inconnue), 410 `reservation_expiree`
+(virement), 422 `virement_indisponible`, 502 (Stripe indisponible, ou IBAN non configuré).
+
+### POST /api/webhooks/stripe/
+Appelé par Stripe uniquement (pas d'authentification ni de CSRF) : l'en-tête `Stripe-Signature` est
+vérifié avec `STRIPE_WEBHOOK_SECRET`. Signature invalide → 400 `signature_invalide`. Sinon 200
+`{ "recu": true }`, y compris pour un doublon (même `id` d'événement, appliqué une seule fois).
+Événements traités : `checkout.session.completed` (payé → commande `Payee`, réservations
+confirmées, email), `checkout.session.async_payment_failed` et `checkout.session.expired`
+(transaction `Echouee`). `Webhook.traite` reste faux pour un événement non appliqué.
+
+Vente : la confirmation est atomique (transaction `Confirmee`, commande `Payee`, pièces `Vendue`,
+stock Classic décrémenté, réservations `Confirmee`). Paiement reçu après expiration : vendu si
+l'article est encore libre, sinon la commande passe `Annulee` avec `a_rembourser` vrai en base et
+l'atelier est alerté par email (`ATELIER_EMAIL`).
 
 ## Divers
 
@@ -246,6 +373,13 @@ Réponse : 204.
 ### `POST /newsletter/`
 
 Corps : `{ "email": "…", "consentement": true }`. Réponse : 202 (un email de confirmation est envoyé).
+Sans `consentement: true` → 400 `validation`. L'inscription n'est effective qu'après clic sur le lien
+de l'email (double confirmation). Même réponse 202 si l'adresse est déjà confirmée (aucun email).
+
+### `GET /newsletter/confirmer/?jeton=…`
+
+Lien de l'email : confirme l'inscription puis redirige (302) vers
+`<FRONT_URL>/newsletter/confirmation?statut=ok` (ou `statut=invalide` si le jeton est inconnu).
 
 ### `GET /health/`
 

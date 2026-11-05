@@ -1,0 +1,1 @@
+{% extends "commande/emails/base.txt" %}{% block message %}Commande {{ commande.reference }} réservée. Nous l'enverrons dès réception de votre virement de CHF {{ total }} (référence {{ commande.reference }}).{% endblock %}

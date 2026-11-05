@@ -10,6 +10,7 @@ import type {
   MatiereAccueil,
   Modele,
   Page,
+  PageContenu,
   Paiement,
   Panier,
   ProduitDetail,
@@ -61,6 +62,8 @@ export const api = {
     request<Paiement>(`/commandes/${reference}/paiement/`, {
       method: "POST",
       body: { methode },
+      // La création de la session Stripe peut être plus lente qu'un GET.
+      timeoutMs: 15000,
     }),
 
   contact: (body: ContactMessage) =>
@@ -71,5 +74,16 @@ export const api = {
     request<HeroAccueil>("/contenu/accueil/hero/", opts),
   matiereAccueil: (opts?: Signal) =>
     request<MatiereAccueil>("/contenu/accueil/matiere/", opts),
+  /**
+   * Page éditoriale. Avec `apercu` (jeton serveur), l'API renvoie le brouillon : jamais mis en cache.
+   */
+  pageContenu: (slug: string, opts: Signal & { apercu?: string } = {}) =>
+    request<PageContenu>(`/contenu/pages/${slug}/`, {
+      query: { apercu: opts.apercu },
+      signal: opts.signal,
+      ...(opts.apercu
+        ? { noStore: true }
+        : { tags: ["contenu", `contenu:${slug}`] }),
+    }),
   health: (opts?: Signal) => request<{ statut: string }>("/health/", opts),
 };

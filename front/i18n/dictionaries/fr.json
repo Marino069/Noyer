@@ -85,7 +85,9 @@
       "viewCart": "Voir le panier",
       "contact": "Nous contacter",
       "errorGeneric": "L'ajout au panier a échoué. Réessayez dans un instant.",
-      "errorUnavailable": "Cette pièce vient d'être réservée. Choisissez un autre numéro."
+      "errorUnavailable": "Cette pièce vient d'être réservée. Choisissez un autre numéro.",
+      "reserved": "Pièce n° {numero} réservée pour vous, encore {duree}.",
+      "suggest": "Réserver plutôt le n° {numero}"
     },
     "soldOut": {
       "title": "Série épuisée",
@@ -149,6 +151,8 @@
     "remove": "Retirer",
     "removeLabel": "Retirer {nom} du panier",
     "expires": "Pièce réservée jusqu'à {heure}",
+    "remaining": "Réservation : encore {duree}",
+    "expired": "La réservation de la pièce n° {numero} ({nom}) a expiré : l'article a été retiré de votre panier.",
     "updateError": "La modification a échoué. Réessayez dans un instant.",
     "stockError": "Stock insuffisant pour cette quantité.",
     "summary": "Récapitulatif",
@@ -159,6 +163,108 @@
     "total": "Total TTC",
     "totalVat": "TVA incluse ({rate})",
     "checkout": "Passer la commande"
+  },
+  "checkout": {
+    "title": "Coordonnées et livraison",
+    "loading": "Chargement de votre commande…",
+    "errorTitle": "Commande indisponible",
+    "errorMessage": "Votre panier n'a pas pu être chargé. Vérifiez votre connexion et réessayez.",
+    "retry": "Réessayer",
+    "emptyTitle": "Votre panier est vide",
+    "emptyMessage": "Ajoutez une lampe à votre panier avant de passer commande.",
+    "emptyCta": "Découvrir les lampes",
+    "requiredNote": "Les champs marqués d'un * sont obligatoires.",
+    "contact": "Vos coordonnées",
+    "email": "Adresse e-mail",
+    "emailHint": "Pour la confirmation et le suivi de votre commande.",
+    "address": "Adresse",
+    "name": "Nom et prénom",
+    "street": "Rue et numéro",
+    "npa": "NPA",
+    "npaHint": "4 chiffres",
+    "locality": "Localité",
+    "country": "Pays",
+    "countryCh": "Suisse",
+    "delivery": "Mode de réception",
+    "modeLivraison": "Livraison à l'adresse indiquée ({frais})",
+    "modeRetrait": "Retrait à l'atelier, Genève ({frais})",
+    "free": "gratuit",
+    "cgvBefore": "J'ai lu et j'accepte les ",
+    "cgvLink": "conditions générales de vente",
+    "cgvAfter": ", y compris les informations sur le droit de rétractation.",
+    "summary": "Récapitulatif",
+    "shipping": "Livraison",
+    "total": "Total TTC",
+    "totalVat": "TVA incluse ({rate})",
+    "submit": "Continuer vers le paiement",
+    "errorSummary": "Le formulaire contient des erreurs : corrigez les champs signalés.",
+    "errors": {
+      "email": "Saisissez une adresse e-mail valide, par exemple nom@exemple.ch.",
+      "name": "Indiquez votre nom et prénom.",
+      "street": "Indiquez votre rue et son numéro.",
+      "npa": "Le NPA suisse comporte 4 chiffres, par exemple 1204.",
+      "locality": "Indiquez votre localité.",
+      "cgv": "Vous devez accepter les conditions générales de vente pour commander.",
+      "expired": "La réservation d'une pièce a expiré. Vérifiez votre panier.",
+      "server": "La commande n'a pas pu être enregistrée. Réessayez dans un instant."
+    }
+  },
+  "confirmation": {
+    "title": "Confirmation de commande",
+    "paidTitle": "Merci, votre commande est confirmée",
+    "pendingTitle": "Commande enregistrée",
+    "paidIntro": "Commande {reference} réglée. Un e-mail de confirmation vous a été envoyé.",
+    "pendingIntro": "Commande {reference} enregistrée. Nous attendons la confirmation du paiement ; rechargez cette page pour la mettre à jour.",
+    "recap": "Récapitulatif",
+    "quantity": "Quantité : {quantite}",
+    "pieceNumber": "Pièce n° {numero}",
+    "total": "Total",
+    "nextTitle": "Prochaine étape",
+    "nextPaid": "Votre lampe est préparée à l'atelier. Vous recevrez un e-mail dès son expédition.",
+    "nextPending": "Dès réception du paiement, nous préparons votre lampe à l'atelier. Pour un virement, la pièce reste réservée pendant le délai indiqué.",
+    "cancelledTitle": "Commande annulée",
+    "cancelledMessage": "Cette commande a été annulée. Vous pouvez recommencer depuis le catalogue.",
+    "loading": "Chargement de votre commande…",
+    "unavailableTitle": "Commande introuvable",
+    "unavailableMessage": "Nous ne parvenons pas à afficher cette commande depuis cet appareil. Votre e-mail de confirmation contient son récapitulatif.",
+    "errorTitle": "Commande momentanément indisponible",
+    "errorMessage": "Le récapitulatif n'a pas pu être chargé. Réessayez dans un instant.",
+    "backToCatalogue": "Retour au catalogue"
+  },
+  "paiement": {
+    "title": "Paiement",
+    "intro": "Votre commande {reference} est enregistrée. Vous allez régler sur la page sécurisée de notre prestataire de paiement, par TWINT ou par carte bancaire.",
+    "methods": "TWINT (QR code sur ordinateur, application sur mobile) ou carte bancaire.",
+    "secure": "Aucune donnée de carte ne transite par notre site : la saisie se fait sur la page hébergée par Stripe.",
+    "pay": "Payer par TWINT ou carte",
+    "redirecting": "Redirection vers la page de paiement…",
+    "missingTitle": "Commande introuvable",
+    "missingMessage": "Aucune commande à payer n'a été indiquée. Reprenez depuis votre panier.",
+    "backToCart": "Retour au panier",
+    "alreadyPaidTitle": "Commande déjà payée",
+    "alreadyPaidMessage": "Cette commande est déjà réglée : vous n'avez rien de plus à faire.",
+    "cancelledTitle": "Paiement annulé",
+    "cancelledMessage": "Vous avez quitté la page de paiement. Votre commande est conservée : vous pouvez reprendre le paiement.",
+    "failedTitle": "Paiement refusé",
+    "failedMessage": "Le paiement n'a pas abouti. Aucun montant n'a été débité. Vous pouvez réessayer, par TWINT ou avec une autre carte.",
+    "timeoutTitle": "Le prestataire met trop de temps à répondre",
+    "timeoutMessage": "La page de paiement n'a pas pu être ouverte à temps. Votre commande est conservée : réessayez.",
+    "errorTitle": "Paiement indisponible",
+    "errorMessage": "La page de paiement n'a pas pu être ouverte. Votre commande est conservée : réessayez dans un instant.",
+    "retry": "Reprendre le paiement",
+    "methodLegend": "Mode de paiement",
+    "methodCard": "TWINT ou carte bancaire",
+    "methodTransfer": "Virement bancaire (pièces Premium)",
+    "transferNote": "Le virement est réservé aux pièces Premium. Votre pièce reste réservée plus longtemps pendant que nous attendons votre règlement.",
+    "transferPay": "Choisir le virement",
+    "transferTitle": "Virement bancaire",
+    "transferIntro": "Votre commande {reference} est enregistrée. Effectuez le virement avec les coordonnées ci-dessous.",
+    "transferIban": "IBAN",
+    "transferBeneficiary": "Bénéficiaire",
+    "transferReference": "Référence à indiquer",
+    "transferReferenceHint": "Indiquez impérativement cette référence dans le motif du virement.",
+    "transferDelay": "Votre pièce est réservée {jours} jours pour recevoir votre virement. Passé ce délai, la réservation est libérée.",
+    "transferDelayOne": "Votre pièce est réservée 1 jour pour recevoir votre virement. Passé ce délai, la réservation est libérée."
   },
   "price": {
     "vatIncluded": "TVA incluse ({rate})"
@@ -201,6 +307,16 @@
       "privacy": "Confidentialité"
     }
   },
+  "consent": {
+    "title": "Cookies et mesure d'audience",
+    "text": "Nous aimerions mesurer la fréquentation du site pour l'améliorer. Rien n'est chargé sans votre accord, et vous pouvez changer d'avis à tout moment depuis le pied de page.",
+    "accept": "Accepter",
+    "refuse": "Refuser",
+    "footerLink": "Préférences cookies"
+  },
+  "pageContenu": {
+    "miseAJour": "Dernière mise à jour :"
+  },
   "newsletter": {
     "title": "Nouvelles de l'atelier",
     "intro": "Nos nouvelles pièces et les coulisses de la fabrication, quelques fois par an.",
@@ -212,6 +328,48 @@
       "email": "Saisissez une adresse e-mail valide.",
       "consent": "Votre consentement est nécessaire pour vous inscrire.",
       "server": "L'inscription n'a pas pu aboutir. Réessayez dans un instant."
+    }
+  },
+  "contact": {
+    "meta": {
+      "title": "Contact et showroom",
+      "description": "Écrivez à l'atelier Noyer ou passez voir nos lampes au showroom, à Genève."
+    },
+    "title": "Nous contacter",
+    "intro": "Une question sur une lampe, une commande ou une demande sur mesure ? Écrivez-nous, nous répondons sous deux jours ouvrés.",
+    "form": {
+      "name": "Nom",
+      "email": "Adresse e-mail",
+      "message": "Message",
+      "honeypot": "Ne pas remplir ce champ",
+      "consent": "J'accepte que Noyer traite mes données pour répondre à ma demande, conformément à la politique de confidentialité (nLPD).",
+      "submit": "Envoyer",
+      "success": "Merci, votre message a bien été envoyé. Nous vous répondons rapidement.",
+      "errors": {
+        "name": "Indiquez votre nom.",
+        "email": "Saisissez une adresse e-mail valide.",
+        "message": "Écrivez votre message.",
+        "consent": "Votre consentement est nécessaire pour envoyer le message.",
+        "server": "Le message n'a pas pu être envoyé. Réessayez dans un instant."
+      }
+    },
+    "showroom": {
+      "title": "Showroom",
+      "intro": "Nos lampes sont à voir et à toucher à l'atelier, sur rendez-vous.",
+      "addressLabel": "Adresse",
+      "address": ["Noyer", "Genève, Suisse"],
+      "hoursLabel": "Horaires",
+      "hours": [
+        { "jour": "Lundi – vendredi", "horaire": "sur rendez-vous" },
+        { "jour": "Samedi", "horaire": "10 h – 17 h" }
+      ]
+    },
+    "map": {
+      "title": "Plan d'accès",
+      "notice": "Le plan est fourni par OpenStreetMap. Pour l'afficher, votre navigateur se connecte à leurs serveurs, qui peuvent recevoir votre adresse IP.",
+      "show": "Afficher le plan",
+      "hide": "Masquer le plan",
+      "frameTitle": "Plan de Genève (OpenStreetMap)"
     }
   },
   "languageSwitcher": {

@@ -49,7 +49,7 @@ const lignePremium = {
   produit: premium,
   quantite: 1,
   numero_piece: 7,
-  reservation_expire_le: "2026-10-05T14:45:00+02:00",
+  reservation_expire_le: new Date(Date.now() + 15 * 60_000).toISOString(),
 };
 
 const rendre = () =>

@@ -31,6 +31,35 @@ export type MatiereAccueil = {
   gros_plans: { legende: string; image: Image }[];
 };
 
+/** Fragment de texte riche ; les marques sont combinables. */
+export type SegmentTexte = {
+  texte: string;
+  italique?: boolean;
+  gras?: boolean;
+  /** Lien : chemin public sans préfixe de langue ("/atelier") ou URL https. */
+  lien?: string;
+};
+
+export type BlocTexte =
+  | { type: "titre"; niveau: 2 | 3; segments: SegmentTexte[] }
+  | { type: "paragraphe"; segments: SegmentTexte[] }
+  | { type: "citation"; segments: SegmentTexte[]; auteur?: string | null }
+  | { type: "liste"; ordonnee: boolean; items: SegmentTexte[][] }
+  | { type: "image"; image: Image; legende?: string | null }
+  | { type: "section"; ton: TonSection; blocs: BlocTexte[] };
+
+/** Registre d'une section éditoriale : clair (défaut), fond alterné ou sombre. */
+export type TonSection = "clair" | "alt" | "sombre";
+
+export type PageContenu = {
+  slug: string;
+  titre: string;
+  description: string;
+  /** Date de dernière mise à jour (AAAA-MM-JJ), affichée sur les pages légales. */
+  mis_a_jour?: string;
+  blocs: BlocTexte[];
+};
+
 export type Page<T> = {
   count: number;
   next: string | null;

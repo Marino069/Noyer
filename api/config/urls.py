@@ -31,9 +31,15 @@ def health(request):
 urlpatterns = [
     # Photos téléversées (MEDIA_ROOT, volume Docker)
     re_path(r"^media/(?P<path>.*)$", serve, {"document_root": settings.MEDIA_ROOT}),
-    path("admin/", admin.site.urls),
+    path(settings.ADMIN_URL, admin.site.urls),
     path("api/health/", health),
     path("api/", include("catalogue.urls")),
+    path("api/", include("inventaire.urls")),
+    path("api/", include("panier.urls")),
+    path("api/", include("paiement.urls")),
+    path("api/", include("commande.urls")),
+    path("api/", include("contact.urls")),
+    path("api/", include("newsletter.urls")),
     path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
     path("api/docs/", SpectacularSwaggerView.as_view(url_name="schema"), name="docs"),
 ]

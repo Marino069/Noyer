@@ -6,6 +6,7 @@ import {
   heroAccueil,
   matiereAccueil,
   modeleComplet,
+  pagesContenu,
   produits,
   slugsMisEnAvant,
 } from "./data";
@@ -54,6 +55,14 @@ export const handlers = [
   http.get(url("/health/"), () => HttpResponse.json({ statut: "ok" })),
 
   http.get(url("/contenu/accueil/hero/"), () => HttpResponse.json(heroAccueil)),
+
+  http.get(url("/contenu/pages/:slug/"), ({ params, request }) => {
+    const apercu = new URL(request.url).searchParams.get("apercu");
+    const page = pagesContenu[String(params.slug)];
+    if (!page || (page.brouillon && !apercu))
+      return erreur(404, "introuvable", "Page introuvable.");
+    return HttpResponse.json(page.contenu);
+  }),
 
   http.get(url("/contenu/accueil/matiere/"), () =>
     HttpResponse.json(matiereAccueil),

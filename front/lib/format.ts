@@ -24,6 +24,17 @@ function regionalLocale(locale: string): string {
   return locale.includes("-") ? locale : `${locale}-CH`;
 }
 
+/** Date ISO (AAAA-MM-JJ) en toutes lettres, ex. « 1 novembre 2026 ». */
+export function formatDateLongue(iso: string, locale: string): string {
+  const [annee, mois, jour] = iso.split("-").map(Number);
+  return new Intl.DateTimeFormat(locale, {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+    timeZone: "UTC",
+  }).format(new Date(Date.UTC(annee, mois - 1, jour)));
+}
+
 /** Remplace les `{clé}` d'un message du dictionnaire. */
 export function interpolate(
   message: string,
@@ -32,4 +43,12 @@ export function interpolate(
   return message.replace(/\{(\w+)\}/g, (_, key: string) =>
     String(values[key] ?? ""),
   );
+}
+
+/** Millisecondes restantes → « 14 min 05 s » (arrondi à la seconde supérieure). */
+export function formatDuree(ms: number): string {
+  const total = Math.max(0, Math.ceil(ms / 1000));
+  const minutes = Math.floor(total / 60);
+  const secondes = String(total % 60).padStart(2, "0");
+  return `${minutes} min ${secondes} s`;
 }

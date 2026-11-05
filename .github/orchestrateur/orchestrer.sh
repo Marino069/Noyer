@@ -47,6 +47,7 @@ checks_en_echec() {
 
 # --- 2. Pull requests --------------------------------------------------------
 log "=== Pull requests ==="
+fusions=0
 for pr in $(gh pr list --repo "$REPO" --state open --json number,isDraft --jq '.[] | select(.isDraft==false) | .number' | sort -n); do
   info=$(gh pr view "$pr" --repo "$REPO" --json title,headRefName,headRefOid,mergeable,author,closingIssuesReferences)
   titre=$(echo "$info" | jq -r .title)
@@ -81,10 +82,24 @@ for pr in $(gh pr list --repo "$REPO" --state open --json number,isDraft --jq '.
   if [ -z "$probleme" ]; then
     if gh pr merge "$pr" --repo "$REPO" --squash --delete-branch > /dev/null 2>&1; then
       log "✅ #$pr fusionnée : $titre"
+      fusions=1
     else
       log "⚠️  #$pr verte mais fusion refusée (on réessaiera) : $titre"
     fi
     continue
+  fi
+
+  # CI rouge : d'abord une relance simple (panne réseau, Google Fonts…), une fois par version.
+  if [ "$probleme" = "ci" ] && [ "$(nb_marqueurs "$pr" "[auto-relance-ci $sha")" -eq 0 ]; then
+    sha_complet=$(echo "$info" | jq -r .headRefOid)
+    run_ci=$(GH_TOKEN="$LECTURE_TOKEN" gh api "repos/$REPO/commits/$sha_complet/check-runs" \
+      --jq '.check_runs[] | select(.name=="ci" and .conclusion=="failure") | .details_url' 2>/dev/null \
+      | grep -oE 'runs/[0-9]+' | head -1 | cut -d/ -f2)
+    if [ -n "$run_ci" ] && gh api -X POST "repos/$REPO/actions/runs/$run_ci/rerun-failed-jobs" > /dev/null 2>&1; then
+      gh pr comment "$pr" --repo "$REPO" --body "[auto-relance-ci $sha] CI relancée une fois au cas où ce serait une panne passagère." > /dev/null
+      log "🔁 #$pr : CI relancée (panne passagère ?)"
+      continue
+    fi
   fi
 
   # Réparation : une demande par version du code, 3 demandes au maximum.
@@ -119,6 +134,9 @@ for pr in $(gh pr list --repo "$REPO" --state open --json number,isDraft --jq '.
     log "🔧 #$pr ($probleme) : réparation en cours"
   fi
 done
+
+# Laisse à GitHub le temps de fermer les issues liées aux PR fusionnées.
+[ "$fusions" -eq 1 ] && sleep 20
 
 # --- 3. Tickets --------------------------------------------------------------
 log ""

@@ -32,10 +32,40 @@ class DejaPayee(ErreurMetier):
     default_detail = "Cette commande est déjà payée."
 
 
+class CommandeAnnulee(ErreurMetier):
+    status_code = status.HTTP_409_CONFLICT
+    default_code = "commande_annulee"
+    default_detail = "Cette commande est annulée."
+
+
+class PaiementIndisponible(ErreurMetier):
+    status_code = status.HTTP_502_BAD_GATEWAY
+    default_code = "paiement_indisponible"
+    default_detail = "Le service de paiement est momentanément indisponible."
+
+
+class VirementIndisponible(ErreurMetier):
+    status_code = status.HTTP_422_UNPROCESSABLE_ENTITY
+    default_code = "virement_indisponible"
+    default_detail = "Le virement est réservé aux commandes contenant une pièce Premium."
+
+
 class ReservationExpiree(ErreurMetier):
     status_code = status.HTTP_410_GONE
     default_code = "reservation_expiree"
     default_detail = "Votre réservation a expiré."
+
+
+class ReservationNonLiberable(ErreurMetier):
+    status_code = status.HTTP_409_CONFLICT
+    default_code = "reservation_non_liberable"
+    default_detail = "Une réservation confirmée ne peut pas être libérée."
+
+
+class TransitionImpossible(ErreurMetier):
+    status_code = status.HTTP_409_CONFLICT
+    default_code = "transition_impossible"
+    default_detail = "Cette action est impossible pour l'état actuel de la commande."
 
 
 class DonneesInvalides(ErreurMetier):
@@ -93,7 +123,12 @@ def exception_handler(exc, context):
             code = exc.default_code
         else:
             code = CODES_PAR_STATUT.get(response.status_code, exc.default_code)
-        return erreur(code, exc.detail, response.status_code)
+        reponse = erreur(code, exc.detail, response.status_code)
+        # Conserve les en-têtes utiles (Retry-After sur 429, WWW-Authenticate sur 401)
+        for en_tete in ("Retry-After", "WWW-Authenticate"):
+            if en_tete in response:
+                reponse[en_tete] = response[en_tete]
+        return reponse
 
     # Http404 / PermissionDenied convertis par DRF
     code = CODES_PAR_STATUT.get(response.status_code, "erreur")

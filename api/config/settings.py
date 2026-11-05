@@ -1,3 +1,5 @@
+import sys
+from datetime import timedelta
 from pathlib import Path
 
 import environ
@@ -21,12 +23,15 @@ INSTALLED_APPS = [
     "drf_spectacular",
     "django_filters",
     "corsheaders",
+    "axes",
     "config",
     "catalogue",
     "inventaire",
     "panier",
     "commande",
     "paiement",
+    "contact",
+    "newsletter",
 ]
 
 MIDDLEWARE = [
@@ -39,6 +44,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # Doit rester en dernier
+    'axes.middleware.AxesMiddleware',
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -85,6 +92,47 @@ CACHES = {
         },
     },
 }
+
+
+# Administration : connexion sécurisée
+# Adresse non devinable (jamais /admin/), configurable par variable d'environnement
+ADMIN_URL = env("ADMIN_URL", default="atelier-k7q2x9m4/").strip("/") + "/"
+
+# Mots de passe hachés avec Argon2
+PASSWORD_HASHERS = [
+    "django.contrib.auth.hashers.Argon2PasswordHasher",
+    "django.contrib.auth.hashers.PBKDF2PasswordHasher",
+]
+
+# django-axes : blocage temporaire après 5 échecs de connexion
+AUTHENTICATION_BACKENDS = [
+    "axes.backends.AxesStandaloneBackend",
+    "django.contrib.auth.backends.ModelBackend",
+]
+AXES_FAILURE_LIMIT = env.int("AXES_FAILURE_LIMIT", default=5)
+AXES_COOLOFF_TIME = timedelta(minutes=env.int("AXES_COOLOFF_MINUTES", default=30))
+AXES_LOCKOUT_PARAMETERS = [["ip_address", "username"]]
+AXES_RESET_ON_SUCCESS = True
+
+# Cookies de session et CSRF : Secure et HttpOnly en production
+SESSION_COOKIE_SECURE = env.bool("SESSION_COOKIE_SECURE", default=not DEBUG)
+SESSION_COOKIE_HTTPONLY = True
+CSRF_COOKIE_SECURE = env.bool("CSRF_COOKIE_SECURE", default=not DEBUG)
+CSRF_COOKIE_HTTPONLY = True
+CSRF_TRUSTED_ORIGINS = env.list("CSRF_TRUSTED_ORIGINS", default=[])
+
+# HTTPS en production (vérifié par `manage.py check --deploy`)
+# Le client de test est en HTTP : pas de redirection pendant `manage.py test`
+TESTING = len(sys.argv) > 1 and sys.argv[1] == "test"
+SECURE_SSL_REDIRECT = env.bool("SECURE_SSL_REDIRECT", default=not (DEBUG or TESTING))
+SECURE_HSTS_SECONDS = env.int("SECURE_HSTS_SECONDS", default=0 if DEBUG else 31536000)
+SECURE_HSTS_INCLUDE_SUBDOMAINS = not DEBUG
+SECURE_HSTS_PRELOAD = not DEBUG
+SECURE_CONTENT_TYPE_NOSNIFF = True
+SECURE_REFERRER_POLICY = "same-origin"
+if env.bool("SECURE_PROXY_SSL", default=False):
+    # Derrière un reverse proxy qui termine le TLS
+    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
 
 # Password validation
@@ -137,7 +185,21 @@ REST_FRAMEWORK = {
     "DEFAULT_FILTER_BACKENDS": ["django_filters.rest_framework.DjangoFilterBackend"],
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
     "PAGE_SIZE": 24,
+    # Limitation de débit : seules les vues avec un throttle_scope sont limitées
+    # (compteurs dans le cache Redis). Les webhooks Stripe ne sont jamais limités.
+    "DEFAULT_THROTTLE_CLASSES": ["rest_framework.throttling.ScopedRateThrottle"],
+    "DEFAULT_THROTTLE_RATES": {
+        "contact": env("THROTTLE_CONTACT", default="5/hour"),
+        "commande": env("THROTTLE_COMMANDE", default="10/hour"),
+        "panier_ajout": env("THROTTLE_PANIER_AJOUT", default="60/minute"),
+    },
+    # Nombre de proxies devant l'API (pour lire la vraie IP du client)
+    "NUM_PROXIES": env.int("NUM_PROXIES", default=0),
 }
+
+# drf_spectacular.W002 : les vues APIView sans serializer_class ne sont pas devinables par
+# drf-spectacular (documentation OpenAPI seulement) ; le contrat de référence est docs/api.md.
+SILENCED_SYSTEM_CHECKS = ["drf_spectacular.W002"]
 
 SPECTACULAR_SETTINGS = {
     "TITLE": "API Noyer",
@@ -149,6 +211,18 @@ SPECTACULAR_SETTINGS = {
 # CORS : seule l'URL du front est autorisée
 FRONT_URL = env("FRONT_URL", default="http://localhost:3000").rstrip("/")
 CORS_ALLOWED_ORIGINS = [FRONT_URL]
+# URL publique de l'API (liens de confirmation envoyés par email)
+API_PUBLIC_URL = env("API_PUBLIC_URL", default="http://localhost:8000").rstrip("/")
+# Le front envoie le cookie du panier (credentials: "include")
+CORS_ALLOW_CREDENTIALS = True
+
+# Cookie du panier : domaine partagé entre front et API (ex. ".noyer.ch"), vide en local
+PANIER_COOKIE_DOMAIN = env("PANIER_COOKIE_DOMAIN", default="") or None
+PANIER_COOKIE_SECURE = env.bool("PANIER_COOKIE_SECURE", default=not DEBUG)
+
+# Montants du panier (centimes entiers). TVA en centièmes de pour cent : 810 = 8,1 %.
+TVA_TAUX_CENTIEMES = env.int("TVA_TAUX_CENTIEMES", default=810)
+FRAIS_LIVRAISON_CENTIMES = env.int("FRAIS_LIVRAISON_CENTIMES", default=0)
 
 # Les erreurs 500 sont journalisées, jamais renvoyées au client
 LOGGING = {
@@ -162,11 +236,32 @@ LOGGING = {
 # Email
 # https://docs.djangoproject.com/en/6.1/topics/email/#topic-email-configuration
 
-MAILERS = {
-    'default': {
-        "BACKEND": env(
-            "DJANGO_EMAIL_BACKEND",
-            default="django.core.mail.backends.smtp.EmailBackend",
-        ),
-    },
-}
+EMAIL_BACKEND_CLASSE = env(
+    "DJANGO_EMAIL_BACKEND",
+    default="django.core.mail.backends.smtp.EmailBackend",
+)
+MAILERS = {"default": {"BACKEND": EMAIL_BACKEND_CLASSE}}
+if EMAIL_BACKEND_CLASSE.endswith("smtp.EmailBackend"):
+    # SMTP du prestataire (Infomaniak, Brevo…) : identifiants uniquement par variables d'environnement
+    MAILERS["default"]["OPTIONS"] = {
+        "host": env("EMAIL_HOST", default="localhost"),
+        "port": env.int("EMAIL_PORT", default=587),
+        "username": env("EMAIL_HOST_USER", default=""),
+        "password": env("EMAIL_HOST_PASSWORD", default=""),
+        "use_tls": env.bool("EMAIL_USE_TLS", default=True),
+        "timeout": env.int("EMAIL_TIMEOUT", default=10),
+    }
+
+ATELIER_EMAIL = env("ATELIER_EMAIL", default="atelier@noyer.ch")
+DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL", default="Noyer <commandes@noyer.ch>")
+
+# Paiement : Stripe Checkout (clés uniquement par variables d'environnement)
+STRIPE_SECRET_KEY = env("STRIPE_SECRET_KEY", default="")
+STRIPE_WEBHOOK_SECRET = env("STRIPE_WEBHOOK_SECRET", default="")
+# Virement bancaire (Premium) : coordonnées de l'atelier et délai en jours ouvrés
+VIREMENT_IBAN = env("VIREMENT_IBAN", default="")
+VIREMENT_BENEFICIAIRE = env("VIREMENT_BENEFICIAIRE", default="Noyer")
+VIREMENT_DELAI_JOURS = env.int("VIREMENT_DELAI_JOURS", default=5)
+
+# Échecs d'envoi d'email : journalisés (la commande n'est jamais annulée)
+LOGGING["loggers"]["noyer.emails"] = LOGGING["loggers"]["noyer.api"] | {"level": "INFO"}

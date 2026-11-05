@@ -11,8 +11,28 @@ from django.core.management.base import BaseCommand
 
 logger = logging.getLogger("noyer.worker")
 
+def expirer_reservations():
+    # import tardif : les apps doivent être chargées
+    from inventaire.services import expirer_reservations as expirer
+
+    n = expirer()
+    if n:
+        logger.info("%s réservation(s) expirée(s)", n)
+
+
+def annuler_commandes_abandonnees():
+    from commande.services import annuler_commandes_abandonnees as annuler
+
+    n = annuler()
+    if n:
+        logger.info("%s commande(s) abandonnée(s) annulée(s)", n)
+
+
 # Liste de (nom, fonction) exécutées à chaque passage.
-TACHES: list = []
+TACHES: list = [
+    ("expirer_reservations", expirer_reservations),
+    ("annuler_commandes_abandonnees", annuler_commandes_abandonnees),
+]
 
 
 def executer_taches():

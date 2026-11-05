@@ -1,0 +1,68 @@
+.page {
+  max-width: 40rem;
+  margin: 0 auto;
+  padding: 2rem 1rem 4rem;
+}
+
+.title {
+  margin: 0 0 1.5rem;
+  font-family: var(--serif);
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.body p,
+.body h2 {
+  margin: 0;
+}
+
+.muted {
+  color: var(--text-muted);
+}
+
+.status {
+  min-height: 1.5rem;
+  font-weight: 500;
+}
+
+.status h2 {
+  font-family: var(--serif);
+  font-size: 1.125rem;
+}
+
+.methods {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.methods legend {
+  padding: 0;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+.coords {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 0.5rem 1rem;
+  margin: 0;
+}
+
+.coords dt {
+  color: var(--text-muted);
+}
+
+.coords dd {
+  margin: 0;
+  font-weight: 500;
+  overflow-wrap: anywhere;
+}

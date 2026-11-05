@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { AjoutPanier } from "@/components/AjoutPanier";
 import { Atelier } from "@/components/Atelier";
 import { Button } from "@/components/Button";
+import { ConsentCookies } from "@/components/ConsentCookies";
 import { Galerie } from "@/components/Galerie";
 import { Hero } from "@/components/Hero";
 import { Logo } from "@/components/Logo";
@@ -11,11 +12,18 @@ import { NewsletterForm } from "@/components/NewsletterForm";
 import { Panier } from "@/components/Panier";
 import { Section } from "@/components/Section";
 import { Selection, SelectionSkeleton } from "@/components/Selection";
+import { TexteRiche } from "@/components/TexteRiche";
 import { hasLocale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/get-dictionary";
 import { networkError, type ProduitResume } from "@/lib/api";
 import { localePath } from "@/lib/routes";
-import { detailDe, heroAccueil, matiereAccueil, produits } from "@/mocks/data";
+import {
+  detailDe,
+  heroAccueil,
+  matiereAccueil,
+  pagesContenu,
+  produits,
+} from "@/mocks/data";
 import { CartIndicatorDemo } from "./CartIndicatorDemo";
 import styles from "./page.module.css";
 
@@ -111,6 +119,9 @@ export default async function DesignSystemPage({ params }: Props) {
       <h2 className={styles.heading}>Matière</h2>
       <Matiere contenu={matiereAccueil} />
 
+      <h2 className={styles.heading}>Texte riche</h2>
+      <TexteRiche blocs={pagesContenu.atelier.contenu.blocs} locale={locale} />
+
       <h2 className={styles.heading}>Sélection</h2>
       <h3 className={styles.heading}>chargée</h3>
       <Selection {...selection} produits={{ ok: true, data: page(produits) }} />
@@ -189,6 +200,15 @@ export default async function DesignSystemPage({ params }: Props) {
           href={localePath(locale, "panier")}
           labels={dictionary.header.cart}
         />
+      </Section>
+
+      <Section>
+        <h2>ConsentCookies</h2>
+        <p>
+          Bannière nLPD : « Refuser » et « Accepter » au même poids. Affichée
+          sur le site seulement si NEXT_PUBLIC_TRACKER_SRC est défini.
+        </p>
+        <ConsentCookies dictionary={dictionary.consent} demo />
       </Section>
 
       <Section>

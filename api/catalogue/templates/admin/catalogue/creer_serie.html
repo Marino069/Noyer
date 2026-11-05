@@ -1,0 +1,11 @@
+{% extends "admin/base_site.html" %}
+{% block content %}
+<form method="post">
+  {% csrf_token %}
+  <p>Produit : {% for p in produits %}{{ p.slug }}{% endfor %}</p>
+  {{ form.as_p }}
+  <input type="hidden" name="action" value="creer_serie">
+  {% for pk in selection %}<input type="hidden" name="_selected_action" value="{{ pk }}">{% endfor %}
+  <input type="submit" name="confirmer" value="Créer la série">
+</form>
+{% endblock %}
