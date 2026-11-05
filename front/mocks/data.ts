@@ -8,13 +8,14 @@ import type {
   ProduitResume,
 } from "@/lib/api/types";
 
-const image = (alt: string): Image => ({
+// Illustrations de démonstration (front/public/mocks/<nom>-<largeur>.webp), en attendant les vraies photos.
+const image = (alt: string, nom: string): Image => ({
   alt,
   largeur_origine: 1600,
   hauteur_origine: 1200,
   sources: [480, 960, 1600].map((largeur) => ({
     largeur: largeur as 480 | 960 | 1600,
-    url: `/mocks/lampe-${largeur}.webp`,
+    url: `/mocks/${nom}-${largeur}.webp`,
   })),
 });
 
@@ -25,24 +26,36 @@ export const heroAccueil: HeroAccueil = {
     "Lampes semi-artisanales en noyer et laiton, assemblées à Genève. Deux gammes, mêmes formes, matières différentes.",
   cta_libelle: "Découvrir les lampes",
   cta_chemin: "/produits/classic",
-  image: image("Lampe en noyer posée sur une table, dans la lumière du matin"),
+  image: image(
+    "Lampe en noyer posée sur une table, dans la lumière du matin",
+    "hero",
+  ),
 };
 
 export const matiereAccueil: MatiereAccueil = {
   titre: "La matière",
   gros_plans: [
-    { legende: "Noyer", image: image("Grain de noyer huilé, gros plan") },
+    {
+      legende: "Noyer",
+      image: image("Grain de noyer huilé, gros plan", "matiere-noyer"),
+    },
     {
       legende: "Laiton",
-      image: image("Laiton brossé, reflet doux, gros plan"),
+      image: image("Laiton brossé, reflet doux, gros plan", "matiere-laiton"),
     },
     {
       legende: "Assemblage",
-      image: image("Assemblage noyer et laiton, gros plan"),
+      image: image(
+        "Assemblage noyer et laiton, gros plan",
+        "matiere-assemblage",
+      ),
     },
     {
       legende: "Finition",
-      image: image("Surface de noyer huilée à la main, gros plan"),
+      image: image(
+        "Surface de noyer huilée à la main, gros plan",
+        "matiere-finition",
+      ),
     },
   ],
 };
@@ -53,21 +66,21 @@ export const produits: ProduitResume[] = [
     modele: "Lucerne",
     gamme: "Classic",
     prix_ttc_centimes: 48000,
-    image_principale: image("Lampe Lucerne Classic"),
+    image_principale: image("Lampe Lucerne Classic", "lucerne-classic"),
   },
   {
     slug: "lucerne-premium",
     modele: "Lucerne",
     gamme: "Premium",
     prix_ttc_centimes: 124000,
-    image_principale: image("Lampe Lucerne Premium"),
+    image_principale: image("Lampe Lucerne Premium", "lucerne-premium"),
   },
   {
     slug: "leman-classic",
     modele: "Léman",
     gamme: "Classic",
     prix_ttc_centimes: 39000,
-    image_principale: image("Lampe Léman Classic"),
+    image_principale: image("Lampe Léman Classic", "leman-classic"),
   },
 ];
 
@@ -108,8 +121,14 @@ export function detailDe(p: ProduitResume): ProduitDetail {
     medias: p.image_principale
       ? [
           p.image_principale,
-          image(`${p.image_principale.alt}, vue de détail du pied en noyer`),
-          image(`${p.image_principale.alt}, allumée dans une pièce`),
+          image(
+            `${p.image_principale.alt}, vue de détail du pied en noyer`,
+            `${p.slug}-detail`,
+          ),
+          image(
+            `${p.image_principale.alt}, allumée dans une pièce`,
+            `${p.slug}-allumee`,
+          ),
         ]
       : [],
     autre_gamme: autre?.slug ?? null,
@@ -150,7 +169,10 @@ const atelier: PageContenu = {
     },
     {
       type: "image",
-      image: image("Mains huilant un pied de lampe en noyer, dans l'atelier"),
+      image: image(
+        "Mains huilant un pied de lampe en noyer, dans l'atelier",
+        "matiere-finition",
+      ),
       legende: "L'huilage, dernière étape avant l'assemblage.",
     },
     {
@@ -179,7 +201,10 @@ const atelier: PageContenu = {
         },
         {
           type: "image",
-          image: image("Établi de l'atelier avec outils et pièces de laiton"),
+          image: image(
+            "Établi de l'atelier avec outils et pièces de laiton",
+            "matiere-assemblage",
+          ),
         },
       ],
     },
