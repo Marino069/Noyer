@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { cleEmailCommande } from "@/lib/commande";
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { api, type ModeLivraison, type Panier } from "@/lib/api";
 import { publishCart } from "@/lib/cart";
@@ -238,6 +239,15 @@ export function Checkout({
     });
     if (result.ok) {
       const reference = encodeURIComponent(result.data.reference);
+      // La page de confirmation relit la commande avec cet e-mail (exigé par le back).
+      try {
+        sessionStorage.setItem(
+          cleEmailCommande(result.data.reference),
+          valeur("email"),
+        );
+      } catch {
+        // Stockage indisponible (navigation privée) : la confirmation s'en passera.
+      }
       // Indice d'affichage : le virement n'est proposé que si le panier contient du Premium
       // (le back reste seul juge et refuse le virement hors Premium).
       const premium = panier.lignes.some((l) => l.produit.gamme === "Premium")

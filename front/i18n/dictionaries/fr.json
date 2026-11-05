@@ -209,6 +209,28 @@
       "server": "La commande n'a pas pu être enregistrée. Réessayez dans un instant."
     }
   },
+  "confirmation": {
+    "title": "Confirmation de commande",
+    "paidTitle": "Merci, votre commande est confirmée",
+    "pendingTitle": "Commande enregistrée",
+    "paidIntro": "Commande {reference} réglée. Un e-mail de confirmation vous a été envoyé.",
+    "pendingIntro": "Commande {reference} enregistrée. Nous attendons la confirmation du paiement ; rechargez cette page pour la mettre à jour.",
+    "recap": "Récapitulatif",
+    "quantity": "Quantité : {quantite}",
+    "pieceNumber": "Pièce n° {numero}",
+    "total": "Total",
+    "nextTitle": "Prochaine étape",
+    "nextPaid": "Votre lampe est préparée à l'atelier. Vous recevrez un e-mail dès son expédition.",
+    "nextPending": "Dès réception du paiement, nous préparons votre lampe à l'atelier. Pour un virement, la pièce reste réservée pendant le délai indiqué.",
+    "cancelledTitle": "Commande annulée",
+    "cancelledMessage": "Cette commande a été annulée. Vous pouvez recommencer depuis le catalogue.",
+    "loading": "Chargement de votre commande…",
+    "unavailableTitle": "Commande introuvable",
+    "unavailableMessage": "Nous ne parvenons pas à afficher cette commande depuis cet appareil. Votre e-mail de confirmation contient son récapitulatif.",
+    "errorTitle": "Commande momentanément indisponible",
+    "errorMessage": "Le récapitulatif n'a pas pu être chargé. Réessayez dans un instant.",
+    "backToCatalogue": "Retour au catalogue"
+  },
   "paiement": {
     "title": "Paiement",
     "intro": "Votre commande {reference} est enregistrée. Vous allez régler sur la page sécurisée de notre prestataire de paiement, par TWINT ou par carte bancaire.",
