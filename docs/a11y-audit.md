@@ -16,5 +16,5 @@ Limite : jsdom ne calcule ni la mise en page ni les styles CSS, donc la règle a
 | 1 | `--brass` sur `--dark-bg-alt` = 4.16:1 : OK pour bordures, focus, grand texte (3:1), insuffisant pour du texte courant. Aucun texte courant concerné aujourd'hui ; ne pas en ajouter. | Faible | #235 : arbitrer avec la charte (brief §04) avant tout texte laiton sur `--dark-bg-alt`. |
 | 2 | Test lecteur d'écran (VoiceOver, NVDA) sur la fiche produit : non réalisable en CI ni par un agent. | À faire à la main | #236 : recette manuelle VoiceOver/NVDA. |
 | 3 | ~~Parcours clavier vérifié seulement par composants (jsdom).~~ **Résolu (#237)** : `front/e2e/parcours-clavier.spec.ts` (Playwright, Chromium, mocks MSW) fait accueil → fiche → panier → commande → paiement au clavier, vérifie le focus visible à chaque Tab et lance axe-core (contrastes réels du navigateur) à chaque page. Tourne via `npm test` dans la CI front. | Résolu | #237 : fait. |
-| 4 | Pages de contenu (accueil, légales, contact) pas encore couvertes par axe. | Faible | #238 : étendre les tests axe. |
+| 4 | ~~Pages de contenu (accueil, légales, contact) pas encore couvertes par axe.~~ **Résolu (#238)** : `front/tests/e7-08-axe-contenu.test.tsx` lance axe sur l'accueil, les trois pages légales et le contact (zéro violation critique ou sérieuse). | Résolu | #238 : fait. |
 
