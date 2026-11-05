@@ -14,15 +14,12 @@ describe("[E7-03] Budget Lighthouse", () => {
     expect(urls.some((u) => u.includes("/produits/"))).toBe(true);
   });
 
-  it("impose LCP < 2,5 s, CLS < 0,1 et TBT/INP < 200 ms", () => {
+  it("impose LCP < 2,5 s, CLS < 0,1 et TBT < 200 ms (proxy lab de l'INP)", () => {
     expect(assertions["largest-contentful-paint"][1].maxNumericValue).toBe(
       2500,
     );
     expect(assertions["cumulative-layout-shift"][1].maxNumericValue).toBe(0.1);
     expect(assertions["total-blocking-time"][1].maxNumericValue).toBe(200);
-    expect(assertions["interaction-to-next-paint"][1].maxNumericValue).toBe(
-      200,
-    );
   });
 
   it("limite le poids de la page à 1,5 Mo", () => {

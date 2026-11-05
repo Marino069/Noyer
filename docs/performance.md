@@ -6,7 +6,7 @@ Mesuré sur **mobile** (émulation Lighthouse, 4G ralentie) pour la homepage (`/
 | --- | --- | --- |
 | LCP | < 2,5 s | Image du hero : `loading="eager"`, `fetchpriority="high"`, préchargée |
 | CLS | < 0,1 | Toutes les images portent `width`/`height` (ratio réservé) |
-| INP | < 200 ms | Non mesurable en lab : TBT < 200 ms sert de proxy bloquant, INP en avertissement |
+| INP | < 200 ms | Non mesurable en lab : TBT < 200 ms sert de proxy bloquant (pas d'assertion INP dans Lighthouse CI) |
 | Poids homepage | < 1,5 Mo (1 572 864 octets) | `total-byte-weight` au premier chargement |
 
 ## Images

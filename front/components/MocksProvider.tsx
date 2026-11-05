@@ -18,5 +18,11 @@ export function MocksProvider({ children }: { children: React.ReactNode }) {
     };
   }, []);
 
-  return ready ? children : null;
+  // Tant que MSW démarre, on réserve la hauteur d'un écran : sans cela le contenu
+  // apparaît d'un coup et repousse le footer (CLS).
+  return ready ? (
+    children
+  ) : (
+    <div aria-hidden="true" style={{ minHeight: "100vh" }} />
+  );
 }
