@@ -2,15 +2,15 @@
 .section {
   background: var(--bg);
   color: var(--text);
-  padding-block: 4rem;
+  padding-block: var(--space-section);
 }
 
 /* Les tokens surchargés ici sont lus par les enfants (texte, boutons, filets). */
 .inner {
   box-sizing: border-box;
-  max-width: 72rem;
+  max-width: var(--container);
   margin-inline: auto;
-  padding-inline: 1.5rem;
+  padding-inline: var(--gutter);
 }
 
 .alt {
@@ -32,25 +32,4 @@
 .dark .inner {
   --bg: var(--dark-bg);
   --bg-alt: var(--dark-bg-alt);
-}
-
-/* Tablette puis desktop (brief §07 : 600 / 900 px) */
-@media (min-width: 600px) {
-  .section {
-    padding-block: 5rem;
-  }
-
-  .inner {
-    padding-inline: 2rem;
-  }
-}
-
-@media (min-width: 900px) {
-  .section {
-    padding-block: 7rem;
-  }
-
-  .inner {
-    padding-inline: 3rem;
-  }
 }

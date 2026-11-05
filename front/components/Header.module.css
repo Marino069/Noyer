@@ -12,10 +12,10 @@
   align-items: center;
   justify-content: space-between;
   gap: 1.5rem;
-  max-width: 72rem;
+  max-width: var(--container);
   min-height: 4rem;
   margin-inline: auto;
-  padding-inline: 1.5rem;
+  padding-inline: var(--gutter);
 }
 
 .actions {
@@ -27,17 +27,5 @@
 @media (min-width: 800px) {
   .actions {
     gap: 2rem;
-  }
-}
-
-@media (min-width: 600px) {
-  .inner {
-    padding-inline: 2rem;
-  }
-}
-
-@media (min-width: 900px) {
-  .inner {
-    padding-inline: 3rem;
   }
 }

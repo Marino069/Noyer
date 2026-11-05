@@ -34,7 +34,7 @@
   margin: 0;
   font-family: var(--serif);
   font-weight: 500;
-  font-size: clamp(2rem, 5vw, 3rem);
+  font-size: var(--fs-h2);
   line-height: 1.1;
 }
 
