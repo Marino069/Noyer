@@ -1,4 +1,9 @@
+from django.core.exceptions import ValidationError
 from django.db import models
+from django.db.models.signals import post_delete
+from django.dispatch import receiver
+
+from . import images
 
 
 class Modele(models.Model):
@@ -71,13 +76,48 @@ class ProduitMatiere(models.Model):
 
 
 class Media(models.Model):
-    url = models.CharField(max_length=500)
+    # url : ancienne référence libre, renseignée automatiquement pour un fichier téléversé.
+    url = models.CharField(max_length=500, blank=True)
+    fichier = models.ImageField(upload_to="produits/", null=True, blank=True, max_length=300)
+    largeur_origine = models.PositiveIntegerField(null=True, blank=True, editable=False)
+    hauteur_origine = models.PositiveIntegerField(null=True, blank=True, editable=False)
     alt = models.CharField(max_length=254)
     ordre = models.PositiveSmallIntegerField(default=0)
     produit = models.ForeignKey(
         Produit, on_delete=models.CASCADE, db_column="id_produit", related_name="medias"
     )
 
+    def clean(self):
+        super().clean()
+        if not self.fichier and not self.url:
+            raise ValidationError("Téléversez une photo.")
+
+    def save(self, *args, **kwargs):
+        nouveau = bool(self.fichier) and not getattr(self.fichier, "_committed", True)
+        super().save(*args, **kwargs)
+        if nouveau:
+            self.largeur_origine, self.hauteur_origine = images.generer_versions(
+                self.fichier, self.fichier.storage
+            )
+            self.url = self.fichier.storage.url(images.nom_version(self.fichier.name, 960))
+            super().save(update_fields=["largeur_origine", "hauteur_origine", "url"])
+
+    def sources(self) -> list[dict]:
+        if not self.fichier:
+            return []
+        storage = self.fichier.storage
+        return [
+            {"largeur": largeur, "url": storage.url(images.nom_version(self.fichier.name, largeur))}
+            for largeur in images.LARGEURS
+        ]
+
     class Meta:
         db_table = "Media"
         indexes = [models.Index(fields=["produit", "ordre"], name="idx_media_produit_ordre")]
+
+
+@receiver(post_delete, sender=Media)
+def supprimer_fichiers_media(sender, instance, **kwargs):
+    if instance.fichier:
+        images.supprimer_versions(instance.fichier.name, instance.fichier.storage)
+        instance.fichier.delete(save=False)

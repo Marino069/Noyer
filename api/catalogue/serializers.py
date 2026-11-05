@@ -8,6 +8,16 @@ class ImageSerializer(serializers.ModelSerializer):
         model = Media
         fields = ["url", "alt"]
 
+    def to_representation(self, media):
+        data = super().to_representation(media)
+        if media.fichier:
+            data.update(
+                largeur_origine=media.largeur_origine,
+                hauteur_origine=media.hauteur_origine,
+                sources=media.sources(),
+            )
+        return data
+
 
 class ProduitResumeSerializer(serializers.ModelSerializer):
     modele = serializers.CharField(source="modele.nom")

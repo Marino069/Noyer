@@ -64,8 +64,9 @@ Paramètres : `gamme` (`Classic` | `Premium`), `mis_en_avant` (`true`), `page`.
 Réponse : pagination de `ProduitResume` (24 par page). Seuls les produits actifs.
 `mis_en_avant=true` ne renvoie que les produits actifs mis en avant (page d'accueil).
 Une valeur de `gamme` inconnue renvoie une 400 `validation`.
-Pour l'instant `image_principale` vaut `{ "url": "…", "alt": "…" }` (ou `null`) ; les `sources`
-responsives viendront avec le traitement d'images.
+`image_principale` vaut `{ "url": "…", "alt": "…" }` (ou `null`). Pour une photo téléversée,
+l'objet contient en plus `largeur_origine`, `hauteur_origine` et `sources` (WebP en 480, 960 et
+1600 px, jamais agrandies au-delà de l'original) ; `url` pointe alors vers la version 960 px.
 
 ### `GET /produits/{slug}/`
 
