@@ -1,0 +1,4 @@
+{% extends "commande/emails/base.html" %}
+{% block titre %}Paiement confirmé{% endblock %}
+{% block titre_page %}Paiement confirmé{% endblock %}
+{% block message %}<p>Merci ! Nous avons bien reçu le paiement de votre commande <strong>{{ commande.reference }}</strong>.</p>{% endblock %}

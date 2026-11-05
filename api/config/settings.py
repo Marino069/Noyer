@@ -172,11 +172,23 @@ LOGGING = {
 # Email
 # https://docs.djangoproject.com/en/6.1/topics/email/#topic-email-configuration
 
-MAILERS = {
-    'default': {
-        "BACKEND": env(
-            "DJANGO_EMAIL_BACKEND",
-            default="django.core.mail.backends.smtp.EmailBackend",
-        ),
-    },
-}
+EMAIL_BACKEND_CLASSE = env(
+    "DJANGO_EMAIL_BACKEND",
+    default="django.core.mail.backends.smtp.EmailBackend",
+)
+MAILERS = {"default": {"BACKEND": EMAIL_BACKEND_CLASSE}}
+if EMAIL_BACKEND_CLASSE.endswith("smtp.EmailBackend"):
+    # SMTP du prestataire (Infomaniak, Brevo…) : identifiants uniquement par variables d'environnement
+    MAILERS["default"]["OPTIONS"] = {
+        "host": env("EMAIL_HOST", default="localhost"),
+        "port": env.int("EMAIL_PORT", default=587),
+        "username": env("EMAIL_HOST_USER", default=""),
+        "password": env("EMAIL_HOST_PASSWORD", default=""),
+        "use_tls": env.bool("EMAIL_USE_TLS", default=True),
+        "timeout": env.int("EMAIL_TIMEOUT", default=10),
+    }
+
+DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL", default="Noyer <commandes@noyer.ch>")
+
+# Échecs d'envoi d'email : journalisés (la commande n'est jamais annulée)
+LOGGING["loggers"]["noyer.emails"] = LOGGING["loggers"]["noyer.api"] | {"level": "INFO"}

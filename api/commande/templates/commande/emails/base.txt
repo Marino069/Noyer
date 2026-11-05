@@ -1,0 +1,8 @@
+{% autoescape off %}{% block message %}{% endblock %}
+
+{% for ligne in lignes %}- {{ ligne.nom }} x {{ ligne.quantite }}{% if ligne.numero_piece %} (pièce n° {{ ligne.numero_piece }}){% endif %} : CHF {{ ligne.prix_unitaire }}
+{% endfor %}Livraison : CHF {{ frais_livraison }}
+Total TTC : CHF {{ total }}
+
+L'atelier Noyer, Genève
+{% endautoescape %}
