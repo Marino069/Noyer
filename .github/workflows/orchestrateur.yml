@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
   # Réagit aussi dès qu'une vérification ou un agent a fini : pas besoin d'attendre le tour suivant.
   workflow_run:
-    workflows: ["front-ci", "back-ci", "Claude Dev", "Agent testeur", "Claude Code Review"]
+    workflows: ["front-ci", "back-ci", "Claude Dev", "Agent testeur", "Claude Code Review", "QA visuel", "Gardien du contrat d'API", "Revue de sécurité", "Intégration front + back"]
     types: [completed]
 
 concurrency:
