@@ -1,5 +1,7 @@
 import re
 
+from django.http import Http404
+from django.utils import timezone
 from rest_framework import serializers
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -7,6 +9,7 @@ from rest_framework.views import APIView
 from panier import services as panier
 
 from . import services
+from .models import Commande
 
 NPA_SUISSE = re.compile(r"^\d{4}$")
 
@@ -54,6 +57,42 @@ class CommandesView(APIView):
                 "total_centimes": commande.total_ttc_centimes,
             },
             status=201,
+        )
+        reponse["Cache-Control"] = "no-store"
+        return reponse
+
+
+class CommandeDetailView(APIView):
+    """Suivi sans compte : la référence et l'email doivent correspondre, sinon 404 identique."""
+
+    def get(self, request, reference):
+        email = (request.query_params.get("email") or "").strip()
+        commande = None
+        if email:
+            commande = (
+                Commande.objects.filter(reference=reference, client_email__iexact=email)
+                .prefetch_related("lignes__piece")
+                .first()
+            )
+        if commande is None:
+            raise Http404
+        reponse = Response(
+            {
+                "reference": commande.reference,
+                "statut": commande.statut,
+                "cree_le": timezone.localtime(commande.date_creation).isoformat(),
+                "lignes": [
+                    {
+                        "nom_produit": ligne.nom_produit,
+                        "gamme": ligne.gamme,
+                        "numero_piece": ligne.piece.numero if ligne.piece else None,
+                        "prix_unitaire_centimes": ligne.prix_unitaire_centimes,
+                        "quantite": ligne.quantite,
+                    }
+                    for ligne in commande.lignes.all()
+                ],
+                "total_centimes": commande.total_ttc_centimes,
+            }
         )
         reponse["Cache-Control"] = "no-store"
         return reponse
