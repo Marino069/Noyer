@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     "commande",
     "paiement",
     "contact",
+    "newsletter",
 ]
 
 MIDDLEWARE = [
@@ -182,6 +183,8 @@ SPECTACULAR_SETTINGS = {
 # CORS : seule l'URL du front est autorisée
 FRONT_URL = env("FRONT_URL", default="http://localhost:3000").rstrip("/")
 CORS_ALLOWED_ORIGINS = [FRONT_URL]
+# URL publique de l'API (liens de confirmation envoyés par email)
+API_PUBLIC_URL = env("API_PUBLIC_URL", default="http://localhost:8000").rstrip("/")
 # Le front envoie le cookie du panier (credentials: "include")
 CORS_ALLOW_CREDENTIALS = True
 

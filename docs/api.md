@@ -279,6 +279,13 @@ Réponse : 204.
 ### `POST /newsletter/`
 
 Corps : `{ "email": "…", "consentement": true }`. Réponse : 202 (un email de confirmation est envoyé).
+Sans `consentement: true` → 400 `validation`. L'inscription n'est effective qu'après clic sur le lien
+de l'email (double confirmation). Même réponse 202 si l'adresse est déjà confirmée (aucun email).
+
+### `GET /newsletter/confirmer/?jeton=…`
+
+Lien de l'email : confirme l'inscription puis redirige (302) vers
+`<FRONT_URL>/newsletter/confirmation?statut=ok` (ou `statut=invalide` si le jeton est inconnu).
 
 ### `GET /health/`
 
