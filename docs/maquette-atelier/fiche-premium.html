@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Noyer · Lucerne Premium</title>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Hanken+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#F5F1E8}
+a{color:#29251F;text-decoration:none}
+a:hover{color:#604735}
+</style>
+</helmet>
+
+<div style="background: #F5F1E8; color: #29251F; font-family: 'Hanken Grotesk', -apple-system, sans-serif; font-size: 17px; line-height: 1.6;">
+
+  <header style="max-width: 1320px; margin: 0 auto; padding: 22px 40px; display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap; border-bottom: 1px solid rgba(96,71,53,0.16);">
+    <a href="accueil.html" style="font-family: 'Fraunces', Georgia, serif; font-size: 30px; font-weight: 500;">Noyer</a>
+    <nav aria-label="Navigation principale" style="display: flex; gap: 36px; flex-wrap: wrap; align-items: center; font-size: 15px;">
+      <a href="#">Classic</a>
+      <a href="#">Premium</a>
+      <a href="#">L'atelier</a>
+      <a href="#" aria-label="Panier, {{nbPanier}} article" style="display: inline-flex; align-items: center; gap: 8px;">
+        <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#29251F" stroke-width="1.5"><path d="M5 8h14l-1.2 11.2a1 1 0 0 1-1 .8H7.2a1 1 0 0 1-1-.8L5 8Z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>
+        <span>{{nbPanier}}</span>
+      </a>
+    </nav>
+  </header>
+
+  <nav aria-label="Fil d'Ariane" style="max-width: 1320px; margin: 0 auto; padding: 18px 40px; font-size: 13px; color: #604735; letter-spacing: 0.04em;">
+    <a href="accueil.html" style="color: #604735;">Accueil</a> / <a href="#" style="color: #604735;">Premium</a> / Lucerne
+  </nav>
+
+  <!-- Produit : galerie + panneau d'achat qui reste visible -->
+  <section style="max-width: 1320px; margin: 0 auto; padding: 8px 40px 120px; display: flex; flex-wrap: wrap; gap: 64px; align-items: flex-start;">
+    <div style="flex: 3 1 620px; min-width: 0; display: flex; flex-direction: column; gap: 16px;">
+      <figure style="margin: 0; position: relative;">
+        <img src="/mocks/lucerne-premium-1600.webp" alt="Lampe Lucerne Premium, vue de face" style="display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 2px;">
+        <span style="position: absolute; top: 18px; left: 18px; font-size: 12px; letter-spacing: 0.1em; background: #29251F; color: #F5F1E8; padding: 6px 10px; border-radius: 2px;">SÉRIE LIMITÉE · 50 PIÈCES</span>
+        <div aria-hidden="true" style="position: absolute; top: 10%; bottom: 17%; right: 22%; width: 1px; background: #604735; opacity: 0.55;"></div>
+        <span aria-hidden="true" style="position: absolute; top: 44%; right: calc(22% - 64px); font-family: 'Fraunces', Georgia, serif; font-style: italic; font-size: 15px; color: #604735;">H 42 cm</span>
+      </figure>
+      <div style="display: flex; gap: 16px; flex-wrap: wrap;">
+        <img src="/mocks/lucerne-premium-detail-960.webp" alt="Détail du pied en noyer et des bagues en laiton" style="flex: 1 1 280px; min-width: 0; width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 2px;">
+        <img src="/mocks/lucerne-premium-allumee-1600.webp" alt="Lucerne Premium allumée le soir" style="flex: 1 1 280px; min-width: 0; width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 2px;">
+      </div>
+      <img src="/mocks/matiere-noyer-960.webp" alt="Grain du noyer, gros plan" style="display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 2px;">
+    </div>
+
+    <aside aria-label="Achat" style="flex: 2 1 380px; min-width: 0; position: sticky; top: 24px;">
+      <p style="margin: 0; font-size: 13px; letter-spacing: 0.14em; color: #604735;">PREMIUM</p>
+      <h1 style="margin: 4px 0 0; font-family: 'Fraunces', Georgia, serif; font-weight: 400; font-size: 72px; line-height: 1; letter-spacing: -0.02em;">Lucerne</h1>
+      <p style="margin: 16px 0 0; color: #604735;">Pied en noyer massif cerclé de laiton. La silhouette de la Classic, dans sa matière la plus noble.</p>
+      <p style="margin: 28px 0 0; font-family: 'Fraunces', Georgia, serif; font-size: 34px;">CHF 1 240.–</p>
+      <p style="margin: 2px 0 0; font-size: 13px; color: #604735;">TVA 8,1 % incluse · livraison offerte en Suisse</p>
+
+      <!-- Choix de la pièce numérotée -->
+      <fieldset style="margin: 36px 0 0; padding: 0; border: 0;">
+        <legend style="font-size: 13px; letter-spacing: 0.14em; color: #604735; margin-bottom: 14px;">CHOISISSEZ VOTRE PIÈCE · 12 LIBRES SUR 50</legend>
+        <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+          <sc-for list="{{numeros}}" as="n" hint-placeholder-count="6">
+            <button type="button" onClick="{{n.choisir}}" aria-pressed="{{n.actif}}" style="{{n.style}}">N° {{n.libelle}}</button>
+          </sc-for>
+        </div>
+        <p style="margin: 14px 0 0; font-size: 14px; color: #604735;">Sans choix, nous vous attribuons le prochain numéro libre.</p>
+      </fieldset>
+
+      <!-- Plaque gravée -->
+      <div style="margin-top: 28px; background: #29251F; color: #F5F1E8; border-radius: 2px; padding: 24px 28px; display: flex; justify-content: space-between; align-items: center; gap: 16px;">
+        <div>
+          <p style="margin: 0; font-size: 12px; letter-spacing: 0.14em; color: #DED3C2;">VOTRE PIÈCE</p>
+          <p style="margin: 4px 0 0; font-family: 'Fraunces', Georgia, serif; font-size: 44px; line-height: 1; font-weight: 300;">N° {{choisi}} <span style="color: #B08D57;">/ 50</span></p>
+        </div>
+        <p style="margin: 0; max-width: 170px; font-size: 13px; color: #DED3C2; text-align: right;">Numéro gravé sous le pied, certificat signé joint.</p>
+      </div>
+
+      <button type="button" onClick="{{ajouter}}" style="margin-top: 20px; width: 100%; background: #29251F; color: #F5F1E8; border: 0; border-radius: 2px; padding: 20px; font: inherit; font-size: 16px; font-weight: 500; cursor: pointer;">{{libelleBouton}}</button>
+      <p style="margin: 12px 0 0; font-size: 14px; color: #604735; text-align: center;">Pièce réservée 15 minutes dans votre panier · TWINT, carte ou virement</p>
+
+      <dl style="margin: 40px 0 0; font-size: 15px;">
+        <div style="display: flex; justify-content: space-between; gap: 16px; padding: 14px 0; border-top: 1px solid rgba(96,71,53,0.16);"><dt style="color: #604735;">Dimensions</dt><dd style="margin: 0;">H 42 · Ø 28 cm</dd></div>
+        <div style="display: flex; justify-content: space-between; gap: 16px; padding: 14px 0; border-top: 1px solid rgba(96,71,53,0.16);"><dt style="color: #604735;">Matières</dt><dd style="margin: 0;">Noyer massif · laiton</dd></div>
+        <div style="display: flex; justify-content: space-between; gap: 16px; padding: 14px 0; border-top: 1px solid rgba(96,71,53,0.16);"><dt style="color: #604735;">Culot</dt><dd style="margin: 0;">E27</dd></div>
+        <div style="display: flex; justify-content: space-between; gap: 16px; padding: 14px 0; border-top: 1px solid rgba(96,71,53,0.16); border-bottom: 1px solid rgba(96,71,53,0.16);"><dt style="color: #604735;">Entretien</dt><dd style="margin: 0; text-align: right;">Huiler le noyer une fois par an</dd></div>
+      </dl>
+      <a href="#" style="display: inline-block; margin-top: 24px; font-size: 15px; border-bottom: 1px solid #B08D57; padding-bottom: 2px;">Comparer avec la Classic · CHF 480.–</a>
+    </aside>
+  </section>
+
+  <!-- Toast d'ajout au panier -->
+  <sc-if value="{{ajoute}}" hint-placeholder-val="{{ false }}">
+    <div role="status" style="position: fixed; right: 32px; bottom: 32px; background: #29251F; color: #F5F1E8; padding: 18px 22px; border-radius: 2px; display: flex; gap: 18px; align-items: center; box-shadow: 0 12px 32px rgba(41,37,31,0.25);">
+      <img src="/mocks/lucerne-premium-960.webp" alt="" style="width: 56px; height: 56px; object-fit: cover; border-radius: 2px;">
+      <div>
+        <p style="margin: 0; font-size: 15px;">Lucerne Premium · N° {{choisi}} réservée</p>
+        <a href="#" style="color: #DED3C2; font-size: 14px; border-bottom: 1px solid #B08D57;">Voir le panier</a>
+      </div>
+    </div>
+  </sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":3000}}'>
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = { choisi: '07', ajoute: false }; }
+  renderVals() {
+    const libres = ['03', '07', '08', '15', '21', '26', '33', '38', '41', '44', '47', '49'];
+    const numeros = libres.map((l) => {
+      const actif = l === this.state.choisi;
+      return {
+        libelle: l,
+        actif: actif ? 'true' : 'false',
+        style: 'min-width: 72px; min-height: 44px; padding: 10px 12px; border-radius: 2px; font: inherit; font-size: 15px; cursor: pointer; ' +
+          (actif ? 'background: #29251F; color: #F5F1E8; border: 1px solid #29251F;' : 'background: transparent; color: #29251F; border: 1px solid rgba(96,71,53,0.35);'),
+        choisir: () => this.setState({ choisi: l, ajoute: false }),
+      };
+    });
+    return {
+      numeros,
+      choisi: this.state.choisi,
+      ajoute: this.state.ajoute,
+      nbPanier: this.state.ajoute ? 1 : 0,
+      libelleBouton: this.state.ajoute ? 'Pièce réservée ✓' : 'Réserver la pièce N° ' + this.state.choisi,
+      ajouter: () => this.setState({ ajoute: true }),
+    };
+  }
+}
+</script>
+</body>
+</html>
