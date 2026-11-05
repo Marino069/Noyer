@@ -123,7 +123,12 @@ def exception_handler(exc, context):
             code = exc.default_code
         else:
             code = CODES_PAR_STATUT.get(response.status_code, exc.default_code)
-        return erreur(code, exc.detail, response.status_code)
+        reponse = erreur(code, exc.detail, response.status_code)
+        # Conserve les en-têtes utiles (Retry-After sur 429, WWW-Authenticate sur 401)
+        for en_tete in ("Retry-After", "WWW-Authenticate"):
+            if en_tete in response:
+                reponse[en_tete] = response[en_tete]
+        return reponse
 
     # Http404 / PermissionDenied convertis par DRF
     code = CODES_PAR_STATUT.get(response.status_code, "erreur")

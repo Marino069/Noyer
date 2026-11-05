@@ -120,6 +120,17 @@ CSRF_COOKIE_SECURE = env.bool("CSRF_COOKIE_SECURE", default=not DEBUG)
 CSRF_COOKIE_HTTPONLY = True
 CSRF_TRUSTED_ORIGINS = env.list("CSRF_TRUSTED_ORIGINS", default=[])
 
+# HTTPS en production (vérifié par `manage.py check --deploy`)
+SECURE_SSL_REDIRECT = env.bool("SECURE_SSL_REDIRECT", default=not DEBUG)
+SECURE_HSTS_SECONDS = env.int("SECURE_HSTS_SECONDS", default=0 if DEBUG else 31536000)
+SECURE_HSTS_INCLUDE_SUBDOMAINS = not DEBUG
+SECURE_HSTS_PRELOAD = not DEBUG
+SECURE_CONTENT_TYPE_NOSNIFF = True
+SECURE_REFERRER_POLICY = "same-origin"
+if env.bool("SECURE_PROXY_SSL", default=False):
+    # Derrière un reverse proxy qui termine le TLS
+    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+
 
 # Password validation
 # https://docs.djangoproject.com/en/6.1/ref/settings/#auth-password-validators
@@ -171,7 +182,21 @@ REST_FRAMEWORK = {
     "DEFAULT_FILTER_BACKENDS": ["django_filters.rest_framework.DjangoFilterBackend"],
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
     "PAGE_SIZE": 24,
+    # Limitation de débit : seules les vues avec un throttle_scope sont limitées
+    # (compteurs dans le cache Redis). Les webhooks Stripe ne sont jamais limités.
+    "DEFAULT_THROTTLE_CLASSES": ["rest_framework.throttling.ScopedRateThrottle"],
+    "DEFAULT_THROTTLE_RATES": {
+        "contact": env("THROTTLE_CONTACT", default="5/hour"),
+        "commande": env("THROTTLE_COMMANDE", default="10/hour"),
+        "panier_ajout": env("THROTTLE_PANIER_AJOUT", default="60/minute"),
+    },
+    # Nombre de proxies devant l'API (pour lire la vraie IP du client)
+    "NUM_PROXIES": env.int("NUM_PROXIES", default=0),
 }
+
+# drf_spectacular.W002 : les vues APIView sans serializer_class ne sont pas devinables par
+# drf-spectacular (documentation OpenAPI seulement) ; le contrat de référence est docs/api.md.
+SILENCED_SYSTEM_CHECKS = ["drf_spectacular.W002"]
 
 SPECTACULAR_SETTINGS = {
     "TITLE": "API Noyer",

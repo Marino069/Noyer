@@ -51,6 +51,8 @@ class AjoutLigneSerializer(serializers.Serializer):
 class LignesView(APIView):
     """Ajoute une lampe au panier et la réserve. Le prix vient toujours de la base."""
 
+    throttle_scope = "panier_ajout"
+
     def post(self, request):
         donnees = AjoutLigneSerializer(data=request.data)
         donnees.is_valid(raise_exception=True)

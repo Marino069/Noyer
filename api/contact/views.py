@@ -21,6 +21,7 @@ class ContactSerializer(serializers.Serializer):
 
 
 class ContactView(APIView):
+    throttle_scope = "contact"
     authentication_classes = []
     permission_classes = []
 
