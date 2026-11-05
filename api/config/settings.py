@@ -188,6 +188,7 @@ if EMAIL_BACKEND_CLASSE.endswith("smtp.EmailBackend"):
         "timeout": env.int("EMAIL_TIMEOUT", default=10),
     }
 
+ATELIER_EMAIL = env("ATELIER_EMAIL", default="atelier@noyer.ch")
 DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL", default="Noyer <commandes@noyer.ch>")
 
 # Paiement : Stripe Checkout (clés uniquement par variables d'environnement)

@@ -77,3 +77,23 @@ def envoyer_expedition(commande: Commande) -> None:
 
 def envoyer_virement_en_attente(commande: Commande) -> None:
     _programmer("virement_en_attente", commande)
+
+
+def alerter_atelier_remboursement(commande: Commande) -> None:
+    """Prévient l'atelier : paiement reçu mais vente impossible, à rembourser."""
+    logger.error("Commande %s à rembourser (paiement reçu, article indisponible)", commande.reference)
+
+    def envoyer():
+        try:
+            EmailMultiAlternatives(
+                f"Noyer – Commande {commande.reference} à rembourser",
+                f"Le paiement de la commande {commande.reference} ({commande.client_email}, "
+                f"CHF {_francs(commande.total_ttc_centimes)}) est arrivé après l'expiration de la "
+                "réservation et l'article n'est plus disponible. Merci de rembourser le client.",
+                settings.DEFAULT_FROM_EMAIL,
+                [settings.ATELIER_EMAIL],
+            ).send(fail_silently=False)
+        except Exception:
+            logger.exception("Échec de l'alerte atelier (commande %s)", commande.pk)
+
+    transaction.on_commit(envoyer)
