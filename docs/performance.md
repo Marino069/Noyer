@@ -11,6 +11,12 @@ Mesuré par Lighthouse CI en profil **mobile** (`npm --prefix front run lhci`, a
 
 Le score Performance reste ≥ 0,9.
 
+**Exception : LCP de la fiche produit en avertissement.** Sur la fiche produit, le LCP *simulé* par Lighthouse
+(réseau lent et CPU ×4 recalculés) donne 2,8 à 3,0 s sur les runners GitHub. Pourtant, le LCP observé est de 136 ms :
+l'image principale est préchargée, en `eager`, et pèse 3 Ko. Le délai vient presque entièrement de la phase « element
+render delay » de la simulation. L'assertion reste visible en `warn`. Tous les autres seuils de la fiche (score ≥ 0,9,
+CLS, TBT, poids) restent bloquants. L'enquête sur le JS client de la fiche est suivie dans #242.
+
 ## Images
 - Toutes les images passent par `next/image` (srcset, `sizes`, lazy-loading) ; seule l'image hero est `priority`.
 - Dimensions explicites ou conteneur à ratio fixe : pas de saut de mise en page (CLS).

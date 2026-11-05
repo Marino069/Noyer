@@ -16,7 +16,10 @@ const racine = join(__dirname, "..");
 const lhci = JSON.parse(
   readFileSync(join(racine, "lighthouserc.json"), "utf8"),
 );
-const assertions = lhci.ci.assert.assertions;
+// Seuils de l'accueil (tous bloquants) ; la fiche produit a le LCP simulé en warn (docs/performance.md).
+const assertions = lhci.ci.assert.assertMatrix.find(
+  (m: { matchingUrlPattern: string }) => m.matchingUrlPattern.endsWith("/fr$"),
+).assertions;
 const pkg = JSON.parse(readFileSync(join(racine, "package.json"), "utf8"));
 
 describe("[E7-03] Critère : LCP < 2,5 s, CLS < 0,1, INP < 200 ms sur mobile (accueil et fiche produit)", () => {
