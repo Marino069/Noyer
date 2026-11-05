@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { api } from "@/lib/api";
+import { api, type Paiement } from "@/lib/api";
 import { interpolate } from "@/lib/format";
 import { startMocks } from "@/lib/mocks";
 import { Button } from "./Button";
@@ -28,7 +28,22 @@ export type PaiementTextes = {
   errorTitle: string;
   errorMessage: string;
   retry: string;
+  methodLegend: string;
+  methodCard: string;
+  methodTransfer: string;
+  transferNote: string;
+  transferPay: string;
+  transferTitle: string;
+  transferIntro: string;
+  transferIban: string;
+  transferBeneficiary: string;
+  transferReference: string;
+  transferReferenceHint: string;
+  transferDelay: string;
+  transferDelayOne: string;
 };
+
+type Virement = Extract<Paiement, { methode: "virement" }>;
 
 /** Issue du retour depuis Stripe (`?retour=`), posée par le back dans les URL de retour. */
 export type RetourPaiement = "annule" | "echec" | null;
@@ -37,6 +52,8 @@ type Props = {
   textes: PaiementTextes;
   reference: string | null;
   retour: RetourPaiement;
+  /** Le panier contenait du Premium : le virement est alors proposé. */
+  premium?: boolean;
   panierHref: string;
   /** Redirection vers le prestataire ; injectable pour les tests. */
   redirect?: (url: string) => void;
@@ -65,9 +82,12 @@ export function Paiement({
   textes,
   reference,
   retour,
+  premium = false,
   panierHref,
   redirect = allerVers,
 }: Props) {
+  const [methode, setMethode] = useState<"stripe" | "virement">("stripe");
+  const [virement, setVirement] = useState<Virement | null>(null);
   const [enCours, setEnCours] = useState(false);
   const [probleme, setProbleme] = useState<Probleme | null>(retour);
   // Verrou synchrone : le state n'est pas encore à jour entre deux clics rapprochés.
@@ -108,7 +128,13 @@ export function Paiement({
     await startMocks().catch(() => {
       // Les mocks ne sont qu'un confort de développement.
     });
-    const result = await api.payer(commande, "stripe");
+    const result = await api.payer(commande, methode);
+    if (result.ok && result.data.methode === "virement") {
+      // Le verrou reste posé : la commande attend désormais le virement.
+      setEnCours(false);
+      setVirement(result.data);
+      return;
+    }
     if (
       result.ok &&
       result.data.methode === "stripe" &&
@@ -127,6 +153,32 @@ export function Paiement({
     } else {
       setProbleme("erreur");
     }
+  }
+
+  if (virement) {
+    const jours = virement.delai_jours;
+    return (
+      <div className={styles.page}>
+        <h1 className={styles.title}>{textes.transferTitle}</h1>
+        <div className={styles.body}>
+          <p>{interpolate(textes.transferIntro, { reference: commande })}</p>
+          <dl className={styles.coords}>
+            <dt>{textes.transferIban}</dt>
+            <dd>{virement.iban}</dd>
+            <dt>{textes.transferBeneficiary}</dt>
+            <dd>{virement.beneficiaire}</dd>
+            <dt>{textes.transferReference}</dt>
+            <dd>{virement.reference}</dd>
+          </dl>
+          <p className={styles.muted}>{textes.transferReferenceHint}</p>
+          <p role="status">
+            {jours === 1
+              ? textes.transferDelayOne
+              : interpolate(textes.transferDelay, { jours })}
+          </p>
+        </div>
+      </div>
+    );
   }
 
   const messages: Record<Probleme, { titre: string; message: string }> = {
@@ -154,13 +206,43 @@ export function Paiement({
           ) : null}
         </div>
         <p>{interpolate(textes.intro, { reference: commande })}</p>
+        {premium ? (
+          <fieldset className={styles.methods}>
+            <legend>{textes.methodLegend}</legend>
+            <label>
+              <input
+                type="radio"
+                name="methode"
+                checked={methode === "stripe"}
+                onChange={() => setMethode("stripe")}
+              />
+              {textes.methodCard}
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="methode"
+                checked={methode === "virement"}
+                onChange={() => setMethode("virement")}
+              />
+              {textes.methodTransfer}
+            </label>
+            {methode === "virement" ? (
+              <p className={styles.muted}>{textes.transferNote}</p>
+            ) : null}
+          </fieldset>
+        ) : null}
         <p className={styles.muted}>{textes.methods}</p>
         <p className={styles.muted}>{textes.secure}</p>
         {probleme === "payee" ? (
           <Button href={panierHref}>{textes.backToCart}</Button>
         ) : (
           <Button type="button" onClick={payer} loading={enCours}>
-            {probleme ? textes.retry : textes.pay}
+            {methode === "virement"
+              ? textes.transferPay
+              : probleme
+                ? textes.retry
+                : textes.pay}
           </Button>
         )}
         <p role="status" className={styles.muted}>

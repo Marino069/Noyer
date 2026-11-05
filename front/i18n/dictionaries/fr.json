@@ -229,7 +229,20 @@
     "timeoutMessage": "La page de paiement n'a pas pu être ouverte à temps. Votre commande est conservée : réessayez.",
     "errorTitle": "Paiement indisponible",
     "errorMessage": "La page de paiement n'a pas pu être ouverte. Votre commande est conservée : réessayez dans un instant.",
-    "retry": "Reprendre le paiement"
+    "retry": "Reprendre le paiement",
+    "methodLegend": "Mode de paiement",
+    "methodCard": "TWINT ou carte bancaire",
+    "methodTransfer": "Virement bancaire (pièces Premium)",
+    "transferNote": "Le virement est réservé aux pièces Premium. Votre pièce reste réservée plus longtemps pendant que nous attendons votre règlement.",
+    "transferPay": "Choisir le virement",
+    "transferTitle": "Virement bancaire",
+    "transferIntro": "Votre commande {reference} est enregistrée. Effectuez le virement avec les coordonnées ci-dessous.",
+    "transferIban": "IBAN",
+    "transferBeneficiary": "Bénéficiaire",
+    "transferReference": "Référence à indiquer",
+    "transferReferenceHint": "Indiquez impérativement cette référence dans le motif du virement.",
+    "transferDelay": "Votre pièce est réservée {jours} jours pour recevoir votre virement. Passé ce délai, la réservation est libérée.",
+    "transferDelayOne": "Votre pièce est réservée 1 jour pour recevoir votre virement. Passé ce délai, la réservation est libérée."
   },
   "price": {
     "vatIncluded": "TVA incluse ({rate})"
