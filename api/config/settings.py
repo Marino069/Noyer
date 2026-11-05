@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     "panier",
     "commande",
     "paiement",
+    "contact",
 ]
 
 MIDDLEWARE = [
