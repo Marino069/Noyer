@@ -20,8 +20,19 @@ def expirer_reservations():
         logger.info("%s réservation(s) expirée(s)", n)
 
 
+def annuler_commandes_abandonnees():
+    from commande.services import annuler_commandes_abandonnees as annuler
+
+    n = annuler()
+    if n:
+        logger.info("%s commande(s) abandonnée(s) annulée(s)", n)
+
+
 # Liste de (nom, fonction) exécutées à chaque passage.
-TACHES: list = [("expirer_reservations", expirer_reservations)]
+TACHES: list = [
+    ("expirer_reservations", expirer_reservations),
+    ("annuler_commandes_abandonnees", annuler_commandes_abandonnees),
+]
 
 
 def executer_taches():
