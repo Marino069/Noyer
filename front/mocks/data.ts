@@ -3,6 +3,7 @@ import type {
   Image,
   MatiereAccueil,
   Modele,
+  PageContenu,
   ProduitDetail,
   ProduitResume,
 } from "@/lib/api/types";
@@ -123,3 +124,51 @@ export function modeleComplet(slug: string): Modele | undefined {
     produits: produits.filter((p) => p.modele === modele.nom),
   };
 }
+
+const atelier: PageContenu = {
+  slug: "atelier",
+  titre: "L'atelier",
+  description: "Là où naissent les lampes Noyer, à Genève.",
+  blocs: [
+    {
+      type: "titre",
+      niveau: 2,
+      segments: [
+        { texte: "Le geste, " },
+        { texte: "lentement", italique: true },
+      ],
+    },
+    {
+      type: "paragraphe",
+      segments: [
+        { texte: "Chaque lampe est tournée en " },
+        { texte: "noyer", gras: true },
+        { texte: " puis huilée à la main. " },
+        { texte: "Voir la sélection", lien: "/produits" },
+        { texte: "." },
+      ],
+    },
+    {
+      type: "citation",
+      segments: [{ texte: "Le bois décide de la forme." }],
+      auteur: "L'atelier",
+    },
+    {
+      type: "liste",
+      ordonnee: false,
+      items: [[{ texte: "Noyer suisse" }], [{ texte: "Laiton massif" }]],
+    },
+  ],
+};
+
+/** Pages éditoriales du mock ; `brouillon` : visible seulement avec le jeton d'aperçu. */
+export const pagesContenu: Record<
+  string,
+  { contenu: PageContenu; brouillon?: boolean }
+> = {
+  atelier: { contenu: atelier },
+  brouillon: {
+    contenu: { ...atelier, slug: "brouillon", titre: "Brouillon" },
+    brouillon: true,
+  },
+};

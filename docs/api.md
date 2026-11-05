@@ -17,17 +17,22 @@ Quand le back sera en place, le schéma OpenAPI généré (`/api/schema/`) fera 
 ### Format d'erreur (toutes les routes)
 
 ```json
-{ "erreur": { "code": "piece_indisponible", "message": "Cette pièce vient d'être réservée." } }
+{
+  "erreur": {
+    "code": "piece_indisponible",
+    "message": "Cette pièce vient d'être réservée."
+  }
+}
 ```
 
-| HTTP | Quand |
-|---|---|
+| HTTP      | Quand                                                              |
+| --------- | ------------------------------------------------------------------ |
 | 400 / 422 | Données invalides (`code: "validation"`, avec `details` par champ) |
-| 404 | Ressource introuvable |
-| 409 | Conflit : pièce ou stock indisponible, commande déjà payée |
-| 410 | Réservation expirée |
-| 429 | Trop de requêtes |
-| 500 | Erreur interne (aucun détail technique) |
+| 404       | Ressource introuvable                                              |
+| 409       | Conflit : pièce ou stock indisponible, commande déjà payée         |
+| 410       | Réservation expirée                                                |
+| 429       | Trop de requêtes                                                   |
+| 500       | Erreur interne (aucun détail technique)                            |
 
 ### Pagination
 
@@ -48,8 +53,8 @@ type Image = {
 };
 
 type ProduitResume = {
-  slug: string;              // "lucerne-premium"
-  modele: string;            // "Lucerne"
+  slug: string; // "lucerne-premium"
+  modele: string; // "Lucerne"
   gamme: Gamme;
   prix_ttc_centimes: number;
   image_principale: Image | null;
@@ -81,7 +86,7 @@ l'objet contient en plus `largeur_origine`, `hauteur_origine` et `sources` (WebP
     { "nom": "Noyer", "role": "Pied", "entretien": "Huiler une fois par an." },
     { "nom": "Laiton", "role": "Finition", "entretien": "Chiffon doux et sec." }
   ],
-  "medias": [ /* Image[], triées par ordre */ ],
+  "medias": [/* Image[], triées par ordre */],
   "autre_gamme": "lucerne-classic"
 }
 ```
@@ -91,7 +96,12 @@ l'objet contient en plus `largeur_origine`, `hauteur_origine` et `sources` (WebP
 ### `GET /modeles/{slug}/`
 
 ```json
-{ "slug": "lucerne", "nom": "Lucerne", "description": "…", "produits": [ /* ProduitResume[] */ ] }
+{
+  "slug": "lucerne",
+  "nom": "Lucerne",
+  "description": "…",
+  "produits": [/* ProduitResume[] */]
+}
 ```
 
 `produits` ne contient que les produits actifs du modèle (une ou deux versions, Classic puis Premium). 404 si le modèle n'a aucun produit actif.
@@ -99,16 +109,23 @@ l'objet contient en plus `largeur_origine`, `hauteur_origine` et `sources` (WebP
 ### `GET /produits/{slug}/disponibilite/`
 
 Classic :
+
 ```json
 { "gamme": "Classic", "quantite_disponible": 7 }
 ```
 
 Premium :
+
 ```json
 {
   "gamme": "Premium",
   "series": [
-    { "id": 1, "taille_serie": 50, "pieces_restantes": 12, "numeros_disponibles": [3, 8, 15] }
+    {
+      "id": 1,
+      "taille_serie": 50,
+      "pieces_restantes": 12,
+      "numeros_disponibles": [3, 8, 15]
+    }
   ]
 }
 ```
@@ -126,7 +143,7 @@ Hero de la homepage, modifiable depuis le back-office (source du CMS : point ouv
   "sous_titre": "Lampes semi-artisanales en noyer et laiton, assemblées à Genève.",
   "cta_libelle": "Découvrir les lampes",
   "cta_chemin": "/produits/classic",
-  "image": { /* Image, ou null */ }
+  "image": {/* Image, ou null */}
 }
 ```
 
@@ -140,14 +157,56 @@ Les 4 gros plans « La matière » de la homepage (brief §05.3), modifiables de
 ```json
 {
   "titre": "La matière",
-  "gros_plans": [
-    { "legende": "Noyer", "image": { /* Image */ } }
-  ]
+  "gros_plans": [{ "legende": "Noyer", "image": {/* Image */} }]
 }
 ```
 
 `gros_plans` contient 4 éléments, triés par ordre. L'`alt` de chaque image décrit la matière
 (« Grain de noyer huilé, gros plan »).
+
+### `GET /contenu/pages/{slug}/`
+
+Page éditoriale (atelier, À propos…) avec texte riche **structuré** (pas de HTML brut).
+
+```json
+{
+  "slug": "atelier",
+  "titre": "L'atelier",
+  "description": "Là où naissent les lampes Noyer, à Genève.",
+  "blocs": [
+    { "type": "titre", "niveau": 2, "segments": [{ "texte": "Le geste" }] },
+    {
+      "type": "paragraphe",
+      "segments": [
+        { "texte": "En " },
+        { "texte": "noyer", "gras": true },
+        { "texte": "voir", "lien": "/produits" }
+      ]
+    },
+    {
+      "type": "citation",
+      "segments": [{ "texte": "…" }],
+      "auteur": "L'atelier"
+    },
+    {
+      "type": "liste",
+      "ordonnee": false,
+      "items": [[{ "texte": "Noyer suisse" }]]
+    }
+  ]
+}
+```
+
+Blocs : `titre` (`niveau` 2 ou 3), `paragraphe`, `citation` (`auteur` optionnel), `liste`. Un segment
+porte `texte` et, au choix, `italique`, `gras`, `lien` (chemin public sans préfixe de langue, ou URL
+`https`). Le front ignore les types de bloc inconnus. 404 si la page n'existe pas ou n'est pas publiée.
+
+**Aperçu** : avec `?apercu=<jeton>`, le back renvoie le brouillon s'il le connaît (jeton partagé avec le
+front, variable `PREVIEW_SECRET`), sinon 401. Le front n'envoie ce jeton que côté serveur.
+
+**Webhook de publication** : à chaque publication, le back appelle
+`POST <site>/api/revalidate` avec l'en-tête `x-webhook-secret: <REVALIDATE_SECRET>` et le corps
+`{ "slug": "atelier" }` (sans corps : tous les contenus). Le front invalide alors son cache.
 
 ## Panier
 
@@ -158,7 +217,7 @@ Les 4 gros plans « La matière » de la homepage (brief §05.3), modifiables de
   "lignes": [
     {
       "id": "a1b2",
-      "produit": { /* ProduitResume */ },
+      "produit": {/* ProduitResume */},
       "quantite": 1,
       "numero_piece": 7,
       "reservation_expire_le": "2026-10-05T14:45:00+02:00"
@@ -192,7 +251,13 @@ Réponse : le panier complet.
 ```json
 {
   "email": "client@exemple.ch",
-  "adresse_livraison": { "nom": "…", "rue": "…", "npa": "1204", "localite": "Genève", "pays": "CH" },
+  "adresse_livraison": {
+    "nom": "…",
+    "rue": "…",
+    "npa": "1204",
+    "localite": "Genève",
+    "pays": "CH"
+  },
   "adresse_facturation": null,
   "mode_livraison": "livraison",
   "cgv_acceptees": true
@@ -201,9 +266,15 @@ Réponse : le panier complet.
 
 `mode_livraison` : `livraison` | `retrait_atelier`.
 Réponse 201 :
+
 ```json
-{ "reference": "NOY-2026-00042", "statut": "EnAttente", "total_centimes": 124000 }
+{
+  "reference": "NOY-2026-00042",
+  "statut": "EnAttente",
+  "total_centimes": 124000
+}
 ```
+
 Erreur : 410 `reservation_expiree`.
 
 Précisions : le panier est lu via le cookie. `adresse_facturation` vaut l'adresse de livraison si
@@ -220,8 +291,13 @@ les prix et noms sont copiés dans la commande et le panier est vidé.
   "statut": "Payee",
   "cree_le": "2026-10-05T14:30:00+02:00",
   "lignes": [
-    { "nom_produit": "Lucerne Premium", "gamme": "Premium", "numero_piece": 7,
-      "prix_unitaire_centimes": 124000, "quantite": 1 }
+    {
+      "nom_produit": "Lucerne Premium",
+      "gamme": "Premium",
+      "numero_piece": 7,
+      "prix_unitaire_centimes": 124000,
+      "quantite": 1
+    }
   ],
   "total_centimes": 124000
 }
@@ -234,13 +310,21 @@ les prix et noms sont copiés dans la commande et le panier est vidé.
 Corps : `{ "methode": "stripe" }` ou `{ "methode": "virement" }`.
 
 Stripe (TWINT et cartes) :
+
 ```json
 { "methode": "stripe", "url_paiement": "https://checkout.stripe.com/…" }
 ```
 
 Virement (Premium uniquement) :
+
 ```json
-{ "methode": "virement", "iban": "CH…", "beneficiaire": "Noyer", "reference": "NOY-2026-00042", "delai_jours": 5 }
+{
+  "methode": "virement",
+  "iban": "CH…",
+  "beneficiaire": "Noyer",
+  "reference": "NOY-2026-00042",
+  "delai_jours": 5
+}
 ```
 
 Réponse stripe : 201. Le montant est recalculé par le back (CHF) ; le client est redirigé vers

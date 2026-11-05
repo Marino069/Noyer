@@ -20,6 +20,8 @@ export type RequestOptions = {
   signal?: AbortSignal;
   /** Jamais de cache HTTP (données de stock). */
   noStore?: boolean;
+  /** Étiquettes de cache Next.js, pour la revalidation à la demande (webhook). */
+  tags?: string[];
 };
 
 function buildUrl(path: string, query: RequestOptions["query"]): string {
@@ -50,6 +52,7 @@ async function attempt<T>(
     timeoutMs = DEFAULT_TIMEOUT_MS,
     signal,
     noStore,
+    tags,
   }: RequestOptions,
 ): Promise<ApiResult<T>> {
   const timeout = AbortSignal.timeout(timeoutMs);
@@ -58,6 +61,7 @@ async function attempt<T>(
       method,
       credentials: "include",
       ...(noStore && { cache: "no-store" as const }),
+      ...(tags && !noStore && { next: { tags } }),
       headers: {
         Accept: "application/json",
         ...(body !== undefined && { "Content-Type": "application/json" }),

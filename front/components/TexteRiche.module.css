@@ -1,0 +1,71 @@
+/* Texte riche éditorial : uniquement les tokens de la charte (brief §03-04). */
+.texte {
+  max-width: 40rem;
+  color: var(--text);
+}
+
+.titre2,
+.titre3 {
+  margin: 2.5rem 0 1rem;
+  font-family: var(--serif);
+  font-weight: 500;
+  line-height: 1.15;
+}
+
+.titre2 {
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+}
+
+.titre3 {
+  font-size: clamp(1.25rem, 3vw, 1.75rem);
+}
+
+.paragraphe {
+  margin: 0 0 1.25rem;
+  font-family: var(--sans);
+  line-height: 1.7;
+}
+
+.citation {
+  margin: 2rem 0;
+  padding-left: 1.5rem;
+  border-left: 1px solid var(--brass);
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 1.25rem;
+  line-height: 1.5;
+}
+
+.citation p {
+  margin: 0;
+}
+
+.auteur {
+  display: block;
+  margin-top: 0.5rem;
+  color: var(--text-muted);
+  font-family: var(--sans);
+  font-style: normal;
+  font-size: 0.875rem;
+}
+
+.liste {
+  margin: 0 0 1.25rem;
+  padding-left: 1.25rem;
+  font-family: var(--sans);
+  line-height: 1.7;
+}
+
+.lien {
+  color: var(--text);
+  text-decoration: underline;
+  text-decoration-color: var(--brass);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.35em;
+}
+
+.lien:focus-visible {
+  outline: 2px solid var(--brass);
+  outline-offset: 2px;
+  border-radius: var(--radius);
+}
