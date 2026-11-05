@@ -149,14 +149,39 @@ const atelier: PageContenu = {
       ],
     },
     {
-      type: "citation",
-      segments: [{ texte: "Le bois décide de la forme." }],
-      auteur: "L'atelier",
+      type: "image",
+      image: image("Mains huilant un pied de lampe en noyer, dans l'atelier"),
+      legende: "L'huilage, dernière étape avant l'assemblage.",
     },
     {
-      type: "liste",
-      ordonnee: false,
-      items: [[{ texte: "Noyer suisse" }], [{ texte: "Laiton massif" }]],
+      type: "section",
+      ton: "sombre",
+      blocs: [
+        {
+          type: "citation",
+          segments: [{ texte: "Le bois décide de la forme." }],
+          auteur: "L'atelier",
+        },
+        {
+          type: "paragraphe",
+          segments: [{ texte: "Chaque pièce garde la trace de son bois." }],
+        },
+      ],
+    },
+    {
+      type: "section",
+      ton: "clair",
+      blocs: [
+        {
+          type: "liste",
+          ordonnee: false,
+          items: [[{ texte: "Noyer suisse" }], [{ texte: "Laiton massif" }]],
+        },
+        {
+          type: "image",
+          image: image("Établi de l'atelier avec outils et pièces de laiton"),
+        },
+      ],
     },
   ],
 };

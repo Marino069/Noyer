@@ -199,7 +199,13 @@ Page éditoriale (atelier, À propos…) avec texte riche **structuré** (pas de
 
 Blocs : `titre` (`niveau` 2 ou 3), `paragraphe`, `citation` (`auteur` optionnel), `liste`. Un segment
 porte `texte` et, au choix, `italique`, `gras`, `lien` (chemin public sans préfixe de langue, ou URL
-`https`). Le front ignore les types de bloc inconnus. 404 si la page n'existe pas ou n'est pas publiée.
+`https`). Le front ignore les types de bloc inconnus.
+
+Deux blocs complètent la mise en page éditoriale (atelier, notre histoire) :
+`{ "type": "image", "image": {/* Image */}, "legende": "…" }` (photo documentaire, `alt` obligatoire,
+`legende` optionnelle) et `{ "type": "section", "ton": "clair" | "alt" | "sombre", "blocs": [/* blocs */] }`
+(section à registre propre, sans `section` imbriquée). Les blocs hors `section` sont regroupés en
+section claire. 404 si la page n'existe pas ou n'est pas publiée.
 
 **Aperçu** : avec `?apercu=<jeton>`, le back renvoie le brouillon s'il le connaît (jeton partagé avec le
 front, variable `PREVIEW_SECRET`), sinon 401. Le front n'envoie ce jeton que côté serveur.
