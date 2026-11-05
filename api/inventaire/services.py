@@ -140,6 +140,33 @@ def liberer(reservation, statut_final=Reservation.Statut.ANNULEE):
         return reservation
 
 
+def confirmer(reservation):
+    """Transforme une réservation active en vente (paiement confirmé).
+
+    Premium : la pièce passe à Vendue. Classic : stock disponible et réservé baissent de la
+    quantité vendue. Idempotente. Retourne False si la réservation n'est ni active ni
+    confirmée (expirée, annulée) : l'appelant doit le signaler.
+    """
+    with transaction.atomic():
+        reservation = Reservation.objects.select_for_update().get(pk=reservation.pk)
+        if reservation.statut == Reservation.Statut.CONFIRMEE:
+            return True
+        if reservation.statut != Reservation.Statut.ACTIVE:
+            return False
+        if reservation.piece_id is not None:
+            Piece.objects.filter(pk=reservation.piece_id).update(
+                statut=Piece.Statut.VENDUE, version=F("version") + 1
+            )
+        else:
+            stock = StockClassic.objects.select_for_update().get(produit_id=reservation.produit_id)
+            stock.quantite_dispo = max(0, stock.quantite_dispo - reservation.quantite)
+            stock.quantite_reservee = max(0, stock.quantite_reservee - reservation.quantite)
+            stock.save(update_fields=["quantite_dispo", "quantite_reservee", "date_modification"])
+        reservation.statut = Reservation.Statut.CONFIRMEE
+        reservation.save(update_fields=["statut"])
+        return True
+
+
 def expirer_reservations(maintenant=None):
     """Passe en Expiree et libère les réservations Active dont `expire_le` est dépassé.
 
