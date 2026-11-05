@@ -8,7 +8,7 @@ from django.db import IntegrityError, transaction
 from django.db.models import F
 from django.utils import timezone
 
-from catalogue.models import Gamme
+from catalogue.models import Gamme, Produit
 from config.exceptions import (
     DonneesInvalides,
     PieceIndisponible,
@@ -16,11 +16,33 @@ from config.exceptions import (
     StockInsuffisant,
 )
 
-from .models import Piece, Reservation, StockClassic
+from .models import Piece, Reservation, Serie, StockClassic
 
 logger = logging.getLogger("noyer.inventaire")
 
 DUREE_RESERVATION =timedelta(minutes=15)
+
+TAILLE_SERIE_MAX = 999
+
+
+def creer_serie(produit, taille):
+    """Crée une Serie de `taille` pièces numérotées de 1 à `taille` pour un produit Premium.
+
+    Tout se fait dans une transaction : si une pièce échoue, rien n'est créé.
+    DonneesInvalides (422) si le produit n'est pas Premium ou si la taille est invalide.
+    """
+    taille_valide = (
+        isinstance(taille, int) and not isinstance(taille, bool) and 1 <= taille <= TAILLE_SERIE_MAX
+    )
+    if not taille_valide:
+        raise DonneesInvalides(f"La taille doit être un entier entre 1 et {TAILLE_SERIE_MAX}.")
+    with transaction.atomic():
+        produit = Produit.objects.select_for_update().select_related("gamme").get(pk=produit.pk)
+        if produit.gamme.code != Gamme.Code.PREMIUM:
+            raise DonneesInvalides("Une série ne peut être créée que pour un produit Premium.")
+        serie = Serie.objects.create(produit=produit, taille_serie=taille)
+        Piece.objects.bulk_create(Piece(serie=serie, numero=n) for n in range(1, taille + 1))
+        return serie
 
 
 def reserver(produit, quantite, panier_id, numero=None):
