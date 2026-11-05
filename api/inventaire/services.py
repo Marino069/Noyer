@@ -45,6 +45,29 @@ def creer_serie(produit, taille):
         return serie
 
 
+def definir_stock_classic(stock, quantite_dispo):
+    """Fixe la quantité disponible d'un stock Classic, sans descendre sous la quantité réservée.
+
+    Ligne verrouillée dans une transaction. StockInsuffisant (409) si la valeur est
+    inférieure à la quantité réservée ; DonneesInvalides (422) si elle est invalide.
+    """
+    valide = (
+        isinstance(quantite_dispo, int) and not isinstance(quantite_dispo, bool) and quantite_dispo >= 0
+    )
+    if not valide:
+        raise DonneesInvalides("La quantité disponible doit être un entier positif ou nul.")
+    with transaction.atomic():
+        stock = StockClassic.objects.select_for_update().get(pk=stock.pk)
+        if quantite_dispo < stock.quantite_reservee:
+            raise StockInsuffisant(
+                f"La quantité disponible ne peut pas être inférieure à la quantité réservée "
+                f"({stock.quantite_reservee})."
+            )
+        stock.quantite_dispo = quantite_dispo
+        stock.save(update_fields=["quantite_dispo", "date_modification"])
+        return stock
+
+
 def reserver(produit, quantite, panier_id, numero=None):
     """Réserve `quantite` exemplaires de `produit` pour le panier `panier_id`.
 
