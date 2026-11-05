@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { PageEditoriale } from "@/components/PageEditoriale";
 import { hasLocale } from "@/i18n/config";
+import { getDictionary } from "@/i18n/get-dictionary";
+import { formatDateLongue } from "@/lib/format";
 import { chargerPageContenu } from "@/lib/contenu";
 
 type Props = { params: Promise<{ locale: string; slug: string }> };
@@ -29,6 +31,10 @@ export default async function PageContenuRoute({ params }: Props) {
     throw new Error(result.error.message);
   }
   const page = result.data;
+  const { pageContenu } = await getDictionary(locale);
+  const miseAJour = page.mis_a_jour
+    ? `${pageContenu.miseAJour} ${formatDateLongue(page.mis_a_jour, locale)}`
+    : undefined;
 
   return (
     <main id="contenu" tabIndex={-1}>
@@ -36,6 +42,7 @@ export default async function PageContenuRoute({ params }: Props) {
         titre={page.titre}
         blocs={page.blocs}
         locale={locale}
+        miseAJour={miseAJour}
         entete={
           apercu ? (
             <form role="status" action="/api/apercu" method="get">

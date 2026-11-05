@@ -39,11 +39,14 @@ export function PageEditoriale({
   blocs,
   locale,
   entete,
+  miseAJour,
 }: {
   titre: string;
   blocs: BlocTexte[];
   locale: string;
   entete?: ReactNode;
+  /** Libellé « Dernière mise à jour : … », affiché sous le titre. */
+  miseAJour?: string;
 }) {
   const groupes = grouper(blocs);
   if (groupes.length === 0) groupes.push({ ton: "clair", blocs: [] });
@@ -55,6 +58,7 @@ export function PageEditoriale({
             <>
               {entete}
               <h1>{titre}</h1>
+              {miseAJour ? <p data-mise-a-jour>{miseAJour}</p> : null}
             </>
           ) : null}
           <TexteRiche blocs={g.blocs} locale={locale} />

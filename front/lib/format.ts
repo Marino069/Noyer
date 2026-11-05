@@ -24,6 +24,17 @@ function regionalLocale(locale: string): string {
   return locale.includes("-") ? locale : `${locale}-CH`;
 }
 
+/** Date ISO (AAAA-MM-JJ) en toutes lettres, ex. « 1 novembre 2026 ». */
+export function formatDateLongue(iso: string, locale: string): string {
+  const [annee, mois, jour] = iso.split("-").map(Number);
+  return new Intl.DateTimeFormat(locale, {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+    timeZone: "UTC",
+  }).format(new Date(Date.UTC(annee, mois - 1, jour)));
+}
+
 /** Remplace les `{clé}` d'un message du dictionnaire. */
 export function interpolate(
   message: string,
