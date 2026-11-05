@@ -31,7 +31,7 @@ def health(request):
 urlpatterns = [
     # Photos téléversées (MEDIA_ROOT, volume Docker)
     re_path(r"^media/(?P<path>.*)$", serve, {"document_root": settings.MEDIA_ROOT}),
-    path("admin/", admin.site.urls),
+    path(settings.ADMIN_URL, admin.site.urls),
     path("api/health/", health),
     path("api/", include("catalogue.urls")),
     path("api/", include("inventaire.urls")),
