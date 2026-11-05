@@ -190,5 +190,9 @@ if EMAIL_BACKEND_CLASSE.endswith("smtp.EmailBackend"):
 
 DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL", default="Noyer <commandes@noyer.ch>")
 
+# Paiement : Stripe Checkout (clés uniquement par variables d'environnement)
+STRIPE_SECRET_KEY = env("STRIPE_SECRET_KEY", default="")
+STRIPE_WEBHOOK_SECRET = env("STRIPE_WEBHOOK_SECRET", default="")
+
 # Échecs d'envoi d'email : journalisés (la commande n'est jamais annulée)
 LOGGING["loggers"]["noyer.emails"] = LOGGING["loggers"]["noyer.api"] | {"level": "INFO"}
