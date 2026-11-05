@@ -256,6 +256,11 @@ vérifié avec `STRIPE_WEBHOOK_SECRET`. Signature invalide → 400 `signature_in
 confirmées, email), `checkout.session.async_payment_failed` et `checkout.session.expired`
 (transaction `Echouee`). `Webhook.traite` reste faux pour un événement non appliqué.
 
+Vente : la confirmation est atomique (transaction `Confirmee`, commande `Payee`, pièces `Vendue`,
+stock Classic décrémenté, réservations `Confirmee`). Paiement reçu après expiration : vendu si
+l'article est encore libre, sinon la commande passe `Annulee` avec `a_rembourser` vrai en base et
+l'atelier est alerté par email (`ATELIER_EMAIL`).
+
 ## Divers
 
 ### `POST /contact/`

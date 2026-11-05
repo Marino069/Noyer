@@ -9,11 +9,9 @@ import logging
 
 from django.db import IntegrityError, transaction
 
-from commande import emails
 from commande.models import Commande
-from inventaire import services as inventaire
-from inventaire.models import Reservation
 
+from . import vente
 from .models import TransactionPaiement, Webhook
 
 logger = logging.getLogger("noyer.api")
@@ -90,21 +88,4 @@ def _confirmer(paiement, commande, session) -> bool:
 
     paiement.statut = TransactionPaiement.Statut.CONFIRMEE
     paiement.save(update_fields=["statut", "date_modification"])
-
-    if commande.statut != Commande.Statut.EN_ATTENTE:
-        # payée après annulation : argent reçu, intervention manuelle nécessaire
-        logger.error("Paiement reçu pour la commande %s (%s)", commande.reference, commande.statut)
-        return False
-
-    reservations = Reservation.objects.filter(
-        pk__in=commande.lignes.exclude(reservation=None).values("reservation_id")
-    )
-    for reservation in reservations:
-        if not inventaire.confirmer(reservation):
-            logger.error(
-                "Réservation %s non confirmable (commande %s)", reservation.pk, commande.reference
-            )
-    commande.statut = Commande.Statut.PAYEE
-    commande.save(update_fields=["statut", "date_modification"])
-    emails.envoyer_paiement_confirme(commande)
-    return True
+    return vente.confirmer_vente(commande)

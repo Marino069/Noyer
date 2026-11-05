@@ -167,6 +167,32 @@ def confirmer(reservation):
         return True
 
 
+def vendre_apres_expiration(reservation):
+    """Paiement reçu alors que la réservation a expiré ou été annulée : vend si l'article
+    est encore libre (pièce Disponible / stock suffisant), sinon retourne False sans rien
+    modifier. À appeler dans une transaction. Une réservation encore active ou confirmée
+    est traitée par `confirmer`."""
+    reservation = Reservation.objects.select_for_update().get(pk=reservation.pk)
+    if reservation.statut in (Reservation.Statut.ACTIVE, Reservation.Statut.CONFIRMEE):
+        return confirmer(reservation)
+    if reservation.piece_id is not None:
+        piece = Piece.objects.select_for_update().get(pk=reservation.piece_id)
+        if piece.statut != Piece.Statut.DISPONIBLE:
+            return False
+        piece.statut = Piece.Statut.VENDUE
+        piece.version += 1
+        piece.save(update_fields=["statut", "version"])
+    else:
+        stock = StockClassic.objects.select_for_update().get(produit_id=reservation.produit_id)
+        if stock.quantite_dispo - stock.quantite_reservee < reservation.quantite:
+            return False
+        stock.quantite_dispo -= reservation.quantite
+        stock.save(update_fields=["quantite_dispo", "date_modification"])
+    reservation.statut = Reservation.Statut.CONFIRMEE
+    reservation.save(update_fields=["statut"])
+    return True
+
+
 def expirer_reservations(maintenant=None):
     """Passe en Expiree et libère les réservations Active dont `expire_le` est dépassé.
 

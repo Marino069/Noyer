@@ -17,6 +17,8 @@ class Commande(models.Model):
     total_ttc_centimes = models.PositiveIntegerField()
     frais_livraison_centimes = models.PositiveIntegerField(default=0)
     taux_tva = models.DecimalField(max_digits=4, decimal_places=2)
+    # paiement reçu mais article plus disponible : l'atelier doit rembourser (B5-03)
+    a_rembourser = models.BooleanField(default=False)
     date_creation = models.DateTimeField(auto_now_add=True)
     date_modification = models.DateTimeField(auto_now=True)
 
