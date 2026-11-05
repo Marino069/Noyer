@@ -25,7 +25,7 @@ permissions:
 jobs:
   orchestrer:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v6
         with:
@@ -38,9 +38,15 @@ jobs:
           LIMITE_JOUR: "1000" # pas de limite : enchaîne tant qu'il y a des tickets
         # Une CI relancée ne réveille pas le chef d'orchestre : il attend lui-même la fin et repasse.
         run: |
-          for tour in 1 2 3; do
+          relance=0
+          for tour in 1 2 3 4 5; do
             bash .github/orchestrateur/orchestrer.sh | tee sortie.txt
-            grep -q "🔁" sortie.txt || break
-            echo "--- attente de la CI relancée ---"
-            sleep 240
+            grep -q "🔁" sortie.txt && relance=1
+            # Après une relance, on attend aussi tant qu'une PR est encore en vérification.
+            if [ "$relance" -eq 1 ] && grep -qE "🔁|⏳" sortie.txt; then
+              echo "--- attente de la CI relancée ---"
+              sleep 240
+            else
+              break
+            fi
           done
