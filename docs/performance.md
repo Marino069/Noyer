@@ -9,6 +9,9 @@ Mesuré sur **mobile** (émulation Lighthouse, 4G ralentie) pour la homepage (`/
 | INP | < 200 ms | Non mesurable en lab : TBT < 200 ms sert de proxy bloquant (pas d'assertion INP dans Lighthouse CI) |
 | Poids homepage | < 1,5 Mo (1 572 864 octets) | `total-byte-weight` au premier chargement |
 
+## Données pendant l'audit
+La CI construit sans `NEXT_PUBLIC_API_MOCKS` et n'a pas de back : sans données, la fiche produit afficherait l'état d'erreur (après les nouvelles tentatives du client API), ce qui fausserait LCP, CLS et SEO. `lighthouserc.json` démarre donc le serveur avec `API_MOCKS_SERVER=true` : `instrumentation.ts` active alors les mocks MSW **côté serveur uniquement** (variable lue à l'exécution, pas de mocks navigateur).
+
 ## Images
 - Sources WebP multi-résolutions (`srcset` + `sizes` calés sur 600 / 900 px), fournies par l'API ; AVIF puis WebP via `next/image` (`next.config.ts`).
 - Lazy loading sous la ligne de flottaison ; seule l'image du hero est chargée en priorité.
