@@ -1,5 +1,6 @@
 import { Fragment, type ReactNode } from "react";
 import type { BlocTexte, SegmentTexte } from "@/lib/api/types";
+import { Image } from "./Image";
 import styles from "./TexteRiche.module.css";
 
 /** Chemin public interne ("/atelier") ou URL https : tout le reste (javascript:, data:…) est refusé. */
@@ -97,8 +98,29 @@ export function TexteRiche({
               </Tag>
             );
           }
+          case "image": {
+            const { image, legende } = bloc;
+            const src = [...image.sources].sort(
+              (a, b) => b.largeur - a.largeur,
+            )[0];
+            if (!src) return null;
+            return (
+              <figure key={i} className={styles.figure}>
+                <Image
+                  src={src.url}
+                  alt={image.alt}
+                  width={image.largeur_origine}
+                  height={image.hauteur_origine}
+                />
+                {legende ? (
+                  <figcaption className={styles.legende}>{legende}</figcaption>
+                ) : null}
+              </figure>
+            );
+          }
           default:
-            return null; // type de bloc inconnu (back plus récent que le front)
+            // type de bloc inconnu (back plus récent que le front) ; "section" est rendu par PageEditoriale
+            return null;
         }
       })}
     </div>

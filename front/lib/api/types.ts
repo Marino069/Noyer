@@ -44,7 +44,12 @@ export type BlocTexte =
   | { type: "titre"; niveau: 2 | 3; segments: SegmentTexte[] }
   | { type: "paragraphe"; segments: SegmentTexte[] }
   | { type: "citation"; segments: SegmentTexte[]; auteur?: string | null }
-  | { type: "liste"; ordonnee: boolean; items: SegmentTexte[][] };
+  | { type: "liste"; ordonnee: boolean; items: SegmentTexte[][] }
+  | { type: "image"; image: Image; legende?: string | null }
+  | { type: "section"; ton: TonSection; blocs: BlocTexte[] };
+
+/** Registre d'une section éditoriale : clair (défaut), fond alterné ou sombre. */
+export type TonSection = "clair" | "alt" | "sombre";
 
 export type PageContenu = {
   slug: string;

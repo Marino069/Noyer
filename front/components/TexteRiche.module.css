@@ -56,6 +56,18 @@
   line-height: 1.7;
 }
 
+.figure {
+  margin: 2.5rem 0;
+  max-width: 72rem;
+}
+
+.legende {
+  margin-top: 0.75rem;
+  color: var(--text-muted);
+  font-family: var(--sans);
+  font-size: 0.875rem;
+}
+
 .lien {
   color: var(--text);
   text-decoration: underline;

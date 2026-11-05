@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { Section } from "@/components/Section";
-import { TexteRiche } from "@/components/TexteRiche";
+import { PageEditoriale } from "@/components/PageEditoriale";
 import { hasLocale } from "@/i18n/config";
 import { chargerPageContenu } from "@/lib/contenu";
 
@@ -33,17 +32,20 @@ export default async function PageContenuRoute({ params }: Props) {
 
   return (
     <main id="contenu" tabIndex={-1}>
-      <Section>
-        {apercu ? (
-          <form role="status" action="/api/apercu" method="get">
-            Aperçu du brouillon —{" "}
-            <input type="hidden" name="quitter" value="1" />
-            <button type="submit">quitter</button>
-          </form>
-        ) : null}
-        <h1>{page.titre}</h1>
-        <TexteRiche blocs={page.blocs} locale={locale} />
-      </Section>
+      <PageEditoriale
+        titre={page.titre}
+        blocs={page.blocs}
+        locale={locale}
+        entete={
+          apercu ? (
+            <form role="status" action="/api/apercu" method="get">
+              Aperçu du brouillon —{" "}
+              <input type="hidden" name="quitter" value="1" />
+              <button type="submit">quitter</button>
+            </form>
+          ) : null
+        }
+      />
     </main>
   );
 }
