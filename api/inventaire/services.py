@@ -83,6 +83,34 @@ def _reserver_classic(produit, quantite, panier_id):
     )
 
 
+def modifier_quantite(reservation, quantite):
+    """Change la quantité d'une réservation Classic active, en ajustant le stock réservé.
+
+    Retourne la réservation mise à jour, ou None si elle n'est plus active (expirée ou
+    annulée) : l'appelant doit alors réserver à nouveau.
+    StockInsuffisant (409) : rien n'est modifié.
+    """
+    if quantite < 1:
+        raise DonneesInvalides("La quantité doit être d'au moins 1.")
+    with transaction.atomic():
+        reservation = Reservation.objects.select_for_update().get(pk=reservation.pk)
+        if reservation.statut != Reservation.Statut.ACTIVE:
+            return None
+        stock = (
+            StockClassic.objects.select_for_update()
+            .filter(produit_id=reservation.produit_id)
+            .first()
+        )
+        delta = quantite - reservation.quantite
+        if stock is None or (delta > 0 and stock.quantite_dispo - stock.quantite_reservee < delta):
+            raise StockInsuffisant()
+        stock.quantite_reservee = max(0, stock.quantite_reservee + delta)
+        stock.save(update_fields=["quantite_reservee", "date_modification"])
+        reservation.quantite = quantite
+        reservation.save(update_fields=["quantite"])
+        return reservation
+
+
 def liberer(reservation, statut_final=Reservation.Statut.ANNULEE):
     """Libère une réservation active : l'article redevient disponible.
 

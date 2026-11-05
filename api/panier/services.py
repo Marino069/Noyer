@@ -85,6 +85,42 @@ def ajouter_ligne(panier_id, contenu: dict, produit, quantite: int, numero=None)
     return contenu
 
 
+def trouver_ligne(contenu: dict, ligne_id: str) -> dict | None:
+    return next((x for x in contenu.get("lignes", []) if x["id"] == ligne_id), None)
+
+
+def modifier_quantite(panier_id, contenu: dict, ligne: dict, quantite: int) -> dict:
+    """Change la quantité d'une ligne Classic. StockInsuffisant (409) : ligne inchangée."""
+    from inventaire.models import Reservation
+    from inventaire.services import modifier_quantite as ajuster
+    from inventaire.services import reserver
+
+    reservation = Reservation.objects.filter(pk=ligne["reservation_id"]).first()
+    mise_a_jour = ajuster(reservation, quantite) if reservation else None
+    if mise_a_jour is None:
+        # réservation expirée entre-temps : on réserve à nouveau la nouvelle quantité
+        produit = Produit.objects.select_related("gamme").get(pk=ligne["produit_id"])
+        mise_a_jour = reserver(produit, quantite, str(panier_id))
+    ligne["quantite"] = mise_a_jour.quantite
+    ligne["reservation_id"] = mise_a_jour.pk
+    ligne["reservation_expire_le"] = mise_a_jour.expire_le.isoformat()
+    enregistrer(panier_id, contenu)
+    return contenu
+
+
+def retirer_ligne(panier_id, contenu: dict, ligne: dict) -> dict:
+    """Retire la ligne et libère sa réservation : l'article redevient disponible."""
+    from inventaire.models import Reservation
+    from inventaire.services import liberer
+
+    reservation = Reservation.objects.filter(pk=ligne["reservation_id"]).first()
+    if reservation is not None:
+        liberer(reservation)
+    contenu["lignes"] = [x for x in contenu["lignes"] if x["id"] != ligne["id"]]
+    enregistrer(panier_id, contenu)
+    return contenu
+
+
 def tva_incluse(total_centimes: int) -> int:
     """TVA contenue dans un total TTC, arrondie au centime (calcul entier)."""
     base = 10000 + TAUX_TVA_CENTIEMES

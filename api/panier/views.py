@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.shortcuts import get_object_or_404
 from rest_framework import serializers
-from rest_framework.exceptions import ValidationError
+from rest_framework.exceptions import NotFound, ValidationError
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -72,6 +72,44 @@ class LignesView(APIView):
             poser_cookie(reponse, panier_id)
         reponse["Cache-Control"] = "no-store"
         return reponse
+
+
+class ModifierLigneSerializer(serializers.Serializer):
+    quantite = serializers.IntegerField(min_value=1, max_value=99)
+
+
+class LigneView(APIView):
+    """Modifie la quantité d'une ligne Classic ou retire la ligne (libère la réservation)."""
+
+    def _ouvrir(self, request, ligne_id):
+        panier_id, contenu, nouveau = services.ouvrir(request.COOKIES.get(services.COOKIE_NAME))
+        ligne = services.trouver_ligne(contenu, ligne_id)
+        if ligne is None:
+            raise NotFound("Cette ligne n'existe pas dans votre panier.")
+        return panier_id, contenu, nouveau, ligne
+
+    def _reponse(self, contenu, panier_id, nouveau):
+        reponse = Response(PanierSerializer(services.resume(contenu)).data)
+        if nouveau:
+            poser_cookie(reponse, panier_id)
+        reponse["Cache-Control"] = "no-store"
+        return reponse
+
+    def patch(self, request, ligne_id):
+        donnees = ModifierLigneSerializer(data=request.data)
+        donnees.is_valid(raise_exception=True)
+        panier_id, contenu, nouveau, ligne = self._ouvrir(request, ligne_id)
+        if ligne.get("numero_piece") is not None:
+            raise ValidationError({"quantite": ["Une pièce numérotée se commande à l'unité."]})
+        contenu = services.modifier_quantite(
+            panier_id, contenu, ligne, donnees.validated_data["quantite"]
+        )
+        return self._reponse(contenu, panier_id, nouveau)
+
+    def delete(self, request, ligne_id):
+        panier_id, contenu, nouveau, ligne = self._ouvrir(request, ligne_id)
+        contenu = services.retirer_ligne(panier_id, contenu, ligne)
+        return self._reponse(contenu, panier_id, nouveau)
 
 
 class PanierView(APIView):
