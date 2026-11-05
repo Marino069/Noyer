@@ -52,13 +52,23 @@ export function DisponibiliteLive({
   }, [slug]);
 
   useEffect(() => {
-    const first = setTimeout(() => void refresh(), 0); // dès le montage
+    // Premier rafraîchissement dès le montage, mais après l'événement `load` : la valeur du rendu
+    // serveur est déjà à jour, et cette requête ne doit pas entrer en concurrence avec le rendu
+    // de l'image principale (LCP simulé par Lighthouse).
+    let first: ReturnType<typeof setTimeout> | undefined;
+    const demarrer = () => {
+      first = setTimeout(() => void refresh(), 0);
+    };
+    const attendLoad = document.readyState !== "complete";
+    if (attendLoad) window.addEventListener("load", demarrer, { once: true });
+    else demarrer();
     const timer = setInterval(() => void refresh(), REFRESH_INTERVAL_MS);
     const onVisible = () => {
       if (document.visibilityState === "visible") void refresh();
     };
     document.addEventListener("visibilitychange", onVisible);
     return () => {
+      window.removeEventListener("load", demarrer);
       clearTimeout(first);
       clearInterval(timer);
       document.removeEventListener("visibilitychange", onVisible);

@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { preload } from "react-dom";
 import type { Image } from "@/lib/api/types";
 import { interpolate } from "@/lib/format";
 import styles from "./Galerie.module.css";
@@ -27,16 +28,20 @@ type Props = {
 };
 
 const SWIPE_MIN_PX = 40;
+const SIZE_PRINCIPALE = "(min-width: 900px) 50vw, 100vw";
 
 function Photo({
   image,
   sizes,
   eager,
+  priority,
   className,
 }: {
   image: Image;
   sizes: string;
   eager?: boolean;
+  /** Image LCP : priorité de chargement haute. */
+  priority?: boolean;
   className?: string;
 }) {
   const sources = [...image.sources].sort((a, b) => a.largeur - b.largeur);
@@ -52,6 +57,7 @@ function Photo({
       width={image.largeur_origine}
       height={image.hauteur_origine}
       loading={eager ? "eager" : "lazy"}
+      fetchPriority={priority ? "high" : undefined}
       draggable={false}
     />
   );
@@ -91,6 +97,18 @@ export function Galerie({ medias, textes, className }: Props) {
   }
 
   const courante = medias[index];
+  if (index === 0) {
+    // Image LCP de la fiche : préchargée dès le rendu serveur, en priorité haute.
+    const sources = [...courante.sources].sort((a, b) => a.largeur - b.largeur);
+    if (sources.length > 0) {
+      preload(sources[0].url, {
+        as: "image",
+        imageSrcSet: sources.map((s) => `${s.url} ${s.largeur}w`).join(", "),
+        imageSizes: SIZE_PRINCIPALE,
+        fetchPriority: "high",
+      });
+    }
+  }
   const position = interpolate(textes.position, { index: index + 1, total });
 
   const onKeyDown = (e: React.KeyboardEvent) => {
@@ -143,7 +161,8 @@ export function Galerie({ medias, textes, className }: Props) {
           <Photo
             image={courante}
             eager
-            sizes="(min-width: 900px) 50vw, 100vw"
+            priority={index === 0}
+            sizes={SIZE_PRINCIPALE}
             className={styles.photo}
           />
         </button>

@@ -80,7 +80,7 @@
               }
             ],
             "largest-contentful-paint": [
-              "warn",
+              "error",
               {
                 "maxNumericValue": 2500
               }

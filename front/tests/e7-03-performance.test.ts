@@ -5,7 +5,7 @@ import { describe, expect, it } from "vitest";
 const rc = JSON.parse(
   readFileSync(join(__dirname, "..", "lighthouserc.json"), "utf8"),
 ).ci;
-// Accueil : tous les seuils bloquants. Fiche produit : idem, sauf le LCP simulé (voir docs/performance.md).
+// Accueil et fiche produit : tous les seuils bloquants.
 const matrice = rc.assert.assertMatrix as {
   matchingUrlPattern: string;
   assertions: Record<string, [string, Record<string, number>]>;
@@ -55,19 +55,19 @@ describe("[E7-03] Budget performance", () => {
     }
   });
 
-  it("fiche produit : mêmes seuils, LCP simulé en avertissement", () => {
+  it("fiche produit : mêmes seuils bloquants, LCP simulé compris", () => {
     for (const k of [
       "cumulative-layout-shift",
       "total-blocking-time",
       "total-byte-weight",
       "categories:performance",
+      "largest-contentful-paint",
     ]) {
       expect(fiche[k][0]).toBe("error");
     }
-    expect(fiche["largest-contentful-paint"]).toEqual([
-      "warn",
-      { maxNumericValue: 2500 },
-    ]);
+    expect(
+      fiche["largest-contentful-paint"][1].maxNumericValue,
+    ).toBeLessThanOrEqual(2500);
   });
 
   it("la procédure de comparaison du grain est documentée", () => {
