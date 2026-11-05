@@ -125,7 +125,9 @@ def annuler_commandes_abandonnees(maintenant=None) -> int:
     """Passe en Annulee les commandes EnAttente dont toutes les réservations ont expiré.
 
     Les réservations échues sont d'abord libérées : les articles redeviennent disponibles.
-    Les commandes en attente de virement (B5-04) suivent leur propre délai et sont ignorées.
+    Une commande en attente de virement (B5-04) a des réservations prolongées de 5 jours
+    ouvrés : sans validation de l'atelier dans ce délai elle est annulée et sa transaction
+    de virement passe à Echouee.
     Retourne le nombre de commandes annulées.
     """
     from inventaire.services import expirer_reservations
@@ -135,7 +137,6 @@ def annuler_commandes_abandonnees(maintenant=None) -> int:
     expirer_reservations(maintenant)
     candidates = list(
         Commande.objects.filter(statut=Commande.Statut.EN_ATTENTE)
-        .exclude(transactions__methode=TransactionPaiement.Methode.VIREMENT)
         .values_list("pk", flat=True)
     )
     annulees = 0
@@ -160,6 +161,10 @@ def annuler_commandes_abandonnees(maintenant=None) -> int:
                 continue
             commande.statut = Commande.Statut.ANNULEE
             commande.save(update_fields=["statut", "date_modification"])
+            commande.transactions.filter(
+                methode=TransactionPaiement.Methode.VIREMENT,
+                statut=TransactionPaiement.Statut.CREEE,
+            ).update(statut=TransactionPaiement.Statut.ECHOUEE)
             annulees += 1
     return annulees
 

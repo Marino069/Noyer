@@ -194,6 +194,10 @@ DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL", default="Noyer <commandes@noyer.c
 # Paiement : Stripe Checkout (clés uniquement par variables d'environnement)
 STRIPE_SECRET_KEY = env("STRIPE_SECRET_KEY", default="")
 STRIPE_WEBHOOK_SECRET = env("STRIPE_WEBHOOK_SECRET", default="")
+# Virement bancaire (Premium) : coordonnées de l'atelier et délai en jours ouvrés
+VIREMENT_IBAN = env("VIREMENT_IBAN", default="")
+VIREMENT_BENEFICIAIRE = env("VIREMENT_BENEFICIAIRE", default="Noyer")
+VIREMENT_DELAI_JOURS = env.int("VIREMENT_DELAI_JOURS", default=5)
 
 # Échecs d'envoi d'email : journalisés (la commande n'est jamais annulée)
 LOGGING["loggers"]["noyer.emails"] = LOGGING["loggers"]["noyer.api"] | {"level": "INFO"}
