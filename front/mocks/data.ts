@@ -186,12 +186,64 @@ const atelier: PageContenu = {
   ],
 };
 
+const pageLegale = (
+  slug: string,
+  titre: string,
+  description: string,
+  paragraphes: string[],
+): PageContenu => ({
+  slug,
+  titre,
+  description,
+  mis_a_jour: "2026-11-01",
+  blocs: [
+    { type: "titre", niveau: 2, segments: [{ texte: titre }] },
+    ...paragraphes.map((texte) => ({
+      type: "paragraphe" as const,
+      segments: [{ texte }],
+    })),
+  ],
+});
+
+const impressum = pageLegale(
+  "impressum",
+  "Impressum",
+  "Raison sociale, adresse et numéro IDE de Noyer.",
+  [
+    "Noyer, atelier de lampes artisanales — Genève, Suisse.",
+    "Numéro IDE : CHE-000.000.000.",
+  ],
+);
+
+const cgv = pageLegale(
+  "cgv",
+  "Conditions générales de vente",
+  "Conditions de vente en ligne des lampes Noyer.",
+  [
+    "Les prix sont indiqués en francs suisses, TVA comprise.",
+    "Le paiement s'effectue par TWINT, carte ou virement pour le Premium.",
+  ],
+);
+
+const confidentialite = pageLegale(
+  "confidentialite",
+  "Politique de confidentialité",
+  "Traitement de vos données personnelles (nLPD).",
+  [
+    "Noyer traite vos données conformément à la nouvelle loi fédérale sur la protection des données (nLPD).",
+    "Vous pouvez demander l'accès, la rectification ou l'effacement de vos données.",
+  ],
+);
+
 /** Pages éditoriales du mock ; `brouillon` : visible seulement avec le jeton d'aperçu. */
 export const pagesContenu: Record<
   string,
   { contenu: PageContenu; brouillon?: boolean }
 > = {
   atelier: { contenu: atelier },
+  impressum: { contenu: impressum },
+  cgv: { contenu: cgv },
+  confidentialite: { contenu: confidentialite },
   brouillon: {
     contenu: { ...atelier, slug: "brouillon", titre: "Brouillon" },
     brouillon: true,

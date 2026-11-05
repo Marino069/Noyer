@@ -173,6 +173,7 @@ Page éditoriale (atelier, À propos…) avec texte riche **structuré** (pas de
   "slug": "atelier",
   "titre": "L'atelier",
   "description": "Là où naissent les lampes Noyer, à Genève.",
+  "mis_a_jour": "2026-11-01",
   "blocs": [
     { "type": "titre", "niveau": 2, "segments": [{ "texte": "Le geste" }] },
     {
@@ -196,6 +197,9 @@ Page éditoriale (atelier, À propos…) avec texte riche **structuré** (pas de
   ]
 }
 ```
+
+`mis_a_jour` (date `AAAA-MM-JJ`, optionnel) est affichée par le front sous le titre ; elle est
+obligatoire pour les pages légales `impressum`, `cgv` et `confidentialite` (liées depuis le pied de page).
 
 Blocs : `titre` (`niveau` 2 ou 3), `paragraphe`, `citation` (`auteur` optionnel), `liste`. Un segment
 porte `texte` et, au choix, `italique`, `gras`, `lien` (chemin public sans préfixe de langue, ou URL

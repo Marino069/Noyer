@@ -307,6 +307,9 @@
       "privacy": "Confidentialité"
     }
   },
+  "pageContenu": {
+    "miseAJour": "Dernière mise à jour :"
+  },
   "newsletter": {
     "title": "Nouvelles de l'atelier",
     "intro": "Nos nouvelles pièces et les coulisses de la fabrication, quelques fois par an.",

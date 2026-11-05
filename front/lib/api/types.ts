@@ -55,6 +55,8 @@ export type PageContenu = {
   slug: string;
   titre: string;
   description: string;
+  /** Date de dernière mise à jour (AAAA-MM-JJ), affichée sur les pages légales. */
+  mis_a_jour?: string;
   blocs: BlocTexte[];
 };
 
