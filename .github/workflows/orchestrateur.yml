@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
   # Réagit aussi dès qu'une vérification ou un agent a fini : pas besoin d'attendre le tour suivant.
   workflow_run:
-    workflows: ["front-ci", "back-ci", "Claude Dev", "Agent testeur", "Claude Code Review"]
+    workflows: ["front-ci", "back-ci", "Claude Dev", "Agent testeur", "Claude Code Review", "QA visuel", "Gardien du contrat d'API", "Revue de sécurité", "Intégration front + back"]
     types: [completed]
 
 concurrency:
@@ -36,4 +36,11 @@ jobs:
           LECTURE_TOKEN: ${{ github.token }}
           REPO: ${{ github.repository }}
           LIMITE_JOUR: "1000" # pas de limite : enchaîne tant qu'il y a des tickets
-        run: bash .github/orchestrateur/orchestrer.sh
+        # Une CI relancée ne réveille pas le chef d'orchestre : il attend lui-même la fin et repasse.
+        run: |
+          for tour in 1 2 3; do
+            bash .github/orchestrateur/orchestrer.sh | tee sortie.txt
+            grep -q "🔁" sortie.txt || break
+            echo "--- attente de la CI relancée ---"
+            sleep 240
+          done

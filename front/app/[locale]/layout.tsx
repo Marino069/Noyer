@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Fraunces, Hanken_Grotesk } from "next/font/google";
+import localFont from "next/font/local";
 import { notFound } from "next/navigation";
 import { ConsentCookies } from "@/components/ConsentCookies";
 import { Footer } from "@/components/Footer";
@@ -11,17 +11,32 @@ import { getDictionary } from "@/i18n/get-dictionary";
 import { SITE_URL, TRACKER_SRC } from "@/lib/env";
 import "@/styles/globals.css";
 
-const fraunces = Fraunces({
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600"],
-  style: ["normal", "italic"],
+// Polices hébergées dans le dépôt (licence OFL) : le build ne dépend plus de Google.
+const fraunces = localFont({
+  src: [
+    {
+      path: "../fonts/fraunces-latin-wght-normal.woff2",
+      weight: "300 600",
+      style: "normal",
+    },
+    {
+      path: "../fonts/fraunces-latin-wght-italic.woff2",
+      weight: "300 600",
+      style: "italic",
+    },
+  ],
   display: "swap",
   variable: "--font-fraunces",
 });
 
-const hankenGrotesk = Hanken_Grotesk({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+const hankenGrotesk = localFont({
+  src: [
+    {
+      path: "../fonts/hanken-grotesk-latin-wght-normal.woff2",
+      weight: "400 700",
+      style: "normal",
+    },
+  ],
   display: "swap",
   variable: "--font-hanken",
 });
