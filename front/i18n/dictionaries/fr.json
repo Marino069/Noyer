@@ -307,6 +307,13 @@
       "privacy": "Confidentialité"
     }
   },
+  "consent": {
+    "title": "Cookies et mesure d'audience",
+    "text": "Nous aimerions mesurer la fréquentation du site pour l'améliorer. Rien n'est chargé sans votre accord, et vous pouvez changer d'avis à tout moment depuis le pied de page.",
+    "accept": "Accepter",
+    "refuse": "Refuser",
+    "footerLink": "Préférences cookies"
+  },
   "pageContenu": {
     "miseAJour": "Dernière mise à jour :"
   },

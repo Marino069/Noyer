@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { AjoutPanier } from "@/components/AjoutPanier";
 import { Atelier } from "@/components/Atelier";
 import { Button } from "@/components/Button";
+import { ConsentCookies } from "@/components/ConsentCookies";
 import { Galerie } from "@/components/Galerie";
 import { Hero } from "@/components/Hero";
 import { Logo } from "@/components/Logo";
@@ -199,6 +200,15 @@ export default async function DesignSystemPage({ params }: Props) {
           href={localePath(locale, "panier")}
           labels={dictionary.header.cart}
         />
+      </Section>
+
+      <Section>
+        <h2>ConsentCookies</h2>
+        <p>
+          Bannière nLPD : « Refuser » et « Accepter » au même poids. Affichée
+          sur le site seulement si NEXT_PUBLIC_TRACKER_SRC est défini.
+        </p>
+        <ConsentCookies dictionary={dictionary.consent} demo />
       </Section>
 
       <Section>
