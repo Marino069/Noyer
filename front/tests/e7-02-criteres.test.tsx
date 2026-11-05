@@ -115,8 +115,8 @@ describe("[E7-02] Critère : rapport des écarts restants avec tickets associés
     expect(txt).toMatch(/4\.16/);
   });
 
-  // Bug #224 : le rapport dit « Ticket à créer » sans numéro de ticket.
-  it.fails("chaque écart est associé à un ticket (bug 224)", () => {
+  // Bug #224 corrigé : chaque écart pointe vers son ticket.
+  it("chaque écart est associé à un ticket (bug 224)", () => {
     const lignes = readFileSync(rapport, "utf8")
       .split("\n")
       .filter((l) => /^\|\s*\d+\s*\|/.test(l));
