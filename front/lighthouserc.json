@@ -7,8 +7,7 @@
         "http://localhost:3000/fr",
         "http://localhost:3000/fr/produits/lucerne-classic"
       ],
-      "numberOfRuns": 3,
-      "settings": { "preset": "mobile" }
+      "numberOfRuns": 3
     },
     "assert": {
       "assertions": {

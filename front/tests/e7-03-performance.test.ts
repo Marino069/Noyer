@@ -12,7 +12,8 @@ describe("[E7-03] Budget performance", () => {
     const urls: string[] = rc.collect.url;
     expect(urls.some((u) => u.endsWith("/fr"))).toBe(true);
     expect(urls.some((u) => u.includes("/produits/"))).toBe(true);
-    expect(rc.collect.settings.preset).toBe("mobile");
+    // Lighthouse mesure en mobile par défaut ; « mobile » n'est pas un preset valide de lhci.
+    expect(rc.collect.settings?.preset).toBeUndefined();
   });
 
   it("LCP < 2,5 s, CLS < 0,1, TBT (proxy INP) < 200 ms", () => {
