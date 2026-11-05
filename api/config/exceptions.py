@@ -32,6 +32,18 @@ class DejaPayee(ErreurMetier):
     default_detail = "Cette commande est déjà payée."
 
 
+class CommandeAnnulee(ErreurMetier):
+    status_code = status.HTTP_409_CONFLICT
+    default_code = "commande_annulee"
+    default_detail = "Cette commande est annulée."
+
+
+class PaiementIndisponible(ErreurMetier):
+    status_code = status.HTTP_502_BAD_GATEWAY
+    default_code = "paiement_indisponible"
+    default_detail = "Le service de paiement est momentanément indisponible."
+
+
 class ReservationExpiree(ErreurMetier):
     status_code = status.HTTP_410_GONE
     default_code = "reservation_expiree"

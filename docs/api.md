@@ -242,7 +242,11 @@ Virement (Premium uniquement) :
 { "methode": "virement", "iban": "CH…", "beneficiaire": "Noyer", "reference": "NOY-2026-00042", "delai_jours": 5 }
 ```
 
-Erreur : 409 `deja_payee`.
+Réponse stripe : 201. Le montant est recalculé par le back (CHF) ; le client est redirigé vers
+`url_paiement` (page hébergée par Stripe), puis revient sur `/fr/panier/confirmation?reference=…`
+(ou `/fr/panier/paiement?reference=…&retour=annule`).
+
+Erreurs : 409 `deja_payee`, 409 `commande_annulee`, 404 (référence inconnue), 502 (Stripe indisponible).
 
 ## Divers
 
