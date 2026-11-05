@@ -1,0 +1,13 @@
+{% extends "admin/base_site.html" %}
+{% block content %}
+<p>Anonymiser définitivement le client <strong>{{ email }}</strong> ? Email, adresses et abonnement
+newsletter seront effacés. Montants, lignes et statuts sont conservés. Cette action est irréversible.</p>
+<ul>{% for c in commandes %}<li>{{ c.reference }}</li>{% endfor %}</ul>
+<form method="post">{% csrf_token %}
+  {% for pk in selection %}<input type="hidden" name="_selected_action" value="{{ pk }}">{% endfor %}
+  <input type="hidden" name="action" value="{{ action }}">
+  <input type="hidden" name="confirmer" value="1">
+  <input type="submit" value="Anonymiser">
+  <a href="../">Annuler</a>
+</form>
+{% endblock %}
