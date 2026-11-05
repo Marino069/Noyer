@@ -377,5 +377,13 @@
     "names": {
       "fr": "Français"
     }
+  },
+  "notFound": {
+    "title": "Cette lampe s'est éteinte en chemin",
+    "message": "La page que vous cherchez n'existe pas ou a été déplacée. Nos lampes, elles, sont toujours à Genève.",
+    "gammesLabel": "Découvrir nos gammes",
+    "classic": "Voir la gamme Classic",
+    "premium": "Voir la gamme Premium",
+    "home": "Retour à l'accueil"
   }
 }
