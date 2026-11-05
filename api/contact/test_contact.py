@@ -1,5 +1,6 @@
 from django.apps import apps
 from django.core import mail
+from django.core.cache import cache
 from django.test import TestCase, override_settings
 
 VALIDE = {
@@ -11,8 +12,14 @@ VALIDE = {
 }
 
 
-@override_settings(ATELIER_EMAIL="atelier@noyer.test")
+@override_settings(
+    ATELIER_EMAIL="atelier@noyer.test",
+    CACHES={"default": {"BACKEND": "django.core.cache.backends.locmem.LocMemCache"}},
+)
 class ContactTests(TestCase):
+    def setUp(self):
+        cache.clear()  # remet à zéro les compteurs de limitation de débit
+
     def envoyer(self, **modif):
         return self.client.post("/api/contact/", {**VALIDE, **modif}, content_type="application/json")
 

@@ -33,6 +33,7 @@ class StripeWebhookView(APIView):
 
     authentication_classes = []
     permission_classes = []
+    throttle_classes = []  # les webhooks ne sont jamais limités
 
     @extend_schema(exclude=True)
     def post(self, request):

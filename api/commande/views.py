@@ -45,6 +45,8 @@ class CommandeSerializer(serializers.Serializer):
 class CommandesView(APIView):
     """Transforme le panier du visiteur en commande EnAttente. Jamais mis en cache."""
 
+    throttle_scope = "commande"
+
     def post(self, request):
         donnees = CommandeSerializer(data=request.data)
         donnees.is_valid(raise_exception=True)
