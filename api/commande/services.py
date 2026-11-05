@@ -107,6 +107,7 @@ def passer_commande(panier_id, contenu, donnees) -> Commande:
                 prix_unitaire_centimes=produit.prix_ttc_centimes,
                 quantite=element["quantite"],
                 piece_id=reservation.piece_id,
+                reservation=reservation,
             )
             reservation.expire_le = maintenant + DUREE_PAIEMENT
             reservation.save(update_fields=["expire_le"])
@@ -118,6 +119,49 @@ def passer_commande(panier_id, contenu, donnees) -> Commande:
 
     panier.enregistrer(panier_id, {"lignes": []})
     return commande
+
+
+def annuler_commandes_abandonnees(maintenant=None) -> int:
+    """Passe en Annulee les commandes EnAttente dont toutes les réservations ont expiré.
+
+    Les réservations échues sont d'abord libérées : les articles redeviennent disponibles.
+    Les commandes en attente de virement (B5-04) suivent leur propre délai et sont ignorées.
+    Retourne le nombre de commandes annulées.
+    """
+    from inventaire.services import expirer_reservations
+    from paiement.models import TransactionPaiement
+
+    maintenant = maintenant or timezone.now()
+    expirer_reservations(maintenant)
+    candidates = list(
+        Commande.objects.filter(statut=Commande.Statut.EN_ATTENTE)
+        .exclude(transactions__methode=TransactionPaiement.Methode.VIREMENT)
+        .values_list("pk", flat=True)
+    )
+    annulees = 0
+    for pk in candidates:
+        with transaction.atomic():
+            commande = Commande.objects.select_for_update().get(pk=pk)
+            if commande.statut != Commande.Statut.EN_ATTENTE:
+                continue
+            reservations = list(
+                Reservation.objects.select_for_update().filter(
+                    pk__in=commande.lignes.exclude(reservation=None).values("reservation_id")
+                )
+            )
+            if not reservations:
+                continue
+            # une réservation encore valable (ou confirmée) : commande pas abandonnée
+            if any(
+                r.statut == Reservation.Statut.CONFIRMEE
+                or (r.statut == Reservation.Statut.ACTIVE and r.expire_le > maintenant)
+                for r in reservations
+            ):
+                continue
+            commande.statut = Commande.Statut.ANNULEE
+            commande.save(update_fields=["statut", "date_modification"])
+            annulees += 1
+    return annulees
 
 
 def _nom(produit) -> str:

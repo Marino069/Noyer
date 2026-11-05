@@ -41,6 +41,11 @@ class LigneCommande(models.Model):
         Piece, on_delete=models.PROTECT, db_column="id_piece", null=True, blank=True,
         related_name="+",
     )
+    # réservation qui garde l'article le temps du paiement (B4-04)
+    reservation = models.ForeignKey(
+        "inventaire.Reservation", on_delete=models.SET_NULL, db_column="id_reservation",
+        null=True, blank=True, related_name="+",
+    )
 
     class Meta:
         db_table = "Ligne_Commande"
