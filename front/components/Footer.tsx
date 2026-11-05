@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { Locale } from "@/i18n/config";
 import type { Dictionary } from "@/i18n/get-dictionary";
 import { localePath } from "@/lib/routes";
+import { ConsentPreferencesButton } from "./ConsentPreferencesButton";
 import { NewsletterForm } from "./NewsletterForm";
 import { Section } from "./Section";
 import styles from "./Footer.module.css";
@@ -11,10 +12,13 @@ export function Footer({
   locale,
   dictionary,
   newsletter,
+  consentLabel,
 }: {
   locale: Locale;
   dictionary: Dictionary["footer"];
   newsletter: Dictionary["newsletter"];
+  /** Présent seulement si des trackers existent : libellé du lien « Cookies ». */
+  consentLabel?: string;
 }) {
   const legal = [
     { key: "impressum", label: dictionary.legal.impressum },
@@ -53,6 +57,11 @@ export function Footer({
                 </Link>
               </li>
             ))}
+            {consentLabel ? (
+              <li>
+                <ConsentPreferencesButton label={consentLabel} />
+              </li>
+            ) : null}
           </ul>
         </nav>
       </Section>

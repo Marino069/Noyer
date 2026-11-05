@@ -1,13 +1,14 @@
 import type { Metadata } from "next";
 import { Fraunces, Hanken_Grotesk } from "next/font/google";
 import { notFound } from "next/navigation";
+import { ConsentCookies } from "@/components/ConsentCookies";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { MocksProvider } from "@/components/MocksProvider";
 import { hasLocale, locales } from "@/i18n/config";
 import { getDictionary } from "@/i18n/get-dictionary";
-import { SITE_URL } from "@/lib/env";
+import { SITE_URL, TRACKER_SRC } from "@/lib/env";
 import "@/styles/globals.css";
 
 const fraunces = Fraunces({
@@ -74,6 +75,11 @@ export default async function LocaleLayout({
           locale={locale}
           dictionary={dictionary.footer}
           newsletter={dictionary.newsletter}
+          consentLabel={TRACKER_SRC ? dictionary.consent.footerLink : undefined}
+        />
+        <ConsentCookies
+          dictionary={dictionary.consent}
+          trackerSrc={TRACKER_SRC}
         />
       </body>
     </html>

@@ -25,6 +25,14 @@
   text-underline-offset: 0.3em;
 }
 
+.linkButton {
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  cursor: pointer;
+}
+
 .legal {
   margin-block-start: 3rem;
   padding-block-start: 1.5rem;
@@ -40,7 +48,8 @@
   list-style: none;
 }
 
-.legal a {
+.legal a,
+.legal button {
   display: inline-flex;
   align-items: center;
   min-height: 44px;
