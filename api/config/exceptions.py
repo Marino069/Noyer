@@ -62,6 +62,12 @@ class ReservationNonLiberable(ErreurMetier):
     default_detail = "Une réservation confirmée ne peut pas être libérée."
 
 
+class TransitionImpossible(ErreurMetier):
+    status_code = status.HTTP_409_CONFLICT
+    default_code = "transition_impossible"
+    default_detail = "Cette action est impossible pour l'état actuel de la commande."
+
+
 class DonneesInvalides(ErreurMetier):
     status_code = status.HTTP_422_UNPROCESSABLE_ENTITY
     default_code = "validation"
