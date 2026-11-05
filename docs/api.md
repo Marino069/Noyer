@@ -248,6 +248,14 @@ Réponse stripe : 201. Le montant est recalculé par le back (CHF) ; le client e
 
 Erreurs : 409 `deja_payee`, 409 `commande_annulee`, 404 (référence inconnue), 502 (Stripe indisponible).
 
+### POST /api/webhooks/stripe/
+Appelé par Stripe uniquement (pas d'authentification ni de CSRF) : l'en-tête `Stripe-Signature` est
+vérifié avec `STRIPE_WEBHOOK_SECRET`. Signature invalide → 400 `signature_invalide`. Sinon 200
+`{ "recu": true }`, y compris pour un doublon (même `id` d'événement, appliqué une seule fois).
+Événements traités : `checkout.session.completed` (payé → commande `Payee`, réservations
+confirmées, email), `checkout.session.async_payment_failed` et `checkout.session.expired`
+(transaction `Echouee`). `Webhook.traite` reste faux pour un événement non appliqué.
+
 ## Divers
 
 ### `POST /contact/`
