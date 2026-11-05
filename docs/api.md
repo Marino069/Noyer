@@ -205,6 +205,12 @@ Réponse 201 :
 ```
 Erreur : 410 `reservation_expiree`.
 
+Précisions : le panier est lu via le cookie. `adresse_facturation` vaut l'adresse de livraison si
+elle est `null`. NPA suisse (`pays` = `CH`) : 4 chiffres. `cgv_acceptees` doit être `true`. Panier
+vide ou données invalides : 422/400 `validation`. Si une réservation n'est plus active, aucune
+commande n'est créée (410). Sinon les réservations sont prolongées de 30 minutes (paiement),
+les prix et noms sont copiés dans la commande et le panier est vidé.
+
 ### `GET /commandes/{reference}/?email=…`
 
 ```json
