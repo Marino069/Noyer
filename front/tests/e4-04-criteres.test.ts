@@ -9,9 +9,8 @@ vi.mock("@/lib/api", async (importOriginal) => {
   return { ...original, api: { ...original.api, ...hoisted.api } };
 });
 
-vi.mock("next/font/google", () => ({
-  Fraunces: () => ({ variable: "", className: "" }),
-  Hanken_Grotesk: () => ({ variable: "", className: "" }),
+vi.mock("next/font/local", () => ({
+  default: () => ({ variable: "", className: "" }),
 }));
 
 import { generateMetadata as layoutMeta } from "@/app/[locale]/layout";
