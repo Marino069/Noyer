@@ -7,6 +7,7 @@ toujours recalculés depuis la base. Montants en centimes entiers.
 import uuid
 from datetime import timedelta
 
+from django.conf import settings
 from django.core.cache import cache
 from django.db.models import Prefetch
 
@@ -16,10 +17,9 @@ COOKIE_NAME = "noyer_panier"
 DUREE = timedelta(days=3)
 DUREE_SECONDES = int(DUREE.total_seconds())
 
-# TVA suisse 8,1 % : taux en centièmes de pour cent, pour rester en entiers
-TAUX_TVA_CENTIEMES = 810
-TAUX_TVA = "8.10"
-FRAIS_LIVRAISON_CENTIMES = 0
+MODE_LIVRAISON = "livraison"
+MODE_RETRAIT_ATELIER = "retrait_atelier"
+MODES_LIVRAISON = (MODE_LIVRAISON, MODE_RETRAIT_ATELIER)
 
 
 def cle(panier_id) -> str:
@@ -121,10 +121,46 @@ def retirer_ligne(panier_id, contenu: dict, ligne: dict) -> dict:
     return contenu
 
 
+def taux_tva() -> str:
+    """Taux de TVA lu dans la configuration, au format du contrat (« 8.10 »)."""
+    centiemes = settings.TVA_TAUX_CENTIEMES
+    return f"{centiemes // 100}.{centiemes % 100:02d}"
+
+
 def tva_incluse(total_centimes: int) -> int:
     """TVA contenue dans un total TTC, arrondie au centime (calcul entier)."""
-    base = 10000 + TAUX_TVA_CENTIEMES
-    return (total_centimes * TAUX_TVA_CENTIEMES * 2 + base) // (2 * base)
+    taux = settings.TVA_TAUX_CENTIEMES
+    base = 10000 + taux
+    return (total_centimes * taux * 2 + base) // (2 * base)
+
+
+def calculer_totaux(lignes, mode_livraison: str = MODE_LIVRAISON) -> dict:
+    """Seul endroit qui calcule les montants du panier (centimes entiers, jamais de float).
+
+    ``lignes`` : éléments portant ``produit`` (avec ``prix_ttc_centimes``) et ``quantite``,
+    sous forme de dict ou d'objet. Le retrait à l'atelier est gratuit.
+    """
+    if mode_livraison not in MODES_LIVRAISON:
+        raise ValueError(f"mode de livraison inconnu : {mode_livraison!r}")
+
+    def lire(element, champ):
+        return element[champ] if isinstance(element, dict) else getattr(element, champ)
+
+    sous_total = sum(
+        lire(lire(ligne, "produit"), "prix_ttc_centimes") * lire(ligne, "quantite")
+        for ligne in lignes
+    )
+    frais = 0
+    if mode_livraison == MODE_LIVRAISON and sous_total > 0:
+        frais = settings.FRAIS_LIVRAISON_CENTIMES
+    total = sous_total + frais
+    return {
+        "sous_total_centimes": sous_total,
+        "frais_livraison_centimes": frais,
+        "tva_incluse_centimes": tva_incluse(total),
+        "taux_tva": taux_tva(),
+        "total_centimes": total,
+    }
 
 
 def resume(contenu: dict) -> dict:
@@ -138,13 +174,11 @@ def resume(contenu: dict) -> dict:
     par_id = {p.pk: p for p in produits}
 
     lignes = []
-    sous_total = 0
     for ligne in brutes:
         produit = par_id.get(ligne["produit_id"])
         if produit is None:
             continue  # produit retiré de la vente depuis l'ajout
         quantite = ligne["quantite"]
-        sous_total += produit.prix_ttc_centimes * quantite
         lignes.append(
             {
                 "id": ligne["id"],
@@ -154,12 +188,4 @@ def resume(contenu: dict) -> dict:
                 "reservation_expire_le": ligne.get("reservation_expire_le"),
             }
         )
-    total = sous_total + FRAIS_LIVRAISON_CENTIMES
-    return {
-        "lignes": lignes,
-        "sous_total_centimes": sous_total,
-        "frais_livraison_centimes": FRAIS_LIVRAISON_CENTIMES,
-        "tva_incluse_centimes": tva_incluse(total),
-        "taux_tva": TAUX_TVA,
-        "total_centimes": total,
-    }
+    return {"lignes": lignes, **calculer_totaux(lignes, MODE_LIVRAISON)}
