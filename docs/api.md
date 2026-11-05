@@ -246,7 +246,13 @@ Réponse stripe : 201. Le montant est recalculé par le back (CHF) ; le client e
 `url_paiement` (page hébergée par Stripe), puis revient sur `/fr/panier/confirmation?reference=…`
 (ou `/fr/panier/paiement?reference=…&retour=annule`).
 
-Erreurs : 409 `deja_payee`, 409 `commande_annulee`, 404 (référence inconnue), 502 (Stripe indisponible).
+Réponse virement : 201. Crée une transaction `Virement`, prolonge les réservations de 5 jours ouvrés
+et envoie un email au client. Sans validation de l'atelier dans ce délai, la commande est annulée
+et la pièce libérée. Un second appel renvoie les mêmes coordonnées sans rien prolonger.
+Réservé aux commandes contenant du Premium : sinon 422 `virement_indisponible`.
+
+Erreurs : 409 `deja_payee`, 409 `commande_annulee`, 404 (référence inconnue), 410 `reservation_expiree`
+(virement), 422 `virement_indisponible`, 502 (Stripe indisponible, ou IBAN non configuré).
 
 ### POST /api/webhooks/stripe/
 Appelé par Stripe uniquement (pas d'authentification ni de CSRF) : l'en-tête `Stripe-Signature` est

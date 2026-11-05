@@ -58,14 +58,27 @@ class AnnulationTests(TestCase):
         self.perimer()
         self.assertEqual(annuler_commandes_abandonnees(), 0)
 
-    def test_commande_en_attente_de_virement_ignoree(self):
-        TransactionPaiement.objects.create(
+    def test_virement_non_valide_dans_le_delai_annule_la_commande(self):
+        t = TransactionPaiement.objects.create(
             commande=self.commande,
             methode="Virement",
             prestataire="banque",
             montant_centimes=self.commande.total_ttc_centimes,
         )
         self.perimer()
+        self.assertEqual(annuler_commandes_abandonnees(), 1)
+        t.refresh_from_db()
+        self.assertEqual(t.statut, TransactionPaiement.Statut.ECHOUEE)
+        self.assertEqual(Piece.objects.get(numero=2).statut, Piece.Statut.DISPONIBLE)
+
+    def test_virement_dans_le_delai_intact(self):
+        TransactionPaiement.objects.create(
+            commande=self.commande,
+            methode="Virement",
+            prestataire="banque",
+            montant_centimes=self.commande.total_ttc_centimes,
+        )
+        Reservation.objects.update(expire_le=timezone.now() + timedelta(days=3))
         self.assertEqual(annuler_commandes_abandonnees(), 0)
 
     def test_tache_du_worker(self):

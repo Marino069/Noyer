@@ -44,6 +44,12 @@ class PaiementIndisponible(ErreurMetier):
     default_detail = "Le service de paiement est momentanément indisponible."
 
 
+class VirementIndisponible(ErreurMetier):
+    status_code = status.HTTP_422_UNPROCESSABLE_ENTITY
+    default_code = "virement_indisponible"
+    default_detail = "Le virement est réservé aux commandes contenant une pièce Premium."
+
+
 class ReservationExpiree(ErreurMetier):
     status_code = status.HTTP_410_GONE
     default_code = "reservation_expiree"
