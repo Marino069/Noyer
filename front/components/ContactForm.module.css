@@ -1,0 +1,27 @@
+.form {
+  display: grid;
+  justify-items: start;
+  gap: 1rem;
+  max-width: 36rem;
+}
+
+.form > * {
+  width: 100%;
+}
+
+.form button {
+  width: auto;
+}
+
+/* Champ piège anti-robot : hors écran, jamais display:none (les robots l'ignoreraient). */
+.trap {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.status p {
+  margin: 0;
+}

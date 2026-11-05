@@ -1,0 +1,44 @@
+.titre {
+  margin: 0 0 1rem;
+}
+
+.intro {
+  margin: 0 0 2rem;
+  color: var(--text-muted);
+  max-width: 36rem;
+}
+
+.sous-titre {
+  margin: 0 0 1rem;
+  font-size: 1.5rem;
+}
+
+.adresse {
+  font-style: normal;
+  margin: 0 0 1.5rem;
+}
+
+.adresse p,
+.horaires dd {
+  margin: 0;
+}
+
+.horaires {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 0.25rem 1.5rem;
+  margin: 0 0 2rem;
+}
+
+.horaires dt {
+  font-weight: 600;
+}
+
+.horaires dd {
+  margin: 0;
+}
+
+.label {
+  margin: 0 0 0.25rem;
+  font-weight: 600;
+}
