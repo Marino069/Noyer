@@ -8,7 +8,11 @@ import { localePath } from "@/lib/routes";
 
 type Props = {
   params: Promise<{ locale: string }>;
-  searchParams: Promise<{ reference?: string; retour?: string }>;
+  searchParams: Promise<{
+    reference?: string;
+    retour?: string;
+    premium?: string;
+  }>;
 };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -22,7 +26,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function PaiementPage({ params, searchParams }: Props) {
   const { locale } = await params;
   if (!hasLocale(locale) || !SHOP_ENABLED) notFound();
-  const { reference, retour } = await searchParams;
+  const { reference, retour, premium } = await searchParams;
   const { paiement } = await getDictionary(locale);
   const issue: RetourPaiement =
     retour === "annule" || retour === "echec" ? retour : null;
@@ -32,6 +36,7 @@ export default async function PaiementPage({ params, searchParams }: Props) {
         textes={paiement}
         reference={reference?.trim() || null}
         retour={issue}
+        premium={premium === "1"}
         panierHref={localePath(locale, "panier")}
       />
     </main>

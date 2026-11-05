@@ -34,3 +34,35 @@
   font-family: var(--serif);
   font-size: 1.125rem;
 }
+
+.methods {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.methods legend {
+  padding: 0;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+.coords {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 0.5rem 1rem;
+  margin: 0;
+}
+
+.coords dt {
+  color: var(--text-muted);
+}
+
+.coords dd {
+  margin: 0;
+  font-weight: 500;
+  overflow-wrap: anywhere;
+}

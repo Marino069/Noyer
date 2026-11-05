@@ -238,7 +238,12 @@ export function Checkout({
     });
     if (result.ok) {
       const reference = encodeURIComponent(result.data.reference);
-      router.push(`${paiementHref}?reference=${reference}`);
+      // Indice d'affichage : le virement n'est proposé que si le panier contient du Premium
+      // (le back reste seul juge et refuse le virement hors Premium).
+      const premium = panier.lignes.some((l) => l.produit.gamme === "Premium")
+        ? "&premium=1"
+        : "";
+      router.push(`${paiementHref}?reference=${reference}${premium}`);
       return;
     }
     envoiEnCours.current = false;
