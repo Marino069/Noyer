@@ -11,7 +11,9 @@
     "format": "prettier --write .",
     "lhci": "lhci autorun --config=lighthouserc.json",
     "prepare": "cd .. && husky front/.husky",
-    "test": "vitest run"
+    "test": "vitest run && npm run test:e2e",
+    "test:unit": "vitest run",
+    "test:e2e": "playwright install --with-deps chromium && playwright test"
   },
   "dependencies": {
     "next": "^16.4.1",
@@ -19,7 +21,9 @@
     "react-dom": "^19.3.0"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.14.0",
     "@lhci/cli": "^0.16.0",
+    "@playwright/test": "^1.64.1",
     "@testing-library/jest-dom": "^7.0.1",
     "@testing-library/react": "^16.3.3",
     "@testing-library/user-event": "^14.6.7",
