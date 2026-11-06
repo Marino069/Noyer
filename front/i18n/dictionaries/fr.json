@@ -43,6 +43,39 @@
       "errorTitle": "Sélection indisponible",
       "errorMessage": "La sélection n'a pas pu être chargée. Rechargez la page dans un instant."
     },
+    "frise": {
+      "surtitre": "De la planche à la lampe",
+      "titre": "Quatre gestes,",
+      "accent": "aucun raccourci",
+      "etapesLabel": "Les quatre étapes de fabrication",
+      "etapes": [
+        {
+          "titre": "Le bois",
+          "texte": "Un noyer choisi pour son grain, séché lentement avant d'être travaillé.",
+          "duree": "[DURÉE DE SÉCHAGE]"
+        },
+        {
+          "titre": "Le façonnage",
+          "texte": "Le pied est tourné et poncé à la main, jusqu'à sa forme définitive.",
+          "duree": "[HEURES AU TOUR]"
+        },
+        {
+          "titre": "La finition",
+          "texte": "Huile sur le bois, laiton poli : la matière est travaillée à la main.",
+          "duree": "[NOMBRE DE COUCHES]"
+        },
+        {
+          "titre": "L'assemblage",
+          "texte": "Montage, câblage et contrôle de chaque pièce, à Genève.",
+          "duree": "Signée et numérotée"
+        }
+      ],
+      "image": {
+        "src": "/mocks/lucerne-premium-allumee-1600.webp",
+        "alt": "Lampe Lucerne Premium allumée dans une pièce sombre"
+      },
+      "citation": "Le soir venu, le laiton prend la couleur de la flamme."
+    },
     "atelier": {
       "title": "L'atelier",
       "text": "Chaque lampe est tournée, assemblée et finie à la main à Genève. Le bois est travaillé à l'outil, le laiton poli à la pièce : ici, les gestes comptent autant que la forme.",

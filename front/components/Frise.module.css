@@ -1,0 +1,153 @@
+.title {
+  max-width: 47.5rem;
+  margin: 0;
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: var(--fs-h2);
+  line-height: 1.02;
+  letter-spacing: var(--ls-title);
+}
+
+.frise {
+  position: relative;
+  margin-top: 3rem;
+}
+
+/* Filet horizontal : visible seulement en ligne (desktop) ; vertical sur mobile. */
+.filet {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 4px;
+  width: 1px;
+  background: color-mix(in srgb, var(--brass) 35%, transparent);
+}
+
+.etapes {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.etape {
+  position: relative;
+  min-width: 0;
+  padding-left: 2rem;
+}
+
+.puce {
+  position: absolute;
+  top: 0.4rem;
+  left: 0;
+  box-sizing: border-box;
+  width: 9px;
+  height: 9px;
+  border: 1px solid var(--brass);
+  border-radius: 50%;
+  background: var(--dark-bg);
+}
+
+.etape:first-child .puce {
+  background: var(--brass);
+}
+
+.numero {
+  margin: 0 0 0.5rem;
+  font-family: var(--serif);
+  font-weight: 300;
+  font-size: 3.5rem;
+  line-height: 1;
+  color: color-mix(in srgb, var(--dark-text) 80%, transparent);
+}
+
+.etapeTitre {
+  margin: 0 0 0.625rem;
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: 1.5rem;
+}
+
+.texte {
+  margin: 0;
+  color: var(--text-muted);
+}
+
+.duree {
+  margin: 1.125rem 0 0;
+  font-size: var(--fs-eyebrow);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--brass);
+}
+
+@media (min-width: 900px) {
+  .filet {
+    top: 0;
+    bottom: auto;
+    left: 0;
+    right: 0;
+    width: auto;
+    height: 1px;
+  }
+
+  .etapes {
+    flex-direction: row;
+    gap: 0;
+  }
+
+  .etape {
+    flex: 1 1 0;
+    padding: 0 1.75rem 0 0;
+  }
+
+  .puce {
+    position: static;
+    display: block;
+    margin-top: -5px;
+  }
+
+  .numero {
+    margin-top: 1.75rem;
+  }
+}
+
+.finale {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3rem;
+  align-items: center;
+  margin-top: 4rem;
+}
+
+.photo {
+  flex: 1 1 35rem;
+  min-width: 0;
+  overflow: hidden;
+  border-radius: var(--radius);
+}
+
+.photo img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+}
+
+.citation {
+  flex: 1 1 20rem;
+  min-width: 0;
+  margin: 0;
+}
+
+.citation p {
+  margin: 0;
+  font-family: var(--serif);
+  font-weight: 300;
+  font-size: var(--fs-h3);
+  line-height: 1.3;
+}

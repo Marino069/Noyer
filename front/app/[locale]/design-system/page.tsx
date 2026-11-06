@@ -11,6 +11,7 @@ import { Surtitre } from "@/components/atelier/Surtitre";
 import { Button } from "@/components/Button";
 import { ConsentCookies } from "@/components/ConsentCookies";
 import { Galerie } from "@/components/Galerie";
+import { Frise } from "@/components/Frise";
 import { Hero } from "@/components/Hero";
 import { Manifeste } from "@/components/Manifeste";
 import { Logo } from "@/components/Logo";
@@ -142,6 +143,9 @@ export default async function DesignSystemPage({ params }: Props) {
 
       <h2 className={styles.heading}>Matière</h2>
       <Matiere contenu={matiereAccueil} {...dictionary.home.matiere} />
+
+      <h2 className={styles.heading}>Frise du processus</h2>
+      <Frise textes={dictionary.home.frise} />
 
       <h2 className={styles.heading}>Texte riche</h2>
       <TexteRiche blocs={pagesContenu.atelier.contenu.blocs} locale={locale} />
