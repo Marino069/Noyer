@@ -165,6 +165,7 @@
       "reserveAuto": "Réserver une pièce",
       "reminder": "Pièce réservée 15 minutes dans votre panier · TWINT, carte ou virement",
       "viewCart": "Voir le panier",
+      "dismiss": "Fermer la confirmation",
       "contact": "Nous contacter",
       "errorGeneric": "L'ajout au panier a échoué. Réessayez dans un instant.",
       "errorUnavailable": "Cette pièce vient d'être réservée. Choisissez un autre numéro.",
