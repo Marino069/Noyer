@@ -129,6 +129,7 @@ export function detailDe(p: ProduitResume): ProduitDetail {
             `${p.image_principale.alt}, allumée dans une pièce`,
             `${p.slug}-allumee`,
           ),
+          image("Grain du noyer, gros plan", "matiere-noyer"),
         ]
       : [],
     autre_gamme: autre?.slug ?? null,

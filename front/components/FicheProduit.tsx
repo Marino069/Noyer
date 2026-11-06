@@ -8,7 +8,7 @@ import { AchatLive } from "./AchatLive";
 import { Button } from "./Button";
 import { DispoLive } from "./DispoLive";
 import { DisponibiliteLive } from "./DisponibiliteLive";
-import { Galerie } from "./Galerie";
+import { GalerieEmpilee } from "./GalerieEmpilee";
 import { Price } from "./Price";
 import { ProcessusFabrication } from "./ProcessusFabrication";
 import { Section } from "./Section";
@@ -46,9 +46,14 @@ export function FicheProduit({
         className={styles.fiche}
       >
         <div className={styles.layout}>
-          <Galerie medias={produit.medias} textes={textes.gallery} />
+          <GalerieEmpilee
+            medias={produit.medias}
+            cote={`${textes.details.heightShort} ${c.hauteur_cm} cm`}
+            label={textes.gallery.label}
+            vide={textes.gallery.empty}
+          />
 
-          <div className={styles.infos}>
+          <aside className={styles.infos} aria-label={textes.buyColumn}>
             <p className={styles.gamme}>{produit.gamme}</p>
             <h1 id="fiche-titre" className={styles.title}>
               {produit.modele.nom}
@@ -126,7 +131,7 @@ export function FicheProduit({
                 </Link>
               </p>
             ) : null}
-          </div>
+          </aside>
         </div>
       </Section>
       {premium ? <ProcessusFabrication textes={textes.process} /> : null}

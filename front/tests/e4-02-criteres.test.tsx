@@ -107,7 +107,9 @@ describe("[E4-02] Galerie accessible, alt par photo", () => {
   });
 
   it("la galerie est un groupe nommé, les commandes sont des boutons nommés", () => {
-    render(<Galerie medias={classic.medias} textes={fr.fiche.gallery} />);
+    render(
+      <Galerie medias={classic.medias.slice(0, 3)} textes={fr.fiche.gallery} />,
+    );
     expect(
       screen.getByRole("group", { name: "Galerie photo" }),
     ).toBeInTheDocument();
@@ -118,7 +120,9 @@ describe("[E4-02] Galerie accessible, alt par photo", () => {
 
   it("navigation au clavier (flèches) et position annoncée", async () => {
     const user = userEvent.setup();
-    render(<Galerie medias={classic.medias} textes={fr.fiche.gallery} />);
+    render(
+      <Galerie medias={classic.medias.slice(0, 3)} textes={fr.fiche.gallery} />,
+    );
     expect(screen.getByRole("status")).toHaveTextContent("Photo 1 sur 3");
     await user.tab();
     await user.keyboard("{ArrowRight}");
@@ -129,7 +133,9 @@ describe("[E4-02] Galerie accessible, alt par photo", () => {
 
   it("plein écran : dialog modal nommé, fermeture rend le focus à l'ouverture", async () => {
     const user = userEvent.setup();
-    render(<Galerie medias={classic.medias} textes={fr.fiche.gallery} />);
+    render(
+      <Galerie medias={classic.medias.slice(0, 3)} textes={fr.fiche.gallery} />,
+    );
     const opener = screen.getByRole("button", { name: /Agrandir la photo/ });
     await user.click(opener);
     const dialog = await screen.findByRole("dialog", {
