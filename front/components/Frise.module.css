@@ -61,7 +61,7 @@
   font-weight: 300;
   font-size: 3.5rem;
   line-height: 1;
-  color: var(--bg-alt);
+  color: color-mix(in srgb, var(--dark-text) 80%, transparent);
 }
 
 .etapeTitre {

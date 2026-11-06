@@ -7,7 +7,8 @@
 }
 
 .dark {
-  color: var(--bg-alt);
+  /* Texte secondaire 80 % du texte clair (brief §02) ; --bg-alt est sombre dans <Section tone="dark">. */
+  color: color-mix(in srgb, var(--dark-text) 80%, transparent);
 }
 
 .accent::before {
