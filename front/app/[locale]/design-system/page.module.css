@@ -15,6 +15,18 @@
   padding: 4rem 1.5rem 0;
 }
 
+.figure {
+  position: relative;
+  margin: 1rem 0;
+  max-width: 40rem;
+}
+
+.image {
+  aspect-ratio: 4 / 3;
+  border-radius: var(--radius);
+  background: var(--bg-alt);
+}
+
 .muted {
   color: var(--text-muted);
 }

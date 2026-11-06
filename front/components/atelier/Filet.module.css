@@ -1,0 +1,14 @@
+.filet {
+  margin: 0;
+  border: 0;
+  height: 1px;
+  background: var(--border);
+}
+
+.dark {
+  background: color-mix(in srgb, var(--dark-text) 16%, transparent);
+}
+
+.accent {
+  background: var(--brass);
+}

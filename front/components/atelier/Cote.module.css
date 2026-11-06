@@ -1,0 +1,81 @@
+.cote {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--text-muted);
+  pointer-events: none;
+}
+
+.positioned {
+  position: absolute;
+}
+
+.horizontal {
+  flex-direction: column;
+}
+
+.vertical {
+  flex-direction: row;
+}
+
+/* Trait avec deux butées de 13 px aux extrémités. */
+.trait {
+  position: relative;
+  display: block;
+  background: currentcolor;
+  opacity: 0.55;
+}
+
+.trait::before,
+.trait::after {
+  content: "";
+  position: absolute;
+  background: currentcolor;
+}
+
+.horizontal .trait {
+  width: var(--cote-length);
+  height: 1px;
+}
+
+.horizontal .trait::before,
+.horizontal .trait::after {
+  top: -6px;
+  width: 1px;
+  height: 13px;
+}
+
+.horizontal .trait::before {
+  left: 0;
+}
+
+.horizontal .trait::after {
+  right: 0;
+}
+
+.vertical .trait {
+  width: 1px;
+  height: var(--cote-length);
+}
+
+.vertical .trait::before,
+.vertical .trait::after {
+  left: -6px;
+  width: 13px;
+  height: 1px;
+}
+
+.vertical .trait::before {
+  top: 0;
+}
+
+.vertical .trait::after {
+  bottom: 0;
+}
+
+.label {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 0.9375rem;
+  white-space: nowrap;
+}
