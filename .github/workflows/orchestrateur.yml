@@ -38,15 +38,11 @@ jobs:
           LIMITE_JOUR: "1000" # pas de limite : enchaîne tant qu'il y a des tickets
         # Une CI relancée ne réveille pas le chef d'orchestre : il attend lui-même la fin et repasse.
         run: |
-          relance=0
-          for tour in 1 2 3 4 5; do
+          # Dépôt public : minutes gratuites. Le chef d'orchestre ne compte plus seulement sur
+          # workflow_run (parfois jamais déclenché) : tant qu'une PR est en vérification, il repasse.
+          for tour in $(seq 1 12); do
             bash .github/orchestrateur/orchestrer.sh | tee sortie.txt
-            grep -q "🔁" sortie.txt && relance=1
-            # Après une relance, on attend aussi tant qu'une PR est encore en vérification.
-            if [ "$relance" -eq 1 ] && grep -qE "🔁|⏳" sortie.txt; then
-              echo "--- attente de la CI relancée ---"
-              sleep 240
-            else
-              break
-            fi
+            grep -qE "🔁|⏳" sortie.txt || break
+            echo "--- une PR est en vérification : nouveau passage dans 2 min ---"
+            sleep 120
           done
