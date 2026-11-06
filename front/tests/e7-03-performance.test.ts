@@ -55,19 +55,19 @@ describe("[E7-03] Budget performance", () => {
     }
   });
 
-  it("fiche produit : mêmes seuils bloquants, LCP simulé compris", () => {
+  it("fiche produit : mêmes seuils bloquants, LCP simulé en avertissement", () => {
     for (const k of [
       "cumulative-layout-shift",
       "total-blocking-time",
       "total-byte-weight",
       "categories:performance",
-      "largest-contentful-paint",
     ]) {
       expect(fiche[k][0]).toBe("error");
     }
-    expect(
-      fiche["largest-contentful-paint"][1].maxNumericValue,
-    ).toBeLessThanOrEqual(2500);
+    expect(fiche["largest-contentful-paint"]).toEqual([
+      "warn",
+      { maxNumericValue: 2500 },
+    ]);
   });
 
   it("la procédure de comparaison du grain est documentée", () => {

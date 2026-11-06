@@ -11,7 +11,7 @@ Mesuré par Lighthouse CI en profil **mobile** (`npm --prefix front run lhci`, a
 
 Le score Performance reste ≥ 0,9.
 
-**Fiche produit.** Le LCP simulé (réseau lent et CPU ×4 recalculés) est bloquant comme sur l'accueil. Il dépassait
+**Fiche produit.** Le LCP simulé (réseau lent et CPU ×4 recalculés) est en **avertissement** : il varie de 2,4 à 3,0 s selon le runner GitHub, sans changement de code (constaté sur E8-01). Tous les autres seuils de la fiche restent bloquants. Il dépassait
 2,5 s alors que le LCP observé était de 136 ms : l'image principale est préchargée, en `eager`, et pèse 3 Ko. Le
 premier rafraîchissement de la disponibilité (`DisponibiliteLive`) attend désormais l'événement `load`, pour que sa
 requête ne soit pas comptée dans le chemin critique du rendu (#242).
