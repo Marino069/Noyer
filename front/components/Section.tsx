@@ -26,7 +26,7 @@ export function Section({
     .join(" ");
 
   return (
-    <section {...rest} data-tone={tone} className={classes}>
+    <section {...rest} data-tone={tone} data-reveal="" className={classes}>
       <div className={styles.inner}>{children}</div>
     </section>
   );

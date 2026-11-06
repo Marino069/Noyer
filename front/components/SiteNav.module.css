@@ -115,7 +115,8 @@
 
   .bars,
   .bars::before,
-  .bars::after {
+  .bars::after,
+  .link::after {
     transition: none;
   }
 }
@@ -143,19 +144,43 @@
   }
 
   .link {
+    position: relative;
     font-family: var(--sans);
     font-size: 1rem;
     font-weight: 500;
   }
 
-  .link:hover {
-    text-decoration: underline;
-    text-decoration-color: var(--brass);
-    text-decoration-thickness: 1px;
-    text-underline-offset: 0.4em;
+  /* Trait laiton qui se dessine sous le lien (transform seul : aucun décalage de mise en page). */
+  .link::after {
+    content: "";
+    position: absolute;
+    inset-inline: 0;
+    inset-block-end: 0.6rem;
+    height: 1px;
+    background: var(--brass);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
+  }
+
+  .link:hover::after,
+  .link:focus-visible::after,
+  .link[aria-current="page"]::after {
+    transform: scaleX(1);
+  }
+
+  .link[aria-current="page"] {
+    text-decoration: none;
   }
 
   .cta {
     margin-block-start: 0;
+  }
+}
+
+/* Après le bloc desktop pour l'emporter sur sa transition. */
+@media (prefers-reduced-motion: reduce) {
+  .link::after {
+    transition: none;
   }
 }
