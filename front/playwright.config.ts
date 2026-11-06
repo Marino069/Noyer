@@ -12,6 +12,10 @@ export default defineConfig({
   use: {
     baseURL: `http://localhost:${PORT}`,
     trace: "retain-on-failure",
+    // Les apparitions au défilement (E8-10) masquent les sections hors écran le temps de
+    // l'animation : axe les compterait comme du texte sans contraste. Le parcours teste le
+    // contenu, donc animations coupées (le code les désactive déjà avec reduced-motion).
+    reducedMotion: "reduce",
   },
   projects: [{ name: "chromium", use: { ...devices["Desktop Chrome"] } }],
   webServer: {
