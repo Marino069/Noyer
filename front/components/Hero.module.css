@@ -1,5 +1,5 @@
 .hero {
-  padding-block: 2.5rem;
+  padding-block: 2.5rem 0;
 }
 
 .layout {
@@ -18,9 +18,10 @@
 .title {
   margin: 0;
   font-family: var(--serif);
-  font-weight: 500;
-  font-size: clamp(2.25rem, 6vw, 3.75rem);
-  line-height: 1.1;
+  font-weight: 400;
+  font-size: var(--fs-display);
+  line-height: 1;
+  letter-spacing: var(--ls-display);
   text-wrap: balance;
 }
 
@@ -33,7 +34,7 @@
 .subtitle {
   margin: 0;
   max-width: 34rem; /* lignes < 80 caractères */
-  font-size: 1.0625rem;
+  font-size: var(--fs-body);
   color: var(--text-muted);
 }
 
@@ -54,7 +55,7 @@
 
 @media (min-width: 900px) {
   .hero {
-    padding-block: 5rem;
+    padding-block: 2rem 0;
   }
 
   .layout {

@@ -1,4 +1,5 @@
-/* Tokens de docs/brief.md §04 — ne rien ajouter hors de cette liste. */
+/* Couleurs, polices et rayon : tokens de docs/brief.md §04 uniquement. */
+/* Échelle typographique, conteneur et rythme (E8-01) : tokens de mise en page, sans couleur ni police. */
 /* --text-muted : #604735 plein (pas d'opacité) → 7.6:1 sur --bg, 5.8:1 sur --bg-alt (seuil 4.5:1, brief §07). */
 /* Pas de prefers-color-scheme : le registre sombre est un choix de marque (brief §07). */
 :root {
@@ -17,4 +18,43 @@
   --radius: 2px;
   --serif: var(--font-fraunces), Georgia, serif;
   --sans: var(--font-hanken), -apple-system, sans-serif;
+
+  /* Échelle typographique fluide : desktop ≥ 1440 px, lisible à 390 px. */
+  --fs-display: clamp(3rem, 1.2rem + 7.4vw, 6.5rem); /* h1 ≈ 104 px */
+  --fs-h2: clamp(2.25rem, 1.2rem + 4.4vw, 4rem); /* ≈ 64 px */
+  --fs-h3: clamp(1.5rem, 1.1rem + 1.2vw, 1.875rem);
+  --fs-h4: 1.25rem;
+  --fs-lead: clamp(1.25rem, 1rem + 1.2vw, 1.75rem);
+  --fs-body: 1.0625rem; /* 17 px */
+  --fs-small: 0.875rem;
+  --fs-eyebrow: 0.8125rem; /* surtitres, petites capitales */
+  --ls-eyebrow: 0.14em;
+  --ls-display: -0.025em;
+  --ls-title: -0.02em;
+
+  /* Conteneur et gouttières */
+  --container: 82.5rem; /* 1320 px */
+  --gutter: 1.5rem;
+  --space-section: 5rem; /* 80 px mobile */
+  --space-stack: 1.5rem;
+}
+
+@media (min-width: 600px) {
+  :root {
+    --gutter: 2rem;
+    --space-section: 7.5rem; /* 120 px */
+  }
+}
+
+@media (min-width: 900px) {
+  :root {
+    --gutter: 2.5rem; /* 40 px */
+    --space-section: 8.75rem; /* 140 px */
+  }
+}
+
+@media (min-width: 1200px) {
+  :root {
+    --space-section: 10rem; /* 160 px */
+  }
 }
