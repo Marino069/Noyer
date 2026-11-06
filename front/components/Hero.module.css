@@ -38,6 +38,77 @@
   color: var(--text-muted);
 }
 
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+/* Lien secondaire souligné laiton (filet 1 px, jamais un aplat). */
+.lien {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding-inline: 0.25rem;
+  color: var(--text);
+  text-decoration: none;
+  border-bottom: 1px solid var(--brass);
+}
+
+.lien:focus-visible {
+  outline: 2px solid var(--brass);
+  outline-offset: 4px;
+}
+
+.figure {
+  position: relative;
+  margin: 0;
+}
+
+/* Cotes et étiquette : décor d'atelier, masqués sur petits écrans pour ne pas encombrer. */
+.coteHauteur,
+.coteDiametre {
+  display: none;
+}
+
+.piece {
+  position: absolute;
+  left: 1rem;
+  bottom: 1rem;
+  padding: 0.375rem 0.625rem;
+  border-radius: var(--radius);
+  background: color-mix(in srgb, var(--bg) 85%, transparent);
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+/* Bandeau de 4 filets matière : 1 colonne mobile, 2 tablette, 4 desktop. */
+.filets {
+  display: grid;
+  grid-template-columns: 1fr;
+  margin: 2.5rem 0 0;
+  padding: 0;
+  list-style: none;
+  border-block: 1px solid var(--border);
+}
+
+.filet {
+  padding-block: 1.125rem;
+  font-size: var(--fs-small);
+}
+
+.filet + .filet {
+  border-top: 1px solid var(--border);
+}
+
+.filetLabel {
+  color: var(--text-muted);
+}
+
 /* Ratio réservé : pas de décalage de mise en page pendant le chargement. */
 .media {
   aspect-ratio: 4 / 3;
@@ -61,5 +132,32 @@
   .layout {
     grid-template-columns: 1fr 1fr;
     gap: 4rem;
+  }
+
+  .coteHauteur,
+  .coteDiametre {
+    display: inline-flex;
+  }
+
+  .filets {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .filet + .filet {
+    border-top: 0;
+  }
+}
+
+@media (min-width: 600px) and (max-width: 899px) {
+  .filets {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .filet:nth-child(n + 3) {
+    border-top: 1px solid var(--border);
+  }
+
+  .filet:nth-child(2) {
+    border-top: 0;
   }
 }

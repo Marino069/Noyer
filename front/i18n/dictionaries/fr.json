@@ -8,7 +8,24 @@
     "title": "Noyer",
     "tagline": "Lampes semi-artisanales fabriquées à Genève.",
     "hero": {
-      "cta": "Découvrir les lampes"
+      "cta": "Découvrir les lampes",
+      "surtitre": "Carnet d'atelier — N° 01",
+      "lien": "Entrer dans l'atelier",
+      "coteHauteur": "H 42 cm",
+      "coteDiametre": "Ø 28 cm",
+      "piece": "Lucerne Premium · Pièce N° 07 / 50",
+      "filetsLabel": "Matières et fabrication",
+      "filets": [
+        { "label": "Essence", "valeur": "Noyer massif" },
+        { "label": "Métal", "valeur": "Laiton brossé" },
+        { "label": "Geste", "valeur": "Tourné et huilé à la main" },
+        { "label": "Lieu", "valeur": "Atelier de Genève" }
+      ]
+    },
+    "manifeste": {
+      "texte": "On ne fabrique pas une lampe plus vite que le bois ne sèche.",
+      "accent": "Chaque pièce garde la trace de la main qui l'a tournée.",
+      "signature": "[PRÉNOM], ébéniste, fondateur"
     },
     "gammes": {
       "title": "Deux gammes, une même forme",

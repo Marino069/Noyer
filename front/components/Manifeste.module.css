@@ -1,0 +1,28 @@
+.manifeste {
+  max-width: 61.25rem; /* 980 px */
+  margin: 0 auto;
+  text-align: center;
+}
+
+.citation {
+  margin: 0;
+  font-family: var(--serif);
+  font-weight: 300;
+  font-size: var(--fs-quote);
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+}
+
+.citation em {
+  font-style: italic;
+  color: var(--text-muted);
+}
+
+.signature {
+  margin: 2.25rem 0 0;
+  font-size: var(--fs-eyebrow);
+  letter-spacing: var(--ls-eyebrow);
+  text-transform: uppercase;
+  color: var(--text-muted);
+}

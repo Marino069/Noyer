@@ -25,6 +25,11 @@
   --fs-h3: clamp(1.5rem, 1.1rem + 1.2vw, 1.875rem);
   --fs-h4: 1.25rem;
   --fs-lead: clamp(1.25rem, 1rem + 1.2vw, 1.75rem);
+  --fs-quote: clamp(
+    1.5rem,
+    1rem + 2.2vw,
+    2.75rem
+  ); /* citation manifeste ≈ 44 px */
   --fs-body: 1.0625rem; /* 17 px */
   --fs-small: 0.875rem;
   --fs-eyebrow: 0.8125rem; /* surtitres, petites capitales */
