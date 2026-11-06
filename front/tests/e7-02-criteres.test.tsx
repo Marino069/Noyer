@@ -30,7 +30,7 @@ describe("[E7-02] Critère : zéro violation axe critique ou sérieuse (pages cl
           contenu={{ ...heroAccueil, mot_italique: "prend son temps" }}
           ctaHref="/fr/produits/classic"
         />
-        <Matiere contenu={matiereAccueil} />
+        <Matiere contenu={matiereAccueil} {...fr.home.matiere} />
         <Atelier
           href="/fr/atelier"
           title={fr.home.atelier.title}

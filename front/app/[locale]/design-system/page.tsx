@@ -141,7 +141,7 @@ export default async function DesignSystemPage({ params }: Props) {
       <Manifeste {...dictionary.home.manifeste} />
 
       <h2 className={styles.heading}>Matière</h2>
-      <Matiere contenu={matiereAccueil} />
+      <Matiere contenu={matiereAccueil} {...dictionary.home.matiere} />
 
       <h2 className={styles.heading}>Texte riche</h2>
       <TexteRiche blocs={pagesContenu.atelier.contenu.blocs} locale={locale} />

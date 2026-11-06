@@ -45,7 +45,7 @@ describe("E7-08 · axe sur les pages de contenu", () => {
     const { container } = render(
       <main id="contenu">
         <Hero contenu={heroAccueil} ctaHref="/fr/produits/classic" />
-        <Matiere contenu={matiereAccueil} />
+        <Matiere contenu={matiereAccueil} {...fr.home.matiere} />
         <DeuxGammes
           classic={classic}
           premium={premium}

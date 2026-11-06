@@ -87,7 +87,7 @@ export default async function HomePage({ params }: Props) {
         signature={home.manifeste.signature}
       />
       {matiere.ok && matiere.data.gros_plans.length > 0 ? (
-        <Matiere contenu={matiere.data} />
+        <Matiere contenu={matiere.data} {...home.matiere} />
       ) : null}
       {classic && premium ? (
         <DeuxGammes
