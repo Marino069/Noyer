@@ -14,7 +14,7 @@
   font-size: 0.75rem;
   letter-spacing: var(--ls-eyebrow);
   text-transform: uppercase;
-  color: var(--bg-alt);
+  color: var(--dark-text-muted);
 }
 
 .numero {
@@ -34,5 +34,5 @@
   max-width: 10.5rem;
   font-size: 0.8125rem;
   text-align: right;
-  color: var(--bg-alt);
+  color: var(--dark-text-muted);
 }
