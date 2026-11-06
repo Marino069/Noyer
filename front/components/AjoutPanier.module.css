@@ -40,3 +40,62 @@
   color: var(--text);
   font-weight: 500;
 }
+
+.choix {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-width: 0;
+}
+
+.choix .label {
+  padding: 0;
+  margin-bottom: 0.75rem;
+  font-size: 0.8125rem;
+  letter-spacing: var(--ls-eyebrow);
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.numeros {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.numero {
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--walnut);
+  border-radius: var(--radius);
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  cursor: pointer;
+}
+
+.numero[aria-pressed="true"] {
+  background: var(--walnut);
+  color: var(--bg);
+}
+
+.numero:focus-visible {
+  outline: 2px solid var(--walnut);
+  outline-offset: 2px;
+}
+
+.aide,
+.rappel {
+  margin: 0.875rem 0 0;
+  font-size: 0.875rem;
+  color: var(--text-muted);
+}
+
+.rappel {
+  margin: 0;
+}
+
+.plaque {
+  align-self: stretch;
+}

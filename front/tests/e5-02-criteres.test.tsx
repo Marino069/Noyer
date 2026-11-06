@@ -113,8 +113,12 @@ describe("E5-02 · critère 1 : réservation avec durée restante affichée", ()
     });
     const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
     rendreAjout([3, 8, 15]);
-    await user.selectOptions(screen.getByLabelText("Numéro de la pièce"), "15");
-    await user.click(screen.getByRole("button", { name: "Ajouter au panier" }));
+    await user.click(screen.getByRole("button", { name: "N° 15" }));
+    await user.click(
+      screen.getByRole("button", {
+        name: /Ajouter au panier|Réserver (une pièce|la pièce)/,
+      }),
+    );
     expect(api.ajouterLigne).toHaveBeenCalledWith({
       produit_slug: premium.slug,
       quantite: 1,
@@ -137,7 +141,11 @@ describe("E5-02 · critère 1 : réservation avec durée restante affichée", ()
     });
     const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
     rendreAjout([8, 9]);
-    await user.click(screen.getByRole("button", { name: "Ajouter au panier" }));
+    await user.click(
+      screen.getByRole("button", {
+        name: /Ajouter au panier|Réserver (une pièce|la pièce)/,
+      }),
+    );
     expect(
       await screen.findByText(/Pièce n° 8 réservée pour vous/),
     ).toBeInTheDocument();
@@ -154,7 +162,11 @@ describe("E5-02 · critère 1 : réservation avec durée restante affichée", ()
     });
     const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
     rendreAjout([3, 9]);
-    await user.click(screen.getByRole("button", { name: "Ajouter au panier" }));
+    await user.click(
+      screen.getByRole("button", {
+        name: /Ajouter au panier|Réserver (une pièce|la pièce)/,
+      }),
+    );
     expect(
       await screen.findByText(/Pièce n° 3 réservée pour vous, encore 15 min/),
     ).toBeInTheDocument();
@@ -241,8 +253,12 @@ describe("E5-02 · critère 3 : conflit → proposition d'un autre numéro", () 
     api.ajouterLigne.mockResolvedValue(indisponible);
     const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
     rendreAjout([3, 8, 15]);
-    await user.selectOptions(screen.getByLabelText("Numéro de la pièce"), "3");
-    await user.click(screen.getByRole("button", { name: "Ajouter au panier" }));
+    await user.click(screen.getByRole("button", { name: "N° 3" }));
+    await user.click(
+      screen.getByRole("button", {
+        name: /Ajouter au panier|Réserver (une pièce|la pièce)/,
+      }),
+    );
     expect(await screen.findByRole("status")).toHaveTextContent(
       "Cette pièce vient d'être réservée",
     );
@@ -258,7 +274,11 @@ describe("E5-02 · critère 3 : conflit → proposition d'un autre numéro", () 
     api.ajouterLigne.mockResolvedValue(indisponible);
     const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
     rendreAjout([3, 8]);
-    await user.click(screen.getByRole("button", { name: "Ajouter au panier" }));
+    await user.click(
+      screen.getByRole("button", {
+        name: /Ajouter au panier|Réserver (une pièce|la pièce)/,
+      }),
+    );
     expect(
       await screen.findByRole("button", { name: /Réserver plutôt le n° \d+/ }),
     ).toBeInTheDocument();
@@ -268,8 +288,12 @@ describe("E5-02 · critère 3 : conflit → proposition d'un autre numéro", () 
     api.ajouterLigne.mockResolvedValue(indisponible);
     const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
     rendreAjout([3]);
-    await user.selectOptions(screen.getByLabelText("Numéro de la pièce"), "3");
-    await user.click(screen.getByRole("button", { name: "Ajouter au panier" }));
+    await user.click(screen.getByRole("button", { name: "N° 3" }));
+    await user.click(
+      screen.getByRole("button", {
+        name: /Ajouter au panier|Réserver (une pièce|la pièce)/,
+      }),
+    );
     await screen.findByText(/vient d'être réservée/);
     expect(
       screen.queryByRole("button", { name: /Réserver plutôt/ }),
@@ -283,7 +307,11 @@ describe("E5-02 · critère 3 : conflit → proposition d'un autre numéro", () 
     });
     const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
     rendreAjout([3, 8]);
-    await user.click(screen.getByRole("button", { name: "Ajouter au panier" }));
+    await user.click(
+      screen.getByRole("button", {
+        name: /Ajouter au panier|Réserver (une pièce|la pièce)/,
+      }),
+    );
     await screen.findByText(fr.fiche.cart.errorGeneric);
     expect(
       screen.queryByRole("button", { name: /Réserver plutôt/ }),
@@ -304,7 +332,11 @@ describe("E5-02 · critère 3 : conflit → proposition d'un autre numéro", () 
         onUnavailable={onUnavailable}
       />,
     );
-    await user.click(screen.getByRole("button", { name: "Ajouter au panier" }));
+    await user.click(
+      screen.getByRole("button", {
+        name: /Ajouter au panier|Réserver (une pièce|la pièce)/,
+      }),
+    );
     await screen.findByText(/vient d'être réservée/);
     expect(onUnavailable).toHaveBeenCalledTimes(1);
   });

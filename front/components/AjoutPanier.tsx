@@ -5,6 +5,7 @@ import { useState } from "react";
 import { api, type Gamme } from "@/lib/api";
 import { publishCart } from "@/lib/cart";
 import { formatDuree, interpolate } from "@/lib/format";
+import { PlaqueGravee } from "./atelier/PlaqueGravee";
 import { Button } from "./Button";
 import styles from "./AjoutPanier.module.css";
 
@@ -12,8 +13,14 @@ export type AjoutPanierTextes = {
   add: string;
   adding: string;
   added: string;
-  numero: string;
+  choose: string;
+  numeroButton: string;
   numeroAuto: string;
+  plateLabel: string;
+  plateNote: string;
+  reserve: string;
+  reserveAuto: string;
+  reminder: string;
   viewCart: string;
   errorGeneric: string;
   errorUnavailable: string;
@@ -26,6 +33,8 @@ type Props = {
   gamme: Gamme;
   /** Numéros de pièce encore libres (Premium) ; vide ou absent pour le Classic. */
   numeros?: number[];
+  /** Taille totale de la série (Premium), affichée sur la plaque gravée. */
+  total?: number;
   disabled?: boolean;
   panierHref: string;
   textes: AjoutPanierTextes;
@@ -41,6 +50,7 @@ export function AjoutPanier({
   slug,
   gamme,
   numeros = [],
+  total = 0,
   disabled = false,
   panierHref,
   textes,
@@ -120,34 +130,54 @@ export function AjoutPanier({
   return (
     <div className={styles.bloc}>
       {premium && numeros.length > 0 ? (
-        <div className={styles.field}>
-          <label htmlFor={`numero-${slug}`} className={styles.label}>
-            {textes.numero}
-          </label>
-          <select
-            id={`numero-${slug}`}
-            className={styles.select}
-            value={numero ?? ""}
-            onChange={(e) =>
-              setChoix(e.target.value === "" ? null : Number(e.target.value))
-            }
-          >
-            <option value="">{textes.numeroAuto}</option>
-            {numeros.map((n) => (
-              <option key={n} value={n}>
-                {n}
-              </option>
-            ))}
-          </select>
-        </div>
+        <>
+          <fieldset className={styles.choix}>
+            <legend className={styles.label}>
+              {interpolate(textes.choose, {
+                libres: numeros.length,
+                total: total || numeros.length,
+              })}
+            </legend>
+            <div className={styles.numeros}>
+              {numeros.map((n) => (
+                <button
+                  key={n}
+                  type="button"
+                  className={styles.numero}
+                  aria-pressed={n === numero}
+                  onClick={() => setChoix(n === numero ? null : n)}
+                >
+                  {interpolate(textes.numeroButton, { numero: n })}
+                </button>
+              ))}
+            </div>
+            <p className={styles.aide}>{textes.numeroAuto}</p>
+          </fieldset>
+          <PlaqueGravee
+            numero={numero}
+            total={total || numeros.length}
+            label={textes.plateLabel}
+            note={textes.plateNote}
+            className={styles.plaque}
+          />
+        </>
       ) : null}
       <Button
         onClick={() => ajouter()}
         loading={etat === "envoi"}
         disabled={disabled || sansPiece}
       >
-        {etat === "envoi" ? textes.adding : textes.add}
+        {etat === "envoi"
+          ? textes.adding
+          : premium
+            ? numero !== null
+              ? interpolate(textes.reserve, { numero })
+              : textes.reserveAuto
+            : textes.add}
       </Button>
+      {premium && !sansPiece ? (
+        <p className={styles.rappel}>{textes.reminder}</p>
+      ) : null}
       <div role="status" className={styles.message} data-state={etat}>
         {message}
         {etat === "ajoute" ? (

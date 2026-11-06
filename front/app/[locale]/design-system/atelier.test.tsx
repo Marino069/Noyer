@@ -66,7 +66,7 @@ describe("[E8-02] page design-system : éléments graphiques d'atelier", () => {
 
   it("montre la PlaqueGravee complète et minimale", async () => {
     await renderPage();
-    expect(screen.getByText("Votre pièce")).toBeInTheDocument();
+    expect(screen.getAllByText("Votre pièce").length).toBeGreaterThan(0);
     expect(screen.getAllByText(/N° 07/).length).toBeGreaterThan(0);
     expect(screen.getAllByText(/N° 12/).length).toBeGreaterThan(0);
   });

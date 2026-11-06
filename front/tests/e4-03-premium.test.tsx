@@ -109,20 +109,26 @@ describe("[E4-03] Fiche Premium — processus et numérotation", () => {
       data: { lignes: [], sous_total_centimes: 0 },
     });
     rendre(serie([3, 8, 15]));
-    const select = screen.getByRole("combobox", { name: "Numéro de la pièce" });
-    expect(select).toHaveValue(""); // automatique par défaut
+    // Automatique par défaut : aucun numéro pressé, plaque sans numéro.
+    for (const b of screen.getAllByRole("button", { name: /^N° \d+$/ })) {
+      expect(b).toHaveAttribute("aria-pressed", "false");
+    }
 
     await userEvent.click(
-      screen.getByRole("button", { name: "Ajouter au panier" }),
+      screen.getByRole("button", { name: "Réserver une pièce" }),
     );
     expect(api.ajouterLigne).toHaveBeenLastCalledWith({
       produit_slug: premium.slug,
       quantite: 1,
     });
 
-    await userEvent.selectOptions(select, "8");
+    await userEvent.click(screen.getByRole("button", { name: "N° 8" }));
+    expect(screen.getByRole("button", { name: "N° 8" })).toHaveAttribute(
+      "aria-pressed",
+      "true",
+    );
     await userEvent.click(
-      screen.getByRole("button", { name: "Ajouter au panier" }),
+      screen.getByRole("button", { name: "Réserver la pièce N° 8" }),
     );
     expect(api.ajouterLigne).toHaveBeenLastCalledWith({
       produit_slug: premium.slug,
@@ -138,12 +144,11 @@ describe("[E4-03] Fiche Premium — disponibilité rafraîchie", () => {
     rendre(serie([3, 8, 15]));
     expect(await screen.findByText("1 pièce restante sur 50")).toBeVisible();
     expect(api.disponibilite).toHaveBeenCalledWith(premium.slug);
-    const select = screen.getByRole("combobox", { name: "Numéro de la pièce" });
     expect(
-      within(select)
-        .getAllByRole("option")
-        .map((o) => o.textContent),
-    ).toEqual(["Attribution automatique", "8"]);
+      screen
+        .getAllByRole("button", { name: /^N° \d+$/ })
+        .map((b) => b.textContent),
+    ).toEqual(["N° 8"]);
   });
 
   it("rafraîchit à intervalle régulier (stock limité)", async () => {
@@ -184,10 +189,12 @@ describe("[E4-03] Fiche Premium — disponibilité rafraîchie", () => {
     });
     rendre(serie([3, 8, 15]));
     await act(async () => {});
-    await userEvent.selectOptions(screen.getByRole("combobox"), "8");
+    await userEvent.click(screen.getByRole("button", { name: "N° 8" }));
     api.disponibilite.mockResolvedValue(serie([3, 15]));
     await userEvent.click(
-      screen.getByRole("button", { name: "Ajouter au panier" }),
+      screen.getByRole("button", {
+        name: /Ajouter au panier|Réserver (une pièce|la pièce)/,
+      }),
     );
     expect(await screen.findByText("2 pièces restantes sur 50")).toBeVisible();
   });
@@ -200,7 +207,9 @@ describe("[E4-03] Fiche Premium — série épuisée", () => {
     await act(async () => {});
     expect(screen.getAllByText("Épuisé").length).toBeGreaterThan(0);
     expect(
-      screen.getByRole("button", { name: "Ajouter au panier" }),
+      screen.getByRole("button", {
+        name: /Ajouter au panier|Réserver (une pièce|la pièce)/,
+      }),
     ).toBeDisabled();
     expect(
       screen.getByRole("heading", { name: "Série épuisée" }),

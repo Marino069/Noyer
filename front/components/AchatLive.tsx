@@ -20,6 +20,10 @@ export function AchatLive({ slug, gamme, panierHref, textes, alerte }: Props) {
     disponibilite?.gamme === "Premium"
       ? disponibilite.series.flatMap((s) => s.numeros_disponibles)
       : [];
+  const total =
+    disponibilite?.gamme === "Premium"
+      ? disponibilite.series.reduce((t, s) => t + s.taille_serie, 0)
+      : 0;
   const epuise = estEpuise(disponibilite);
 
   return (
@@ -28,6 +32,7 @@ export function AchatLive({ slug, gamme, panierHref, textes, alerte }: Props) {
         slug={slug}
         gamme={gamme}
         numeros={numeros}
+        total={total}
         disabled={epuise}
         panierHref={panierHref}
         textes={textes}

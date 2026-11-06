@@ -128,7 +128,7 @@ describe("[E4-03] Critère : série épuisée → état clair et proposition d'�
     rendre(serie([]));
     await act(async () => {});
     expect(
-      screen.getByRole("button", { name: "Ajouter au panier" }),
+      screen.getByRole("button", { name: "Réserver une pièce" }),
     ).toBeDisabled();
     expect(screen.getByLabelText(/Adresse e-mail/)).toBeInTheDocument();
     expect(screen.getByRole("checkbox")).toBeInTheDocument();
@@ -155,7 +155,7 @@ describe("[E4-03] Critère : série épuisée → état clair et proposition d'�
       ).toBeNull(),
     );
     expect(
-      screen.getByRole("button", { name: "Ajouter au panier" }),
+      screen.getByRole("button", { name: "Réserver une pièce" }),
     ).toBeEnabled();
   });
 });
