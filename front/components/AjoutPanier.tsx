@@ -1,12 +1,12 @@
 "use client";
 
-import Link from "next/link";
-import { useState } from "react";
-import { api, type Gamme } from "@/lib/api";
+import { useCallback, useState } from "react";
+import { api, type Gamme, type Image } from "@/lib/api";
 import { publishCart } from "@/lib/cart";
 import { formatDuree, interpolate } from "@/lib/format";
 import { PlaqueGravee } from "./atelier/PlaqueGravee";
 import { Button } from "./Button";
+import { ToastAjout } from "./ToastAjout";
 import styles from "./AjoutPanier.module.css";
 
 export type AjoutPanierTextes = {
@@ -22,6 +22,7 @@ export type AjoutPanierTextes = {
   reserveAuto: string;
   reminder: string;
   viewCart: string;
+  dismiss: string;
   errorGeneric: string;
   errorUnavailable: string;
   reserved: string;
@@ -62,6 +63,9 @@ export function AjoutPanier({
     "repos",
   );
   const [message, setMessage] = useState("");
+  const [vignette, setVignette] = useState<Image | null>(null);
+  const [toastVisible, setToastVisible] = useState(false);
+  const fermerToast = useCallback(() => setToastVisible(false), []);
   // Numéro refusé (-1 = attribution automatique) : sert à proposer un autre numéro.
   const [conflit, setConflit] = useState<number | null>(null);
 
@@ -76,6 +80,7 @@ export function AjoutPanier({
   async function ajouter(numeroVoulu: number | null = numero) {
     setEtat("envoi");
     setMessage("");
+    setToastVisible(false);
     const result = await api.ajouterLigne({
       produit_slug: slug,
       quantite: 1,
@@ -85,6 +90,11 @@ export function AjoutPanier({
       publishCart(result.data);
       setConflit(null);
       setEtat("ajoute");
+      setVignette(
+        result.data.lignes.find((l) => l.produit.slug === slug)?.produit
+          .image_principale ?? null,
+      );
+      setToastVisible(true);
       // La pièce qui vient d'être ajoutée est celle dont la réservation expire le plus tard
       // (les réservations plus anciennes de la même fiche sont déjà entamées).
       const ligne = result.data.lignes
@@ -179,13 +189,20 @@ export function AjoutPanier({
         <p className={styles.rappel}>{textes.reminder}</p>
       ) : null}
       <div role="status" className={styles.message} data-state={etat}>
-        {message}
         {etat === "ajoute" ? (
-          <>
-            {" "}
-            <Link href={panierHref}>{textes.viewCart}</Link>
-          </>
-        ) : null}
+          toastVisible ? (
+            <ToastAjout
+              message={message}
+              image={vignette}
+              href={panierHref}
+              viewCart={textes.viewCart}
+              dismiss={textes.dismiss}
+              onClose={fermerToast}
+            />
+          ) : null
+        ) : (
+          message
+        )}
       </div>
       {etat === "erreur" && suggestion !== null ? (
         <Button variant="secondary" onClick={() => ajouter(suggestion)}>
