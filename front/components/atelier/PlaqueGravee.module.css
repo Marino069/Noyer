@@ -1,0 +1,38 @@
+.plaque {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.5rem 1.75rem;
+  border-radius: var(--radius);
+  background: var(--dark-bg);
+  color: var(--dark-text);
+}
+
+.label {
+  margin: 0;
+  font-size: 0.75rem;
+  letter-spacing: var(--ls-eyebrow);
+  text-transform: uppercase;
+  color: var(--bg-alt);
+}
+
+.numero {
+  margin: 0.25rem 0 0;
+  font-family: var(--serif);
+  font-size: 2.75rem;
+  font-weight: 300;
+  line-height: 1;
+}
+
+.total {
+  color: var(--brass);
+}
+
+.note {
+  margin: 0;
+  max-width: 10.5rem;
+  font-size: 0.8125rem;
+  text-align: right;
+  color: var(--bg-alt);
+}

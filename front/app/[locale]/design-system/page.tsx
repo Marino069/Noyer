@@ -2,6 +2,12 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { AjoutPanier } from "@/components/AjoutPanier";
 import { Atelier } from "@/components/Atelier";
+import { BandeauAtelier } from "@/components/atelier/BandeauAtelier";
+import { Cote } from "@/components/atelier/Cote";
+import { Filet } from "@/components/atelier/Filet";
+import { LegendeFigure } from "@/components/atelier/LegendeFigure";
+import { PlaqueGravee } from "@/components/atelier/PlaqueGravee";
+import { Surtitre } from "@/components/atelier/Surtitre";
 import { Button } from "@/components/Button";
 import { ConsentCookies } from "@/components/ConsentCookies";
 import { Galerie } from "@/components/Galerie";
@@ -229,6 +235,57 @@ export default async function DesignSystemPage({ params }: Props) {
         <h2>NewsletterForm</h2>
         <p>Tous les états (erreurs, chargement, succès) via la soumission.</p>
         <NewsletterForm dictionary={dictionary.newsletter} />
+      </Section>
+
+      <Section>
+        <h2>Éléments graphiques d&apos;atelier</h2>
+        <h3>BandeauAtelier</h3>
+        <BandeauAtelier
+          items={[
+            "ATELIER · RUE DES [ADRESSE], GENÈVE",
+            "46°12′ N — 6°09′ E",
+            "Livraison offerte en Suisse · Retrait à l'atelier",
+          ]}
+        />
+        <h3>Surtitre</h3>
+        <Surtitre>Carnet d&apos;atelier — N° 01</Surtitre>
+        <Surtitre accent>Avec filet laiton</Surtitre>
+        <h3>Filet</h3>
+        <Filet />
+        <br />
+        <Filet accent />
+        <h3>Cote (horizontale, verticale, sur une image)</h3>
+        <div className={styles.row}>
+          <Cote label="Ø 28 cm" />
+          <Cote label="H 42 cm" orientation="vertical" length="6rem" />
+        </div>
+        <figure className={styles.figure}>
+          <div className={styles.image} />
+          <Cote
+            label="H 42 cm"
+            orientation="vertical"
+            length="60%"
+            position={{ top: "10%", right: "22%" }}
+          />
+          <Cote label="Ø 28 cm" position={{ top: "6%", left: "38%" }} />
+          <LegendeFigure numero={1} titre="Le grain" surImage />
+        </figure>
+        <h3>LegendeFigure</h3>
+        <figure>
+          <LegendeFigure numero={2} />
+        </figure>
+        <figure>
+          <LegendeFigure numero={3} titre="La patine" />
+        </figure>
+        <h3>PlaqueGravee</h3>
+        <PlaqueGravee
+          numero={7}
+          total={50}
+          label="Votre pièce"
+          note="Numéro gravé sous le pied, certificat signé joint."
+        />
+        <br />
+        <PlaqueGravee numero={12} total={50} />
       </Section>
 
       <h2 className={styles.heading}>Section</h2>

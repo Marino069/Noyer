@@ -1,0 +1,16 @@
+.bandeau {
+  border-bottom: 1px solid var(--border);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+}
+
+.inner {
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 0.625rem var(--gutter);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
