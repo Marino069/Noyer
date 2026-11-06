@@ -9,7 +9,7 @@ import { Matiere } from "@/components/Matiere";
 import { Selection } from "@/components/Selection";
 import { defaultLocale, hasLocale, locales } from "@/i18n/config";
 import { getDictionary } from "@/i18n/get-dictionary";
-import { api } from "@/lib/api";
+import { api, type Disponibilite } from "@/lib/api";
 import { localePath } from "@/lib/routes";
 
 type Props = { params: Promise<{ locale: string }> };
@@ -62,6 +62,34 @@ export default async function HomePage({ params }: Props) {
         )
       : undefined;
 
+  // Détails (pied, finition, dimensions) et disponibilités : tout vient de l'API.
+  const slugsDispo = new Set<string>();
+  if (produits.ok) {
+    for (const p of produits.data.results) slugsDispo.add(p.slug);
+  }
+  if (classic && premium) {
+    slugsDispo.add(classic.slug);
+    slugsDispo.add(premium.slug);
+  }
+  const [detailClassic, detailPremium, dispoEntrees] = await Promise.all([
+    classic ? api.produit(classic.slug) : null,
+    premium ? api.produit(premium.slug) : null,
+    Promise.all(
+      [...slugsDispo].map(
+        async (slug) => [slug, await api.disponibilite(slug)] as const,
+      ),
+    ),
+  ]);
+  const disponibilites: Record<string, Disponibilite | undefined> = {};
+  for (const [slug, r] of dispoEntrees) {
+    if (r?.ok) disponibilites[slug] = r.data;
+  }
+  const dispoPremium = premium ? disponibilites[premium.slug] : undefined;
+  const tirage =
+    dispoPremium?.gamme === "Premium" && dispoPremium.series.length > 0
+      ? Math.max(...dispoPremium.series.map((s) => s.taille_serie))
+      : null;
+
   return (
     <main id="contenu" tabIndex={-1}>
       <Hero
@@ -92,11 +120,18 @@ export default async function HomePage({ params }: Props) {
       ) : null}
       {classic && premium ? (
         <DeuxGammes
-          classic={classic}
-          premium={premium}
+          classic={{
+            produit: classic,
+            detail: detailClassic?.ok ? detailClassic.data : null,
+            tirage: null,
+          }}
+          premium={{
+            produit: premium,
+            detail: detailPremium?.ok ? detailPremium.data : null,
+            tirage,
+          }}
           locale={locale}
-          title={home.gammes.title}
-          intro={home.gammes.intro}
+          textes={home.gammes}
         />
       ) : null}
       <Selection
@@ -106,6 +141,12 @@ export default async function HomePage({ params }: Props) {
         empty={home.selection.empty}
         errorTitle={home.selection.errorTitle}
         errorMessage={home.selection.errorMessage}
+        disponibilites={disponibilites}
+        dispo={home.selection.dispo}
+        tous={{
+          libelle: home.selection.tousLien,
+          href: localePath(locale, "classic"),
+        }}
       />
       <Frise textes={home.frise} />
       <Atelier

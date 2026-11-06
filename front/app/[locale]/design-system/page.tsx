@@ -11,6 +11,7 @@ import { Surtitre } from "@/components/atelier/Surtitre";
 import { Button } from "@/components/Button";
 import { ConsentCookies } from "@/components/ConsentCookies";
 import { Galerie } from "@/components/Galerie";
+import { DeuxGammes } from "@/components/DeuxGammes";
 import { Frise } from "@/components/Frise";
 import { Hero } from "@/components/Hero";
 import { Manifeste } from "@/components/Manifeste";
@@ -150,9 +151,44 @@ export default async function DesignSystemPage({ params }: Props) {
       <h2 className={styles.heading}>Texte riche</h2>
       <TexteRiche blocs={pagesContenu.atelier.contenu.blocs} locale={locale} />
 
+      <h2 className={styles.heading}>Comparaison des gammes</h2>
+      <DeuxGammes
+        classic={{
+          produit: produits[0],
+          detail: detailDe(produits[0]),
+          tirage: null,
+        }}
+        premium={{
+          produit: produits[1],
+          detail: detailDe(produits[1]),
+          tirage: 50,
+        }}
+        locale={locale}
+        textes={dictionary.home.gammes}
+      />
+
       <h2 className={styles.heading}>Sélection</h2>
       <h3 className={styles.heading}>chargée</h3>
-      <Selection {...selection} produits={{ ok: true, data: page(produits) }} />
+      <Selection
+        {...selection}
+        produits={{ ok: true, data: page(produits) }}
+        dispo={texts.dispo}
+        disponibilites={{
+          "lucerne-classic": { gamme: "Classic", quantite_disponible: 7 },
+          "lucerne-premium": {
+            gamme: "Premium",
+            series: [
+              {
+                id: 1,
+                taille_serie: 50,
+                pieces_restantes: 12,
+                numeros_disponibles: [3, 8, 15],
+              },
+            ],
+          },
+          "leman-classic": { gamme: "Classic", quantite_disponible: 0 },
+        }}
+      />
       <h3 className={styles.heading}>vide</h3>
       <Selection {...selection} produits={{ ok: true, data: page([]) }} />
       <h3 className={styles.heading}>erreur</h3>

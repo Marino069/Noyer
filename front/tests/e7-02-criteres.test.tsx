@@ -90,8 +90,12 @@ describe("[E7-02] Parcours clavier : garanties structurelles", () => {
     const fautifs = fichiers.filter((f) =>
       /outline:\s*(none|0)\b/.test(readFileSync(f, "utf8")),
     );
-    // ProductCard remplace l'outline du lien par un outline sur la carte entière.
-    const toleres = ["globals.css", "ProductCard.module.css"];
+    // ProductCard et les cartes de Selection remplacent l'outline du lien par un outline sur la carte entière.
+    const toleres = [
+      "globals.css",
+      "ProductCard.module.css",
+      "Selection.module.css",
+    ];
     expect(fautifs.filter((f) => !toleres.some((t) => f.endsWith(t)))).toEqual(
       [],
     );
