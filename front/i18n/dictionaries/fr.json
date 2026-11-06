@@ -27,6 +27,11 @@
       "accent": "Chaque pièce garde la trace de la main qui l'a tournée.",
       "signature": "[PRÉNOM], ébéniste, fondateur"
     },
+    "matiere": {
+      "intro": "Deux matières, choisies pour vieillir ensemble. Le noyer fonce et se patine, le laiton se voile doucement.",
+      "nomLatin": "Juglans regia",
+      "titreGrain": "Le grain"
+    },
     "gammes": {
       "title": "Deux gammes, une même forme",
       "intro": "Mêmes formes, matières différentes : le Premium reprend la silhouette du Classic, en matières et finitions supérieures."

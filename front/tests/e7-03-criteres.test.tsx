@@ -4,6 +4,7 @@ import { join } from "node:path";
 import { describe, expect, it, vi } from "vitest";
 import { Hero } from "@/components/Hero";
 import { Matiere } from "@/components/Matiere";
+import fr from "@/i18n/dictionaries/fr.json";
 import { ProductCard } from "@/components/ProductCard";
 import { heroAccueil, matiereAccueil, produits } from "@/mocks/data";
 
@@ -95,7 +96,9 @@ describe("[E7-03] Optimisation des images (CLS, poids)", () => {
   });
 
   it("matière (sous le pli) : lazy et dimensions explicites", () => {
-    const { container } = render(<Matiere contenu={matiereAccueil} />);
+    const { container } = render(
+      <Matiere contenu={matiereAccueil} {...fr.home.matiere} />,
+    );
     const imgs = container.querySelectorAll("img");
     expect(imgs.length).toBeGreaterThan(0);
     imgs.forEach((img) => {
