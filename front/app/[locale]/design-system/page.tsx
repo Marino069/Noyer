@@ -127,7 +127,7 @@ export default async function DesignSystemPage({ params }: Props) {
         contenu={{ ...heroAccueil, mot_italique: "prend son temps" }}
         ctaHref="#"
         atelier={{
-          surtitre: dictionary.home.hero.surtitre,
+          surtitre: "Hero d'atelier",
           lien: { libelle: dictionary.home.hero.lien, href: "#" },
           coteHauteur: dictionary.home.hero.coteHauteur,
           coteDiametre: dictionary.home.hero.coteDiametre,
