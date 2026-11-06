@@ -1,10 +1,105 @@
+.entete {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid var(--border);
+}
+
 .title {
-  margin: 0 0 2rem;
+  margin: 0;
   font-family: var(--serif);
   font-weight: 400;
   font-size: var(--fs-h2);
   line-height: 1.05;
   letter-spacing: var(--ls-title);
+}
+
+.tous {
+  color: inherit;
+  text-decoration: none;
+  border-bottom: 1px solid var(--brass);
+  padding-bottom: 2px;
+}
+
+.carte {
+  position: relative;
+  min-width: 0;
+}
+
+.media {
+  aspect-ratio: 4 / 5;
+  background: var(--bg-alt);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.media img,
+.placeholder {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.ligne {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: space-between;
+  padding-top: 1rem;
+}
+
+.nom {
+  margin: 0;
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: 1.375rem;
+}
+
+/* Lien unique : son ::after étend la zone cliquable à toute la carte. */
+.lien {
+  color: inherit;
+  text-decoration: none;
+}
+
+.lien::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+
+.lien:focus-visible {
+  outline: none;
+}
+
+.carte:has(.lien:focus-visible) {
+  outline: 2px solid var(--walnut);
+  outline-offset: 4px;
+}
+
+.carte:hover .lien {
+  text-decoration: underline;
+  text-decoration-color: var(--brass);
+  text-underline-offset: 0.25em;
+}
+
+.gamme {
+  font-family: var(--sans);
+  font-size: var(--fs-eyebrow);
+  color: var(--text-muted);
+}
+
+.prix {
+  margin: 0;
+}
+
+.dispo {
+  margin: 0.25rem 0 0;
+  font-size: var(--fs-small);
+  color: var(--text-muted);
 }
 
 .empty {

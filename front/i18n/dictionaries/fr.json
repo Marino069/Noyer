@@ -33,15 +33,34 @@
       "titreGrain": "Le grain"
     },
     "gammes": {
-      "title": "Deux gammes, une même forme",
-      "intro": "Mêmes formes, matières différentes : le Premium reprend la silhouette du Classic, en matières et finitions supérieures."
+      "titre": "Une forme,",
+      "accent": "deux matières",
+      "intro": "Le Premium reprend la silhouette du Classic. Il en élève la matière, la finition et le tirage.",
+      "lignes": {
+        "pied": "Pied",
+        "finition": "Finition",
+        "tirage": "Tirage",
+        "dimensions": "Dimensions"
+      },
+      "tirageClassic": "Production continue",
+      "tirageSerie": "Série numérotée de {taille}",
+      "dimensions": "H {hauteur} · Ø {diametre} cm · {culot}",
+      "ctaClassic": "Voir la Classic",
+      "ctaPremium": "Choisir ma pièce"
     },
     "selection": {
-      "title": "Notre sélection",
+      "title": "À l'atelier en ce moment",
+      "tousLien": "Toutes les lampes",
       "empty": "Notre sélection arrive bientôt.",
       "loading": "Chargement de la sélection",
       "errorTitle": "Sélection indisponible",
-      "errorMessage": "La sélection n'a pas pu être chargée. Rechargez la page dans un instant."
+      "errorMessage": "La sélection n'a pas pu être chargée. Rechargez la page dans un instant.",
+      "dispo": {
+        "enStock": "En stock",
+        "epuise": "Épuisée pour le moment",
+        "piecesLibres": "{libres} pièces sur {total} encore libres",
+        "serieComplete": "Série complète"
+      }
     },
     "frise": {
       "surtitre": "De la planche à la lampe",
