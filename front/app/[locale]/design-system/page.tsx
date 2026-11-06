@@ -12,6 +12,7 @@ import { Button } from "@/components/Button";
 import { ConsentCookies } from "@/components/ConsentCookies";
 import { Galerie } from "@/components/Galerie";
 import { Hero } from "@/components/Hero";
+import { Manifeste } from "@/components/Manifeste";
 import { Logo } from "@/components/Logo";
 import { Matiere } from "@/components/Matiere";
 import { NewsletterForm } from "@/components/NewsletterForm";
@@ -121,6 +122,23 @@ export default async function DesignSystemPage({ params }: Props) {
         }}
         ctaHref="#"
       />
+      <h3 className={styles.heading}>avec habillage d&apos;atelier</h3>
+      <Hero
+        contenu={{ ...heroAccueil, mot_italique: "prend son temps" }}
+        ctaHref="#"
+        atelier={{
+          surtitre: dictionary.home.hero.surtitre,
+          lien: { libelle: dictionary.home.hero.lien, href: "#" },
+          coteHauteur: dictionary.home.hero.coteHauteur,
+          coteDiametre: dictionary.home.hero.coteDiametre,
+          piece: dictionary.home.hero.piece,
+          filetsLabel: dictionary.home.hero.filetsLabel,
+          filets: dictionary.home.hero.filets,
+        }}
+      />
+
+      <h2 className={styles.heading}>Manifeste</h2>
+      <Manifeste {...dictionary.home.manifeste} />
 
       <h2 className={styles.heading}>Matière</h2>
       <Matiere contenu={matiereAccueil} />

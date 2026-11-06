@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { Atelier } from "@/components/Atelier";
 import { DeuxGammes } from "@/components/DeuxGammes";
 import { Hero } from "@/components/Hero";
+import { Manifeste } from "@/components/Manifeste";
 import { Matiere } from "@/components/Matiere";
 import { Selection } from "@/components/Selection";
 import { defaultLocale, hasLocale, locales } from "@/i18n/config";
@@ -67,6 +68,23 @@ export default async function HomePage({ params }: Props) {
         ctaHref={`/${locale}${
           contenu.cta_chemin.startsWith("/") ? contenu.cta_chemin : ""
         }`}
+        atelier={{
+          surtitre: home.hero.surtitre,
+          lien: {
+            libelle: home.hero.lien,
+            href: localePath(locale, "atelier"),
+          },
+          coteHauteur: home.hero.coteHauteur,
+          coteDiametre: home.hero.coteDiametre,
+          piece: home.hero.piece,
+          filetsLabel: home.hero.filetsLabel,
+          filets: home.hero.filets,
+        }}
+      />
+      <Manifeste
+        texte={home.manifeste.texte}
+        accent={home.manifeste.accent}
+        signature={home.manifeste.signature}
       />
       {matiere.ok && matiere.data.gros_plans.length > 0 ? (
         <Matiere contenu={matiere.data} />
