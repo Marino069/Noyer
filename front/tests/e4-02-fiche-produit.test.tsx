@@ -147,20 +147,20 @@ describe("[E4-02] Fiche produit — bloc infos", () => {
   it("propose la bascule Classic → Premium (même forme, autre gamme)", () => {
     rendre();
     expect(
-      screen.getByRole("link", { name: "Voir la version Premium" }),
+      screen.getByRole("link", { name: "Comparer avec la Premium" }),
     ).toHaveAttribute("href", "/fr/produits/lucerne-premium");
   });
 
   it("propose la bascule Premium → Classic", () => {
     rendre(premium, dispoPremium);
     expect(
-      screen.getByRole("link", { name: "Voir la version Classic" }),
+      screen.getByRole("link", { name: "Comparer avec la Classic" }),
     ).toHaveAttribute("href", "/fr/produits/lucerne-classic");
   });
 
   it("n'affiche pas de bascule si l'autre gamme n'existe pas", () => {
     rendre({ ...classic, autre_gamme: null });
-    expect(screen.queryByRole("link", { name: /Voir la version/ })).toBeNull();
+    expect(screen.queryByRole("link", { name: /Comparer avec/ })).toBeNull();
   });
 
   it("propose « Nous contacter » quand la vente en ligne est désactivée", () => {
@@ -268,7 +268,7 @@ describe("[E4-02] Fiche produit — ajout au panier", () => {
 });
 
 describe("[E4-02] Galerie accessible", () => {
-  const rendre = (medias = classic.medias) =>
+  const rendre = (medias = classic.medias.slice(0, 3)) =>
     render(<Galerie medias={medias} textes={fr.fiche.gallery} />);
 
   it("garde un alt non vide sur chaque photo", () => {

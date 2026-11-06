@@ -119,6 +119,7 @@
     "pageLabel": "Page {page}"
   },
   "fiche": {
+    "buyColumn": "Achat",
     "gallery": {
       "label": "Galerie photo",
       "thumbnails": "Choisir une photo",
@@ -134,6 +135,7 @@
     "details": {
       "dimensions": "Dimensions",
       "height": "Hauteur",
+      "heightShort": "H",
       "diameter": "Diamètre",
       "socket": "Culot",
       "materials": "Matières",
@@ -147,8 +149,8 @@
       "piece": "{count} pièce restante sur {total}"
     },
     "switch": {
-      "toClassic": "Voir la version Classic",
-      "toPremium": "Voir la version Premium"
+      "toClassic": "Comparer avec la Classic",
+      "toPremium": "Comparer avec la Premium"
     },
     "cart": {
       "add": "Ajouter au panier",
