@@ -5,6 +5,7 @@ import { ConsentCookies } from "@/components/ConsentCookies";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { RevealObserver } from "@/components/RevealObserver";
 import { MocksProvider } from "@/components/MocksProvider";
 import { hasLocale, locales } from "@/i18n/config";
 import { getDictionary } from "@/i18n/get-dictionary";
@@ -85,6 +86,7 @@ export default async function LocaleLayout({
           current={locale}
           dictionary={dictionary.languageSwitcher}
         />
+        <RevealObserver />
         <MocksProvider>{children}</MocksProvider>
         <Footer
           locale={locale}

@@ -1,3 +1,8 @@
+/* Bandeau d'atelier : masqué sous 800 px pour que le menu plein écran reste calé sous l'en-tête. */
+.bandeau {
+  display: none;
+}
+
 .header {
   position: sticky;
   inset-block-start: 0;
@@ -25,6 +30,10 @@
 }
 
 @media (min-width: 800px) {
+  .bandeau {
+    display: block;
+  }
+
   .actions {
     gap: 2rem;
   }

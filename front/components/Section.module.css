@@ -33,3 +33,17 @@
   --bg: var(--dark-bg);
   --bg-alt: var(--dark-bg-alt);
 }
+
+/* Apparition au défilement : posée par RevealObserver, seulement hors reduced-motion. */
+@media (prefers-reduced-motion: no-preference) {
+  .section[data-reveal="pending"] {
+    opacity: 0;
+    transform: translateY(1.5rem);
+  }
+
+  .section[data-reveal="shown"] {
+    transition:
+      opacity 0.6s ease,
+      transform 0.6s ease;
+  }
+}

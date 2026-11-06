@@ -363,6 +363,11 @@
   },
   "header": {
     "home": "Noyer, retour à l'accueil",
+    "bandeau": [
+      "ATELIER · RUE DES [ADRESSE], GENÈVE",
+      "46°12′ N — 6°09′ E",
+      "Livraison offerte en Suisse · Retrait à l'atelier"
+    ],
     "nav": {
       "classic": "Classic",
       "premium": "Premium",
