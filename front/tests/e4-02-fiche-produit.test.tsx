@@ -140,7 +140,9 @@ describe("[E4-02] Fiche produit — bloc infos", () => {
     });
     expect(screen.getByText("Épuisé")).toBeInTheDocument();
     expect(
-      screen.getByRole("button", { name: "Ajouter au panier" }),
+      screen.getByRole("button", {
+        name: /Ajouter au panier|Réserver (une pièce|la pièce)/,
+      }),
     ).toBeDisabled();
   });
 
@@ -169,19 +171,20 @@ describe("[E4-02] Fiche produit — bloc infos", () => {
       screen.getByRole("link", { name: "Nous contacter" }),
     ).toHaveAttribute("href", "/fr/contact");
     expect(
-      screen.queryByRole("button", { name: "Ajouter au panier" }),
+      screen.queryByRole("button", {
+        name: /Ajouter au panier|Réserver (une pièce|la pièce)/,
+      }),
     ).toBeNull();
   });
 
   it("Premium : indique les pièces restantes et propose les numéros libres", () => {
     rendre(premium, dispoPremium);
     expect(screen.getByText("3 pièces restantes sur 50")).toBeInTheDocument();
-    const select = screen.getByRole("combobox", { name: "Numéro de la pièce" });
     expect(
-      within(select)
-        .getAllByRole("option")
-        .map((o) => o.textContent),
-    ).toEqual(["Attribution automatique", "3", "8", "15"]);
+      screen
+        .getAllByRole("button", { name: /^N° \d+$/ })
+        .map((b) => b.textContent),
+    ).toEqual(["N° 3", "N° 8", "N° 15"]);
   });
 });
 
@@ -202,7 +205,9 @@ describe("[E4-02] Fiche produit — ajout au panier", () => {
       />,
     );
     await userEvent.click(
-      screen.getByRole("button", { name: "Ajouter au panier" }),
+      screen.getByRole("button", {
+        name: /Ajouter au panier|Réserver (une pièce|la pièce)/,
+      }),
     );
     expect(api.ajouterLigne).toHaveBeenCalledWith({
       produit_slug: "lucerne-classic",
@@ -228,9 +233,11 @@ describe("[E4-02] Fiche produit — ajout au panier", () => {
         textes={textes}
       />,
     );
-    await userEvent.selectOptions(screen.getByRole("combobox"), "8");
+    await userEvent.click(screen.getByRole("button", { name: "N° 8" }));
     await userEvent.click(
-      screen.getByRole("button", { name: "Ajouter au panier" }),
+      screen.getByRole("button", {
+        name: /Ajouter au panier|Réserver (une pièce|la pièce)/,
+      }),
     );
     expect(api.ajouterLigne).toHaveBeenCalledWith({
       produit_slug: "lucerne-premium",
@@ -259,7 +266,9 @@ describe("[E4-02] Fiche produit — ajout au panier", () => {
       />,
     );
     await userEvent.click(
-      screen.getByRole("button", { name: "Ajouter au panier" }),
+      screen.getByRole("button", {
+        name: /Ajouter au panier|Réserver (une pièce|la pièce)/,
+      }),
     );
     expect(await screen.findByRole("status")).toHaveTextContent(
       "Cette pièce vient d'être réservée",

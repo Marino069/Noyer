@@ -1,7 +1,8 @@
 import styles from "./PlaqueGravee.module.css";
 
 type PlaqueGraveeProps = {
-  numero: number;
+  /** Numéro choisi ; `null` = pas encore de choix (attribution automatique). */
+  numero: number | null;
   total: number;
   /** Petit libellé au-dessus, ex. « Votre pièce ». */
   label?: string;
@@ -23,7 +24,7 @@ export function PlaqueGravee({
       <div>
         {label ? <p className={styles.label}>{label}</p> : null}
         <p className={styles.numero}>
-          {`N° ${String(numero).padStart(2, "0")} `}
+          {`N° ${numero === null ? "––" : String(numero).padStart(2, "0")} `}
           <span className={styles.total}>{`/ ${total}`}</span>
         </p>
       </div>

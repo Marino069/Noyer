@@ -242,6 +242,7 @@ export default async function DesignSystemPage({ params }: Props) {
             slug="lucerne-premium"
             gamme="Premium"
             numeros={[3, 8, 15]}
+            total={50}
             panierHref={localePath(locale, "panier")}
             textes={dictionary.fiche.cart}
           />

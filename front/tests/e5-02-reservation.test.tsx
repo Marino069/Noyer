@@ -118,7 +118,11 @@ describe("E5-02 · réservation temporaire", () => {
     });
     const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
     rendreAjout();
-    await user.click(screen.getByRole("button", { name: "Ajouter au panier" }));
+    await user.click(
+      screen.getByRole("button", {
+        name: /Ajouter au panier|Réserver (une pièce|la pièce)/,
+      }),
+    );
     expect(
       await screen.findByText(/Pièce n° 8 réservée pour vous, encore 1\d min/),
     ).toBeInTheDocument();
@@ -136,8 +140,12 @@ describe("E5-02 · réservation temporaire", () => {
       });
     const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
     rendreAjout();
-    await user.selectOptions(screen.getByLabelText("Numéro de la pièce"), "3");
-    await user.click(screen.getByRole("button", { name: "Ajouter au panier" }));
+    await user.click(screen.getByRole("button", { name: "N° 3" }));
+    await user.click(
+      screen.getByRole("button", {
+        name: /Ajouter au panier|Réserver (une pièce|la pièce)/,
+      }),
+    );
     const proposition = await screen.findByRole("button", {
       name: "Réserver plutôt le n° 8",
     });

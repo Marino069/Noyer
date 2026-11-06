@@ -67,7 +67,7 @@ describe("[E8-07] Colonne d'achat", () => {
       within(colonne).getByRole("heading", { level: 1, name: "Lucerne" }),
     ).toBeInTheDocument();
     expect(
-      within(colonne).getByRole("button", { name: /Ajouter au panier/ }),
+      within(colonne).getByRole("button", { name: /Réserver/ }),
     ).toBeInTheDocument();
     expect(colonne.querySelector("dl")).not.toBeNull();
   });
