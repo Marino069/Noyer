@@ -55,7 +55,9 @@ describe("[E3-01] Homepage : contenu éditable via l'API", () => {
       "href",
       "/fr/produits/premium",
     );
-    expect(screen.getByRole("img")).toBeInTheDocument();
+    expect(
+      screen.getByRole("img", { name: heroAccueil.image?.alt }),
+    ).toBeInTheDocument();
   });
 
   it("se rabat sur le dictionnaire si l'API est indisponible", async () => {
@@ -67,6 +69,8 @@ describe("[E3-01] Homepage : contenu éditable via l'API", () => {
     expect(
       screen.getByRole("link", { name: frDict.home.hero.cta }),
     ).toBeInTheDocument();
-    expect(screen.queryByRole("img")).toBeNull();
+    expect(
+      screen.queryByRole("img", { name: heroAccueil.image?.alt }),
+    ).toBeNull();
   });
 });

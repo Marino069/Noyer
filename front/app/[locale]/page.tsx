@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Atelier } from "@/components/Atelier";
 import { DeuxGammes } from "@/components/DeuxGammes";
+import { Frise } from "@/components/Frise";
 import { Hero } from "@/components/Hero";
 import { Manifeste } from "@/components/Manifeste";
 import { Matiere } from "@/components/Matiere";
@@ -106,6 +107,7 @@ export default async function HomePage({ params }: Props) {
         errorTitle={home.selection.errorTitle}
         errorMessage={home.selection.errorMessage}
       />
+      <Frise textes={home.frise} />
       <Atelier
         href={localePath(locale, "atelier")}
         title={home.atelier.title}
