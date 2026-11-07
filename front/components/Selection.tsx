@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { vignetteDe } from "@/lib/image";
 import type { Locale } from "@/i18n/config";
 import type { Dictionary } from "@/i18n/get-dictionary";
 import { getProductPath } from "@/i18n/slugs";
@@ -54,21 +55,19 @@ function CarteAtelier({
   disponibilite: string | null;
 }) {
   const image = produit.image_principale;
-  const sources = image
-    ? [...image.sources].sort((a, b) => a.largeur - b.largeur)
-    : [];
+  const vignette = vignetteDe(image);
   return (
     <article className={styles.carte}>
       <div className={styles.media}>
-        {image && sources.length > 0 ? (
+        {vignette ? (
           // eslint-disable-next-line @next/next/no-img-element -- sources WebP fournies par l'API (srcset)
           <img
-            src={sources[0].url}
-            srcSet={sources.map((s) => `${s.url} ${s.largeur}w`).join(", ")}
+            src={vignette.src}
+            srcSet={vignette.srcSet}
             sizes="(min-width: 900px) 33vw, (min-width: 600px) 50vw, 100vw"
             alt=""
-            width={image.largeur_origine}
-            height={image.hauteur_origine}
+            width={vignette.width}
+            height={vignette.height}
             loading="lazy"
           />
         ) : (

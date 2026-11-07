@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { vignetteDe } from "@/lib/image";
 import type { ReactNode } from "react";
 import type { Locale } from "@/i18n/config";
 import { getProductPath } from "@/i18n/slugs";
@@ -20,9 +21,7 @@ type ProductCardProps = {
 export function ProductCard({ produit, locale, className }: ProductCardProps) {
   const premium = produit.gamme === "Premium";
   const image = produit.image_principale;
-  const sources = image
-    ? [...image.sources].sort((a, b) => a.largeur - b.largeur)
-    : [];
+  const vignette = vignetteDe(image);
   const classes = [
     styles.card,
     premium ? styles.premium : styles.classic,
@@ -34,16 +33,16 @@ export function ProductCard({ produit, locale, className }: ProductCardProps) {
   return (
     <article className={classes} data-tone={premium ? "dark" : "light"}>
       <div className={styles.media}>
-        {image && sources.length > 0 ? (
+        {vignette ? (
           // eslint-disable-next-line @next/next/no-img-element -- sources WebP fournies par l'API (srcset)
           <img
             className={styles.image}
-            src={sources[0].url}
-            srcSet={sources.map((s) => `${s.url} ${s.largeur}w`).join(", ")}
+            src={vignette.src}
+            srcSet={vignette.srcSet}
             sizes="(min-width: 900px) 33vw, (min-width: 600px) 50vw, 100vw"
-            alt={image.alt}
-            width={image.largeur_origine}
-            height={image.hauteur_origine}
+            alt={vignette.alt}
+            width={vignette.width}
+            height={vignette.height}
             loading="lazy"
           />
         ) : (

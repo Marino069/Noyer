@@ -9,12 +9,21 @@ export type Image = {
   sources: { largeur: 480 | 960 | 1600; url: string }[];
 };
 
+/** `image_principale` : `url` + `alt` seulement pour une image externe, le reste pour une photo téléversée. */
+export type ImagePrincipale = {
+  alt: string;
+  url?: string;
+  largeur_origine?: number;
+  hauteur_origine?: number;
+  sources?: Image["sources"];
+};
+
 export type ProduitResume = {
   slug: string;
   modele: string;
   gamme: Gamme;
   prix_ttc_centimes: number;
-  image_principale: Image | null;
+  image_principale: ImagePrincipale | null;
 };
 
 export type HeroAccueil = {
