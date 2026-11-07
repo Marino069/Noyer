@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import { notFound } from "next/navigation";
+import { connection } from "next/server";
+import { BandeauDemo } from "@/components/BandeauDemo";
 import { ConsentCookies } from "@/components/ConsentCookies";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
@@ -9,7 +11,7 @@ import { RevealObserver } from "@/components/RevealObserver";
 import { MocksProvider } from "@/components/MocksProvider";
 import { hasLocale, locales } from "@/i18n/config";
 import { getDictionary } from "@/i18n/get-dictionary";
-import { SITE_URL, TRACKER_SRC } from "@/lib/env";
+import { API_MOCKS, SITE_URL, TRACKER_SRC } from "@/lib/env";
 import "@/styles/globals.css";
 
 // Polices hébergées dans le dépôt (licence OFL) : le build ne dépend plus de Google.
@@ -58,6 +60,8 @@ export async function generateMetadata({
     metadataBase: new URL(SITE_URL),
     title: meta.title,
     description: meta.description,
+    // Site de démonstration : jamais indexé.
+    ...(API_MOCKS && { robots: { index: false, follow: false } }),
   };
 }
 
@@ -70,6 +74,9 @@ export default async function LocaleLayout({
 }) {
   const { locale } = await params;
   if (!hasLocale(locale)) notFound();
+  // Démo : les données fictives (MSW) ne sont servies qu'à l'exécution, pas pendant
+  // `next build`. On rend donc chaque page à la demande au lieu de la pré-générer.
+  if (API_MOCKS) await connection();
   const dictionary = await getDictionary(locale);
 
   return (
@@ -81,6 +88,7 @@ export default async function LocaleLayout({
         <a href="#contenu" className="skip-link">
           {dictionary.a11y.skipToContent}
         </a>
+        {API_MOCKS && <BandeauDemo texte={dictionary.demo.bandeau} />}
         <Header locale={locale} dictionary={dictionary.header} />
         <LanguageSwitcher
           current={locale}

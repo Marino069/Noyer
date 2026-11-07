@@ -7,7 +7,7 @@ export async function register() {
     (process.env.NEXT_PUBLIC_API_MOCKS === "true" ||
       process.env.API_MOCKS_SERVEUR === "true")
   ) {
-    const { server } = await import("./mocks/server");
-    server.listen();
+    const { demarrerMocksServeur } = await import("./mocks/demarrer-serveur");
+    await demarrerMocksServeur();
   }
 }
