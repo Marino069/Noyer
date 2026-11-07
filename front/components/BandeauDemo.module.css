@@ -1,0 +1,8 @@
+.bandeau {
+  margin: 0;
+  padding: 0.5rem 1rem;
+  background: var(--dark-bg);
+  color: var(--dark-text);
+  font-size: 0.8125rem;
+  text-align: center;
+}

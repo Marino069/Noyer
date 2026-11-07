@@ -16,10 +16,22 @@
       "piece": "Lucerne Premium · Pièce N° 07 / 50",
       "filetsLabel": "Matières et fabrication",
       "filets": [
-        { "label": "Essence", "valeur": "Noyer massif" },
-        { "label": "Métal", "valeur": "Laiton brossé" },
-        { "label": "Geste", "valeur": "Tourné et huilé à la main" },
-        { "label": "Lieu", "valeur": "Atelier de Genève" }
+        {
+          "label": "Essence",
+          "valeur": "Noyer massif"
+        },
+        {
+          "label": "Métal",
+          "valeur": "Laiton brossé"
+        },
+        {
+          "label": "Geste",
+          "valeur": "Tourné et huilé à la main"
+        },
+        {
+          "label": "Lieu",
+          "valeur": "Atelier de Genève"
+        }
       ]
     },
     "manifeste": {
@@ -448,8 +460,14 @@
       "address": ["Noyer", "Genève, Suisse"],
       "hoursLabel": "Horaires",
       "hours": [
-        { "jour": "Lundi – vendredi", "horaire": "sur rendez-vous" },
-        { "jour": "Samedi", "horaire": "10 h – 17 h" }
+        {
+          "jour": "Lundi – vendredi",
+          "horaire": "sur rendez-vous"
+        },
+        {
+          "jour": "Samedi",
+          "horaire": "10 h – 17 h"
+        }
       ]
     },
     "map": {
@@ -473,5 +491,8 @@
     "classic": "Voir la gamme Classic",
     "premium": "Voir la gamme Premium",
     "home": "Retour à l'accueil"
+  },
+  "demo": {
+    "bandeau": "Site de démonstration : les lampes, les prix et les stocks sont fictifs. Aucune commande n'est enregistrée et aucun paiement n'est encaissé."
   }
 }
