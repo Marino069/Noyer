@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useState } from "react";
-import { api, type Gamme, type Image } from "@/lib/api";
+import { api, type Gamme, type ImagePrincipale } from "@/lib/api";
 import { publishCart } from "@/lib/cart";
 import { formatDuree, interpolate } from "@/lib/format";
 import { PlaqueGravee } from "./atelier/PlaqueGravee";
@@ -63,7 +63,7 @@ export function AjoutPanier({
     "repos",
   );
   const [message, setMessage] = useState("");
-  const [vignette, setVignette] = useState<Image | null>(null);
+  const [vignette, setVignette] = useState<ImagePrincipale | null>(null);
   const [toastVisible, setToastVisible] = useState(false);
   const fermerToast = useCallback(() => setToastVisible(false), []);
   // Numéro refusé (-1 = attribution automatique) : sert à proposer un autre numéro.

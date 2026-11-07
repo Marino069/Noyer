@@ -120,7 +120,7 @@ export function detailDe(p: ProduitResume): ProduitDetail {
     ],
     medias: p.image_principale
       ? [
-          p.image_principale,
+          p.image_principale as Image,
           image(
             `${p.image_principale.alt}, vue de détail du pied en noyer`,
             `${p.slug}-detail`,

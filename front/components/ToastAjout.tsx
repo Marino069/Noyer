@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { useEffect } from "react";
-import type { Image } from "@/lib/api";
+import type { ImagePrincipale } from "@/lib/api";
+import { vignetteDe } from "@/lib/image";
 import styles from "./ToastAjout.module.css";
 
 /** Durée d'affichage avant fermeture automatique. */
@@ -10,7 +11,7 @@ export const TOAST_DUREE_MS = 6000;
 
 type Props = {
   message: string;
-  image: Image | null;
+  image: ImagePrincipale | null;
   href: string;
   viewCart: string;
   dismiss: string;
@@ -42,18 +43,16 @@ export function ToastAjout({
     };
   }, [onClose]);
 
-  const sources = image
-    ? [...image.sources].sort((a, b) => a.largeur - b.largeur)
-    : [];
+  const vignette = vignetteDe(image);
 
   return (
     <div className={styles.toast} data-testid="toast-ajout">
-      {image && sources.length > 0 ? (
+      {vignette ? (
         // eslint-disable-next-line @next/next/no-img-element -- sources fournies par l'API
         <img
           className={styles.vignette}
-          src={sources[0].url}
-          alt={image.alt}
+          src={vignette.src}
+          alt={vignette.alt}
           width={56}
           height={56}
         />

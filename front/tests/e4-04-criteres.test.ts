@@ -58,7 +58,7 @@ describe("E4-04 – critères d'acceptation", () => {
     };
     expect(og.title).toBeTruthy();
     expect(og.description).toBe(m.description);
-    const largest = produits[0].image_principale!.sources.reduce((a, b) =>
+    const largest = produits[0].image_principale!.sources!.reduce((a, b) =>
       b.largeur > a.largeur ? b : a,
     );
     expect(og.images[0].url).toBe(largest.url);
