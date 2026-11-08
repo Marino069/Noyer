@@ -172,3 +172,24 @@ main:focus {
     }
   }
 }
+
+/* Transitions entre pages (E9-10) : fondu doux, et la photo d'une carte produit s'agrandit
+   jusqu'à la grande photo de la fiche (nom posé par TransitionsPages). Sans View Transitions,
+   ces règles sont ignorées ; en reduced-motion, aucune transition n'est lancée. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.25s;
+}
+
+::view-transition-group(photo-produit) {
+  animation-duration: 0.5s;
+  animation-timing-function: cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}

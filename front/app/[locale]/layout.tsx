@@ -8,6 +8,7 @@ import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { RevealObserver } from "@/components/RevealObserver";
+import { TransitionsPages } from "@/components/TransitionsPages";
 import { RevelationTitres } from "@/components/RevelationTitres";
 import { MocksProvider } from "@/components/MocksProvider";
 import { hasLocale, locales } from "@/i18n/config";
@@ -97,6 +98,7 @@ export default async function LocaleLayout({
         />
         <RevealObserver />
         <RevelationTitres />
+        <TransitionsPages />
         <MocksProvider>{children}</MocksProvider>
         <Footer
           locale={locale}
