@@ -1,8 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { interpolate } from "@/lib/format";
+import { CIBLE_PANIER, mouvementReduit } from "@/lib/vol";
 import { refreshCart, useCartCount } from "@/lib/cart";
 import { startMocks } from "@/lib/mocks";
 import styles from "./CartIndicator.module.css";
@@ -39,13 +40,35 @@ export function CartIndicator({
   }, []);
 
   const n = count ?? 0;
+
+  // Le compteur rebondit quand le nombre d'articles augmente (sauf mouvement réduit).
+  const badge = useRef<HTMLSpanElement>(null);
+  const precedent = useRef(n);
+  useEffect(() => {
+    if (
+      n > precedent.current &&
+      !mouvementReduit() &&
+      typeof badge.current?.animate === "function"
+    ) {
+      badge.current.animate(
+        [
+          { transform: "scale(1)" },
+          { transform: "scale(1.5)", offset: 0.4 },
+          { transform: "scale(1)" },
+        ],
+        { duration: 400, easing: "ease-out" },
+      );
+    }
+    precedent.current = n;
+  }, [n]);
+
   const label =
     n === 0
       ? labels.empty
       : interpolate(n === 1 ? labels.one : labels.other, { count: n });
 
   return (
-    <Link href={href} className={styles.link}>
+    <Link href={href} className={styles.link} {...{ [CIBLE_PANIER]: "" }}>
       <svg
         className={styles.icon}
         viewBox="0 0 24 24"
@@ -67,7 +90,7 @@ export function CartIndicator({
         {label}
       </span>
       {n > 0 && (
-        <span className={styles.count} aria-hidden="true">
+        <span ref={badge} className={styles.count} aria-hidden="true">
           {n}
         </span>
       )}

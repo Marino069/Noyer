@@ -1,12 +1,14 @@
 "use client";
 
 import { useCallback, useRef, useState, type KeyboardEvent } from "react";
-import { api, type Gamme, type ImagePrincipale } from "@/lib/api";
+import { api, type Gamme, type Panier } from "@/lib/api";
 import { publishCart } from "@/lib/cart";
 import { formatDuree, interpolate } from "@/lib/format";
 import { PlaqueGravee } from "./atelier/PlaqueGravee";
 import { Button } from "./Button";
-import { ToastAjout } from "./ToastAjout";
+import { vignetteDe } from "@/lib/image";
+import { voler } from "@/lib/vol";
+import { PanierLateral, type PanierLateralTextes } from "./PanierLateral";
 import styles from "./AjoutPanier.module.css";
 
 export type AjoutPanierTextes = {
@@ -23,11 +25,11 @@ export type AjoutPanierTextes = {
   reserveAuto: string;
   reminder: string;
   viewCart: string;
-  dismiss: string;
   errorGeneric: string;
   errorUnavailable: string;
   reserved: string;
   suggest: string;
+  drawer: Omit<PanierLateralTextes, "viewCart">;
 };
 
 type Props = {
@@ -39,6 +41,10 @@ type Props = {
   total?: number;
   disabled?: boolean;
   panierHref: string;
+  /** Langue d'affichage des montants du panier latéral. */
+  locale?: string;
+  /** Page de commande ; par défaut `<panierHref>/commande`. */
+  commandeHref?: string;
   textes: AjoutPanierTextes;
   /** Appelé quand l'API refuse une pièce déjà réservée (pour rafraîchir la disponibilité). */
   onUnavailable?: () => void;
@@ -55,6 +61,8 @@ export function AjoutPanier({
   total = 0,
   disabled = false,
   panierHref,
+  locale = "fr",
+  commandeHref,
   textes,
   onUnavailable,
 }: Props) {
@@ -64,9 +72,10 @@ export function AjoutPanier({
     "repos",
   );
   const [message, setMessage] = useState("");
-  const [vignette, setVignette] = useState<ImagePrincipale | null>(null);
-  const [toastVisible, setToastVisible] = useState(false);
-  const fermerToast = useCallback(() => setToastVisible(false), []);
+  const [panier, setPanier] = useState<Panier | null>(null);
+  const [tiroirOuvert, setTiroirOuvert] = useState(false);
+  const fermerTiroir = useCallback(() => setTiroirOuvert(false), []);
+  const [declencheur, setDeclencheur] = useState<HTMLElement | null>(null);
   // Numéro refusé (-1 = attribution automatique) : sert à proposer un autre numéro.
   const [conflit, setConflit] = useState<number | null>(null);
 
@@ -113,7 +122,10 @@ export function AjoutPanier({
   async function ajouter(numeroVoulu: number | null = numero) {
     setEtat("envoi");
     setMessage("");
-    setToastVisible(false);
+    setTiroirOuvert(false);
+    const bouton = document.activeElement;
+    const depart = bouton instanceof HTMLElement ? bouton : declencheur;
+    setDeclencheur(depart);
     const result = await api.ajouterLigne({
       produit_slug: slug,
       quantite: 1,
@@ -123,11 +135,14 @@ export function AjoutPanier({
       publishCart(result.data);
       setConflit(null);
       setEtat("ajoute");
-      setVignette(
-        result.data.lignes.find((l) => l.produit.slug === slug)?.produit
-          .image_principale ?? null,
+      setPanier(result.data);
+      const image = result.data.lignes.find((l) => l.produit.slug === slug)
+        ?.produit.image_principale;
+      // La vignette vole jusqu'à l'icône du panier, puis le panier latéral s'ouvre.
+      const source = vignetteDe(image)?.src ?? null;
+      void (depart ? voler(depart, source) : Promise.resolve()).then(() =>
+        setTiroirOuvert(true),
       );
-      setToastVisible(true);
       // La pièce qui vient d'être ajoutée est celle dont la réservation expire le plus tard
       // (les réservations plus anciennes de la même fiche sont déjà entamées).
       const ligne = result.data.lignes
@@ -237,21 +252,18 @@ export function AjoutPanier({
         <p className={styles.rappel}>{textes.reminder}</p>
       ) : null}
       <div role="status" className={styles.message} data-state={etat}>
-        {etat === "ajoute" ? (
-          toastVisible ? (
-            <ToastAjout
-              message={message}
-              image={vignette}
-              href={panierHref}
-              viewCart={textes.viewCart}
-              dismiss={textes.dismiss}
-              onClose={fermerToast}
-            />
-          ) : null
-        ) : (
-          message
-        )}
+        {message}
       </div>
+      <PanierLateral
+        open={tiroirOuvert}
+        onClose={fermerTiroir}
+        panier={panier}
+        locale={locale}
+        textes={{ ...textes.drawer, viewCart: textes.viewCart }}
+        panierHref={panierHref}
+        commandeHref={commandeHref ?? `${panierHref}/commande`}
+        retourFocus={declencheur}
+      />
       {etat === "erreur" && suggestion !== null ? (
         <Button variant="secondary" onClick={() => ajouter(suggestion)}>
           {interpolate(textes.suggest, { numero: suggestion })}
