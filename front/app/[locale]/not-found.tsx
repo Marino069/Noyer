@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { LampeGresillante } from "@/components/LampeGresillante";
 import { Section } from "@/components/Section";
 import fr from "@/i18n/dictionaries/fr.json";
 import { localePath } from "@/lib/routes";
@@ -11,6 +12,12 @@ export default function LocaleNotFound() {
       <Section aria-labelledby="404-titre">
         <h1 id="404-titre">{t.title}</h1>
         <p>{t.message}</p>
+        <LampeGresillante
+          messageGresille={t.lampe.gresille}
+          messageAllumee={t.lampe.allumee}
+          libelleAllumer={t.lampe.allumer}
+          libelleEteindre={t.lampe.eteindre}
+        />
         <nav aria-label={t.gammesLabel}>
           <ul>
             <li>

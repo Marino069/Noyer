@@ -7,6 +7,7 @@ import { Button } from "./Button";
 import { Checkbox } from "./Checkbox";
 import { Input } from "./Input";
 import styles from "./NewsletterForm.module.css";
+import tampon from "./Tampon.module.css";
 
 type Status = "idle" | "loading" | "success" | "error";
 
@@ -27,7 +28,8 @@ export function NewsletterForm({
     const email = String(data.get("email") ?? "").trim();
     const consentement = data.get("consentement") === "on";
 
-    const nextEmailError = form.email.validity.valid
+    const emailChamp = form.elements.namedItem("email") as HTMLInputElement;
+    const nextEmailError = emailChamp.validity.valid
       ? undefined
       : dictionary.errors.email;
     const nextConsentError = consentement
@@ -71,7 +73,14 @@ export function NewsletterForm({
         {dictionary.submit}
       </Button>
       <div role="status" className={styles.status}>
-        {status === "success" ? <p>{dictionary.success}</p> : null}
+        {status === "success" ? (
+          <>
+            <p>{dictionary.success}</p>
+            <span className={tampon.tampon} aria-hidden="true">
+              {dictionary.tampon}
+            </span>
+          </>
+        ) : null}
       </div>
       <div role="alert" className={styles.status}>
         {status === "error" ? <p>{dictionary.errors.server}</p> : null}
