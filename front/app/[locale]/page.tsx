@@ -35,7 +35,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function HomePage({ params }: Props) {
   const { locale } = await params;
   if (!hasLocale(locale)) notFound();
-  const { home } = await getDictionary(locale);
+  const { home, interrupteur } = await getDictionary(locale);
 
   // Contenu éditable ; si l'API est indisponible, repli sur le texte du dictionnaire.
   const result = await api.heroAccueil();
@@ -90,9 +90,23 @@ export default async function HomePage({ params }: Props) {
       ? Math.max(...dispoPremium.series.map((s) => s.taille_serie))
       : null;
 
+  // Version allumée de la lampe (média « <slug>-allumee » de la fiche), si l'API la fournit.
+  const imageAllumee = [detailPremium, detailClassic]
+    .flatMap((d) => (d?.ok ? d.data.medias : []))
+    .find((m) => m.sources.some((s) => s.url.includes("-allumee")));
+
   return (
     <main id="contenu" tabIndex={-1}>
       <Hero
+        interrupteur={
+          imageAllumee
+            ? {
+                allumee: imageAllumee,
+                libelleAllumer: interrupteur.allumer,
+                libelleEteindre: interrupteur.eteindre,
+              }
+            : undefined
+        }
         contenu={contenu}
         ctaHref={`/${locale}${
           contenu.cta_chemin.startsWith("/") ? contenu.cta_chemin : ""

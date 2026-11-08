@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { preload } from "react-dom";
-import type { HeroAccueil } from "@/lib/api/types";
+import type { HeroAccueil, Image } from "@/lib/api/types";
 import { Button } from "./Button";
+import { LampeAllumable } from "./LampeAllumable";
 import { Section } from "./Section";
 import { Cote } from "./atelier/Cote";
 import { Surtitre } from "./atelier/Surtitre";
@@ -28,6 +29,12 @@ type HeroProps = {
   /** Lien du CTA, déjà préfixé par la langue. */
   ctaHref: string;
   atelier?: HeroAtelier;
+  /** Interrupteur : version allumée et libellés (absent = pas d'interrupteur). */
+  interrupteur?: {
+    allumee: Image;
+    libelleAllumer: string;
+    libelleEteindre: string;
+  };
 };
 
 /** Titre avec, au plus, un fragment en italique (accent ponctuel, brief §03). */
@@ -48,7 +55,7 @@ function Titre({ titre, accent }: { titre: string; accent: string | null }) {
  * avec cotes et étiquette de pièce, bandeau de filets matière.
  * L'image est l'élément LCP : préchargée et chargée en priorité (srcset fourni par l'API).
  */
-export function Hero({ contenu, ctaHref, atelier }: HeroProps) {
+export function Hero({ contenu, ctaHref, atelier, interrupteur }: HeroProps) {
   const image = contenu.image;
   const sources = image
     ? [...image.sources].sort((a, b) => a.largeur - b.largeur)
@@ -98,6 +105,9 @@ export function Hero({ contenu, ctaHref, atelier }: HeroProps) {
                 fetchPriority="high"
                 decoding="async"
               />
+              {interrupteur ? (
+                <LampeAllumable sizes={SIZES} {...interrupteur} />
+              ) : null}
             </div>
             {atelier ? (
               <>

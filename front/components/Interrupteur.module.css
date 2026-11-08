@@ -1,0 +1,48 @@
+/* Zone cliquable de 44 px minimum (règles E9) autour d'un petit rail en laiton. */
+.interrupteur {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.interrupteur:focus-visible {
+  outline: 2px solid var(--brass);
+  outline-offset: 2px;
+}
+
+.rail {
+  position: relative;
+  display: block;
+  width: 2.25rem;
+  height: 1.25rem;
+  border: 1px solid var(--brass);
+  border-radius: var(--radius);
+  background: var(--espresso);
+}
+
+.bouton {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 1rem;
+  height: calc(1.25rem - 6px);
+  border-radius: var(--radius);
+  background: var(--brass);
+  transition: transform 0.25s ease;
+}
+
+.interrupteur[aria-pressed="true"] .bouton {
+  transform: translateX(1rem);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bouton {
+    transition: none;
+  }
+}

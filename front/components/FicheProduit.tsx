@@ -23,6 +23,8 @@ type Props = {
   textes: Dictionary["fiche"];
   prix: Dictionary["price"];
   badge: Dictionary["badge"];
+  /** Libellés de l'interrupteur ; absent = pas d'interrupteur. */
+  interrupteur?: Dictionary["interrupteur"];
 };
 
 /** Fiche produit (brief §05) : galerie, infos, bascule d'une gamme à l'autre, CTA. */
@@ -34,8 +36,14 @@ export function FicheProduit({
   textes,
   prix,
   badge,
+  interrupteur,
 }: Props) {
   const premium = produit.gamme === "Premium";
+  const imageAllumee = interrupteur
+    ? produit.medias.find((m) =>
+        m.sources.some((s) => s.url.includes("-allumee")),
+      )
+    : undefined;
   const { caracteristiques: c } = produit;
 
   return (
@@ -51,6 +59,15 @@ export function FicheProduit({
             cote={`${textes.details.heightShort} ${c.hauteur_cm} cm`}
             label={textes.gallery.label}
             vide={textes.gallery.empty}
+            interrupteur={
+              interrupteur && imageAllumee
+                ? {
+                    allumee: imageAllumee,
+                    libelleAllumer: interrupteur.allumer,
+                    libelleEteindre: interrupteur.eteindre,
+                  }
+                : undefined
+            }
           />
 
           <aside className={styles.infos} aria-label={textes.buyColumn}>

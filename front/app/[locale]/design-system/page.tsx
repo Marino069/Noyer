@@ -34,6 +34,7 @@ import {
   produits,
 } from "@/mocks/data";
 import { CartIndicatorDemo } from "./CartIndicatorDemo";
+import { InterrupteurDemo } from "./InterrupteurDemo";
 import styles from "./page.module.css";
 
 type Props = { params: Promise<{ locale: string }> };
@@ -138,6 +139,35 @@ export default async function DesignSystemPage({ params }: Props) {
           filets: dictionary.home.hero.filets,
         }}
       />
+
+      <h3 className={styles.heading}>avec interrupteur (allumer la lampe)</h3>
+      <Hero
+        contenu={{ ...heroAccueil, mot_italique: "prend son temps" }}
+        ctaHref="#"
+        interrupteur={{
+          allumee: {
+            alt: "",
+            largeur_origine: 1600,
+            hauteur_origine: 1200,
+            sources: [480, 960, 1600].map((largeur) => ({
+              largeur: largeur as 480 | 960 | 1600,
+              url: `/mocks/lucerne-premium-allumee-${largeur}.webp`,
+            })),
+          },
+          libelleAllumer: dictionary.interrupteur.allumer,
+          libelleEteindre: dictionary.interrupteur.eteindre,
+        }}
+      />
+
+      <h2 className={styles.heading}>Interrupteur</h2>
+      <Section>
+        <div className={styles.row}>
+          <InterrupteurDemo
+            libelleAllumer={dictionary.interrupteur.allumer}
+            libelleEteindre={dictionary.interrupteur.eteindre}
+          />
+        </div>
+      </Section>
 
       <h2 className={styles.heading}>Manifeste</h2>
       <Manifeste {...dictionary.home.manifeste} />

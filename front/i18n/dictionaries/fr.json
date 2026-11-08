@@ -1,4 +1,8 @@
 {
+  "interrupteur": {
+    "allumer": "Allumer la lampe",
+    "eteindre": "Éteindre la lampe"
+  },
   "meta": {
     "title": "Noyer — Lampes semi-artisanales, Genève",
     "description": "Lampes semi-artisanales fabriquées à Genève : gammes Classic et Premium.",

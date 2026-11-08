@@ -7,6 +7,18 @@ body {
   font-family: var(--sans);
   font-size: var(--fs-body); /* 17px */
   line-height: 1.6;
+  transition: background-color 0.6s ease;
+}
+
+/* Interrupteur (E9-01) : le fond se réchauffe légèrement quand la lampe est allumée (tokens seulement). */
+html[data-lampe="allumee"] body {
+  background: color-mix(in srgb, var(--bg) 90%, var(--brass));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body {
+    transition: none;
+  }
 }
 
 h1,
