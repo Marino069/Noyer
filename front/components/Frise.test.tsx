@@ -42,11 +42,11 @@ describe("Frise", () => {
     ).toBeInTheDocument();
   });
 
-  it("empile les étapes verticalement sur mobile, en ligne dès 900 px", () => {
+  it("empile les étapes verticalement sur mobile, en ligne dès 800 px", () => {
     const base = css.split("@media")[0];
     expect(base).toMatch(/\.etapes\s*{[^}]*flex-direction:\s*column/);
     expect(css).toMatch(
-      /@media \(min-width: 900px\)[\s\S]*\.etapes\s*{[^}]*flex-direction:\s*row/,
+      /@media \(min-width: 800px\)[\s\S]*\.etapes\s*{[^}]*flex-direction:\s*row/,
     );
   });
 });

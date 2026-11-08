@@ -44,8 +44,8 @@ describe("E8-05 Frise : critères d'acceptation", () => {
     expect(base).toMatch(/\.filet\s*\{[^}]*bottom:\s*0/);
   });
 
-  it("desktop : filet horizontal dès 900 px", () => {
-    const desktop = css.slice(css.indexOf("@media (min-width: 900px)"));
+  it("desktop : filet horizontal dès 800 px", () => {
+    const desktop = css.slice(css.indexOf("@media (min-width: 800px)"));
     expect(desktop).toMatch(/\.filet\s*\{[^}]*height:\s*1px/);
   });
 

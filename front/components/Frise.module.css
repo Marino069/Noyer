@@ -23,6 +23,23 @@
   background: color-mix(in srgb, var(--brass) 35%, transparent);
 }
 
+/* Trait laiton qui se remplit : transform seul, état final plein par défaut. */
+.trait {
+  position: absolute;
+  inset: 0;
+  background: var(--brass);
+  transform-origin: top left;
+}
+
+/* Piste de défilement : simple conteneur, sticky seulement dès 800 px (voir plus bas). */
+.piste {
+  position: relative;
+}
+
+.jalon {
+  display: none;
+}
+
 .etapes {
   position: relative;
   display: flex;
@@ -51,7 +68,12 @@
   background: var(--dark-bg);
 }
 
-.etape:first-child .puce {
+/* Remplissage de la puce : opacité seule. État final (tout allumé) par défaut. */
+.puce::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: 50%;
   background: var(--brass);
 }
 
@@ -84,7 +106,7 @@
   color: var(--brass);
 }
 
-@media (min-width: 900px) {
+@media (min-width: 800px) {
   .filet {
     top: 0;
     bottom: auto;
@@ -105,13 +127,302 @@
   }
 
   .puce {
-    position: static;
+    position: relative;
     display: block;
     margin-top: -5px;
   }
 
   .numero {
     margin-top: 1.75rem;
+  }
+}
+
+/* Repli IntersectionObserver (posé par FriseDefilement) : mêmes effets, sans animation-timeline. */
+.piste[data-mode="io"] .trait {
+  transform: scaleY(var(--avancee, 0));
+  transition: transform 0.4s ease-out;
+}
+
+.piste[data-mode="io"] .etape {
+  opacity: 0.4;
+  transition:
+    opacity 0.3s ease-out,
+    transform 0.3s ease-out;
+}
+
+.piste[data-mode="io"] .etape[data-etat="actif"] {
+  opacity: 1;
+}
+
+.piste[data-mode="io"] .puce::after {
+  opacity: 0;
+  transition: opacity 0.3s ease-out;
+}
+
+.piste[data-mode="io"] .etape[data-etat="actif"] .puce::after,
+.piste[data-mode="io"] .etape[data-etat="atteint"] .puce::after {
+  opacity: 1;
+}
+
+/* Mobile : étapes révélées une à une au fil du défilement. */
+.piste[data-mode="io"] .etape[data-etat="a-venir"] {
+  transform: translateY(0.75rem);
+}
+
+@media (min-width: 800px) {
+  .piste[data-mode="io"] .trait {
+    transform: scaleX(var(--avancee, 0));
+  }
+
+  .piste[data-mode="io"] .etape[data-etat="a-venir"] {
+    transform: none;
+  }
+}
+
+/* Sticky : dès 800 px et sans reduced-motion (sinon la frise reste statique, état final). */
+@media (min-width: 800px) and (prefers-reduced-motion: no-preference) {
+  .piste {
+    height: 320vh;
+  }
+
+  .jalon {
+    position: absolute;
+    left: 0;
+    display: block;
+    width: 1px;
+    height: 25%;
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  .jalon:nth-of-type(1) {
+    top: 0;
+  }
+
+  .jalon:nth-of-type(2) {
+    top: 25%;
+  }
+
+  .jalon:nth-of-type(3) {
+    top: 50%;
+  }
+
+  .jalon:nth-of-type(4) {
+    top: 75%;
+  }
+
+  .piste .frise {
+    position: sticky;
+    top: 20vh;
+    margin-top: 0;
+  }
+}
+
+/* Animations liées au défilement (CSS pur) ; sans support, le repli ci-dessus prend le relais. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .piste {
+      view-timeline: --piste block;
+    }
+
+    /* Mobile : filet vertical qui se remplit, étapes révélées une à une. */
+    .trait {
+      animation: remplir-y linear both;
+      animation-timeline: --piste;
+      animation-range: cover 15% cover 85%;
+    }
+
+    .etape {
+      animation: revele linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 70%;
+    }
+
+    @media (min-width: 800px) {
+      .trait {
+        animation-name: remplir-x;
+        animation-range: cover 25% cover 75%;
+      }
+
+      /* Une étape à la fois : opaque quand active, estompée sinon. */
+      .etape {
+        animation-timeline: --piste;
+        animation-range: cover 25% cover 75%;
+      }
+
+      .etape:nth-child(1) {
+        animation-name: etape-1;
+      }
+
+      .etape:nth-child(2) {
+        animation-name: etape-2;
+      }
+
+      .etape:nth-child(3) {
+        animation-name: etape-3;
+      }
+
+      .etape:nth-child(4) {
+        animation-name: etape-4;
+      }
+
+      .puce::after {
+        animation-duration: 1ms;
+        animation-timing-function: linear;
+        animation-fill-mode: both;
+        animation-timeline: --piste;
+        animation-range: cover 25% cover 75%;
+      }
+
+      .etape:nth-child(1) .puce::after {
+        animation-name: puce-1;
+      }
+
+      .etape:nth-child(2) .puce::after {
+        animation-name: puce-2;
+      }
+
+      .etape:nth-child(3) .puce::after {
+        animation-name: puce-3;
+      }
+
+      .etape:nth-child(4) .puce::after {
+        animation-name: puce-4;
+      }
+    }
+  }
+}
+
+@keyframes remplir-y {
+  from {
+    transform: scaleY(0);
+  }
+
+  to {
+    transform: scaleY(1);
+  }
+}
+
+@keyframes remplir-x {
+  from {
+    transform: scaleX(0);
+  }
+
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes revele {
+  from {
+    opacity: 0.25;
+    transform: translateY(1rem);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes etape-1 {
+  0%,
+  22% {
+    opacity: 1;
+  }
+
+  28%,
+  100% {
+    opacity: 0.4;
+  }
+}
+
+@keyframes etape-2 {
+  0%,
+  22% {
+    opacity: 0.4;
+  }
+
+  28%,
+  47% {
+    opacity: 1;
+  }
+
+  53%,
+  100% {
+    opacity: 0.4;
+  }
+}
+
+@keyframes etape-3 {
+  0%,
+  47% {
+    opacity: 0.4;
+  }
+
+  53%,
+  72% {
+    opacity: 1;
+  }
+
+  78%,
+  100% {
+    opacity: 0.4;
+  }
+}
+
+@keyframes etape-4 {
+  0%,
+  72% {
+    opacity: 0.4;
+  }
+
+  78%,
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes puce-1 {
+  from,
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes puce-2 {
+  0%,
+  22% {
+    opacity: 0;
+  }
+
+  28%,
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes puce-3 {
+  0%,
+  47% {
+    opacity: 0;
+  }
+
+  53%,
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes puce-4 {
+  0%,
+  72% {
+    opacity: 0;
+  }
+
+  78%,
+  100% {
+    opacity: 1;
   }
 }
 

@@ -1,6 +1,7 @@
 import type { Dictionary } from "@/i18n/get-dictionary";
 import { Surtitre } from "./atelier/Surtitre";
 import { Image } from "./Image";
+import { FriseDefilement } from "./FriseDefilement";
 import { Section } from "./Section";
 import styles from "./Frise.module.css";
 
@@ -18,22 +19,26 @@ export function Frise({ textes }: { textes: FriseTextes }) {
       <h2 id="frise-titre" className={styles.title}>
         {textes.titre} <em>{textes.accent}</em>
       </h2>
-      <div className={styles.frise}>
-        <div aria-hidden="true" className={styles.filet} />
-        <ol className={styles.etapes} aria-label={textes.etapesLabel}>
-          {textes.etapes.map((etape, i) => (
-            <li key={etape.titre} className={styles.etape}>
-              <span aria-hidden="true" className={styles.puce} />
-              <p className={styles.numero} aria-hidden="true">
-                {String(i + 1).padStart(2, "0")}
-              </p>
-              <h3 className={styles.etapeTitre}>{etape.titre}</h3>
-              <p className={styles.texte}>{etape.texte}</p>
-              <p className={styles.duree}>{etape.duree}</p>
-            </li>
-          ))}
-        </ol>
-      </div>
+      <FriseDefilement etapes={textes.etapes.length}>
+        <div className={styles.frise}>
+          <div aria-hidden="true" className={styles.filet}>
+            <div className={styles.trait} />
+          </div>
+          <ol className={styles.etapes} aria-label={textes.etapesLabel}>
+            {textes.etapes.map((etape, i) => (
+              <li key={etape.titre} className={styles.etape}>
+                <span aria-hidden="true" className={styles.puce} />
+                <p className={styles.numero} aria-hidden="true">
+                  {String(i + 1).padStart(2, "0")}
+                </p>
+                <h3 className={styles.etapeTitre}>{etape.titre}</h3>
+                <p className={styles.texte}>{etape.texte}</p>
+                <p className={styles.duree}>{etape.duree}</p>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </FriseDefilement>
       <div className={styles.finale}>
         <div className={styles.photo}>
           <Image
