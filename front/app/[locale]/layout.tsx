@@ -8,6 +8,7 @@ import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { RevealObserver } from "@/components/RevealObserver";
+import { RevelationTitres } from "@/components/RevelationTitres";
 import { MocksProvider } from "@/components/MocksProvider";
 import { hasLocale, locales } from "@/i18n/config";
 import { getDictionary } from "@/i18n/get-dictionary";
@@ -95,6 +96,7 @@ export default async function LocaleLayout({
           dictionary={dictionary.languageSwitcher}
         />
         <RevealObserver />
+        <RevelationTitres />
         <MocksProvider>{children}</MocksProvider>
         <Footer
           locale={locale}

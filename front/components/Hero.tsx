@@ -95,6 +95,7 @@ export function Hero({ contenu, ctaHref, atelier, interrupteur }: HeroProps) {
               {/* eslint-disable-next-line @next/next/no-img-element -- sources WebP fournies par l'API (srcset), image LCP */}
               <img
                 className={styles.image}
+                data-parallaxe=""
                 src={sources[0].url}
                 srcSet={srcSet}
                 sizes={SIZES}
