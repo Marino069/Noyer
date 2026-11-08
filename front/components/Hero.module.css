@@ -111,6 +111,7 @@
 
 /* Ratio réservé : pas de décalage de mise en page pendant le chargement. */
 .media {
+  position: relative;
   aspect-ratio: 4 / 3;
   background: var(--bg-alt);
   border-radius: var(--radius);

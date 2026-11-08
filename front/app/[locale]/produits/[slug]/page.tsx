@@ -96,6 +96,7 @@ export default async function FicheProduitPage({ params }: Props) {
         textes={dictionary.fiche}
         prix={dictionary.price}
         badge={dictionary.badge}
+        interrupteur={dictionary.interrupteur}
       />
     </main>
   );

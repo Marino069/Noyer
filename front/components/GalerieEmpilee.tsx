@@ -1,5 +1,6 @@
 import { preload } from "react-dom";
 import type { Image } from "@/lib/api/types";
+import { LampeAllumable } from "./LampeAllumable";
 import styles from "./GalerieEmpilee.module.css";
 
 type Props = {
@@ -9,6 +10,12 @@ type Props = {
   /** Message quand il n'y a aucune photo. */
   vide: string;
   label: string;
+  /** Interrupteur sur la grande vue (absent = pas d'interrupteur). */
+  interrupteur?: {
+    allumee: Image;
+    libelleAllumer: string;
+    libelleEteindre: string;
+  };
 };
 
 const SIZES_GRANDE = "(min-width: 900px) 60vw, 100vw";
@@ -51,7 +58,13 @@ function Photo({
  * Galerie empilée de la fiche (maquette « carnet d'atelier ») : grande vue avec
  * sa cote, deux vues carrées côte à côte, puis un gros plan matière.
  */
-export function GalerieEmpilee({ medias, cote, vide, label }: Props) {
+export function GalerieEmpilee({
+  medias,
+  cote,
+  vide,
+  label,
+  interrupteur,
+}: Props) {
   if (medias.length === 0) {
     return (
       <div className={styles.vide}>
@@ -82,6 +95,9 @@ export function GalerieEmpilee({ medias, cote, vide, label }: Props) {
           priority
           className={styles.photo}
         />
+        {interrupteur ? (
+          <LampeAllumable sizes={SIZES_GRANDE} {...interrupteur} />
+        ) : null}
         {cote ? (
           <>
             <span className={styles.coteTrait} aria-hidden="true" />
