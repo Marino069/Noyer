@@ -132,3 +132,43 @@ main:focus {
     scroll-behavior: auto !important;
   }
 }
+
+/* Révélation des titres (E9-06) : posée par RevelationTitres, seulement hors reduced-motion.
+   Seuls clip-path et transform sont animés. Le texte du titre reste intact dans le DOM. */
+@media (prefers-reduced-motion: no-preference) {
+  h1[data-titre="attente"],
+  h2[data-titre="attente"] {
+    clip-path: inset(0 0 100% 0);
+    transform: translateY(0.6em);
+  }
+
+  h1[data-titre="montre"],
+  h2[data-titre="montre"] {
+    clip-path: inset(0 0 -0.3em 0);
+    transition:
+      clip-path 0.8s cubic-bezier(0.2, 0.7, 0.2, 1),
+      transform 0.8s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+}
+
+/* Parallaxe légère (E9-06) : CSS liée au défilement, 32 px au total (≤ 40 px).
+   Désactivée sur mobile et en reduced-motion ; sans animation-timeline, l'image reste fixe. */
+@keyframes parallaxe-image {
+  from {
+    transform: translateY(-16px) scale(1.1);
+  }
+
+  to {
+    transform: translateY(16px) scale(1.1);
+  }
+}
+
+@media (min-width: 900px) and (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    img[data-parallaxe] {
+      animation: parallaxe-image linear both;
+      animation-timeline: view();
+      animation-range: cover;
+    }
+  }
+}
