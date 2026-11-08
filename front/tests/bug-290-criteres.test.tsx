@@ -92,7 +92,7 @@ describe("[Bug 290] Accueil : DeuxGammes avec image sans sources", () => {
         textes={fr.home.gammes}
       />,
     );
-    const srcs = [...container.querySelectorAll("img")].map((i) =>
+    const srcs = [...container.querySelectorAll("article img")].map((i) =>
       i.getAttribute("src"),
     );
     expect(srcs).toEqual([

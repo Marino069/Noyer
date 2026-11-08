@@ -5,6 +5,7 @@ import { getProductPath } from "@/i18n/slugs";
 import type { ProduitDetail, ProduitResume } from "@/lib/api/types";
 import { formatPrice } from "@/lib/format";
 import { Button } from "./Button";
+import { Comparateur } from "./Comparateur";
 import { Section } from "./Section";
 import styles from "./DeuxGammes.module.css";
 
@@ -148,6 +149,9 @@ export function DeuxGammes({
   locale,
   textes,
 }: DeuxGammesProps) {
+  const vignetteClassic = vignetteDe(classic.produit.image_principale);
+  const vignettePremium = vignetteDe(premium.produit.image_principale);
+
   return (
     <Section aria-labelledby="gammes-titre">
       <div className={styles.entete}>
@@ -156,6 +160,19 @@ export function DeuxGammes({
         </h2>
         <p className={styles.intro}>{textes.intro}</p>
       </div>
+      {vignetteClassic && vignettePremium ? (
+        <Comparateur
+          classic={{
+            vignette: vignetteClassic,
+            prix: formatPrice(classic.produit.prix_ttc_centimes, locale),
+          }}
+          premium={{
+            vignette: vignettePremium,
+            prix: formatPrice(premium.produit.prix_ttc_centimes, locale),
+          }}
+          textes={textes.comparateur}
+        />
+      ) : null}
       <div className={styles.grille}>
         <CarteGamme gamme={classic} locale={locale} textes={textes} />
         <CarteGamme gamme={premium} locale={locale} textes={textes} />

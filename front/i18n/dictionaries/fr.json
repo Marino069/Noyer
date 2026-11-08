@@ -62,7 +62,13 @@
       "tirageSerie": "Série numérotée de {taille}",
       "dimensions": "H {hauteur} · Ø {diametre} cm · {culot}",
       "ctaClassic": "Voir la Classic",
-      "ctaPremium": "Choisir ma pièce"
+      "ctaPremium": "Choisir ma pièce",
+      "comparateur": {
+        "label": "Comparer la Classic et la Premium",
+        "classic": "Classic",
+        "premium": "Premium",
+        "valeur": "{valeur} % Premium"
+      }
     },
     "selection": {
       "title": "À l'atelier en ce moment",
