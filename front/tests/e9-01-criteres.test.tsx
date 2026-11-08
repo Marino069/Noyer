@@ -76,8 +76,7 @@ describe("[E9-01] Critère 1 : bouton aria-pressed et libellé clair", () => {
 });
 
 describe("[E9-01] Critère 2 : image allumée chargée à la demande", () => {
-  // Bug #311 : la galerie rend déjà le média -allumee (lazy) sans interaction.
-  it.fails("la fiche ne charge pas l'image allumée au rendu initial", () => {
+  it("la fiche ne charge pas l'image allumée au rendu initial", () => {
     const { container } = fiche();
     expect(imgAllumee(container)).toBeNull();
   });

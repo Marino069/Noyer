@@ -44,6 +44,11 @@ export function FicheProduit({
         m.sources.some((s) => s.url.includes("-allumee")),
       )
     : undefined;
+  // Le média allumé n'est pas dans la galerie : LampeAllumable ne le charge
+  // qu'au premier survol, focus ou clic.
+  const mediasGalerie = imageAllumee
+    ? produit.medias.filter((m) => m !== imageAllumee)
+    : produit.medias;
   const { caracteristiques: c } = produit;
 
   return (
@@ -55,7 +60,7 @@ export function FicheProduit({
       >
         <div className={styles.layout}>
           <GalerieEmpilee
-            medias={produit.medias}
+            medias={mediasGalerie}
             cote={`${textes.details.heightShort} ${c.hauteur_cm} cm`}
             label={textes.gallery.label}
             vide={textes.gallery.empty}
