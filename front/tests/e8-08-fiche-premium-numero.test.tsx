@@ -36,10 +36,10 @@ describe("[E8-08] Choix du numéro et plaque gravée", () => {
   it("propose un bouton par pièce libre, avec aria-pressed", () => {
     rendre();
     const boutons = screen.getAllByRole("button", { name: /^N° \d+$/ });
-    expect(boutons.map((b) => b.textContent)).toEqual([
-      "N° 3",
-      "N° 8",
-      "N° 15",
+    expect(boutons.map((b) => b.getAttribute("data-piece"))).toEqual([
+      "3",
+      "8",
+      "15",
     ]);
     boutons.forEach((b) => expect(b).toHaveAttribute("aria-pressed", "false"));
     expect(
@@ -110,14 +110,14 @@ describe("[E8-08] Choix du numéro et plaque gravée", () => {
     rendre();
     await user.tab();
     expect(screen.getByRole("button", { name: "N° 3" })).toHaveFocus();
-    await user.tab();
+    await user.keyboard("{ArrowRight}");
     expect(screen.getByRole("button", { name: "N° 8" })).toHaveFocus();
     await user.keyboard("{Enter}");
     expect(screen.getByRole("button", { name: "N° 8" })).toHaveAttribute(
       "aria-pressed",
       "true",
     );
-    await user.tab();
+    await user.keyboard("{ArrowRight}");
     await user.keyboard(" ");
     expect(screen.getByRole("button", { name: "N° 15" })).toHaveAttribute(
       "aria-pressed",

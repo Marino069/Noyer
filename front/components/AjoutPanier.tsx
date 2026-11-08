@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useRef, useState, type KeyboardEvent } from "react";
 import { api, type Gamme, type ImagePrincipale } from "@/lib/api";
 import { publishCart } from "@/lib/cart";
 import { formatDuree, interpolate } from "@/lib/format";
@@ -15,6 +15,7 @@ export type AjoutPanierTextes = {
   added: string;
   choose: string;
   numeroButton: string;
+  numeroSold: string;
   numeroAuto: string;
   plateLabel: string;
   plateNote: string;
@@ -76,6 +77,38 @@ export function AjoutPanier({
   // Autre numéro libre à proposer après un conflit.
   const suggestion =
     conflit !== null ? (numeros.find((n) => n !== conflit) ?? null) : null;
+
+  // Grille de la série : une case par pièce, pleine = vendue, creuse = libre.
+  const grille = useRef<HTMLDivElement>(null);
+  const taille = Math.max(total, ...numeros);
+  const pieces = Array.from({ length: taille }, (_, i) => i + 1);
+  const libres = new Set(numeros);
+
+  function naviguer(e: KeyboardEvent<HTMLDivElement>) {
+    const pas = {
+      ArrowRight: [1, 0],
+      ArrowLeft: [-1, 0],
+      ArrowDown: [0, 1],
+      ArrowUp: [0, -1],
+    }[e.key];
+    const actuel = Number((e.target as HTMLElement).dataset.piece);
+    if (!pas || !actuel) return;
+    e.preventDefault();
+    const gabarit = grille.current
+      ? getComputedStyle(grille.current).gridTemplateColumns
+      : "";
+    const colonnes = gabarit.split(" ").filter(Boolean).length || 10;
+    const delta = pas[0] !== 0 ? pas[0] : pas[1] * colonnes;
+    // Prochaine pièce libre dans la direction demandée.
+    for (let n = actuel + delta; n >= 1 && n <= taille; n += delta) {
+      if (libres.has(n)) {
+        grille.current
+          ?.querySelector<HTMLElement>(`[data-piece="${n}"]`)
+          ?.focus();
+        return;
+      }
+    }
+  }
 
   async function ajouter(numeroVoulu: number | null = numero) {
     setEtat("envoi");
@@ -148,18 +181,33 @@ export function AjoutPanier({
                 total: total || numeros.length,
               })}
             </legend>
-            <div className={styles.numeros}>
-              {numeros.map((n) => (
-                <button
-                  key={n}
-                  type="button"
-                  className={styles.numero}
-                  aria-pressed={n === numero}
-                  onClick={() => setChoix(n === numero ? null : n)}
-                >
-                  {interpolate(textes.numeroButton, { numero: n })}
-                </button>
-              ))}
+            <div ref={grille} className={styles.grille} onKeyDown={naviguer}>
+              {pieces.map((n) =>
+                libres.has(n) ? (
+                  <button
+                    key={n}
+                    type="button"
+                    className={styles.numero}
+                    data-piece={n}
+                    aria-pressed={n === numero}
+                    onClick={() => setChoix(n === numero ? null : n)}
+                  >
+                    <span className={styles.point} aria-hidden="true" />
+                    <span className={styles.etiquette}>
+                      {interpolate(textes.numeroButton, { numero: n })}
+                    </span>
+                  </button>
+                ) : (
+                  <span
+                    key={n}
+                    className={`${styles.numero} ${styles.vendue}`}
+                    role="img"
+                    aria-label={interpolate(textes.numeroSold, { numero: n })}
+                  >
+                    <span className={styles.point} aria-hidden="true" />
+                  </span>
+                ),
+              )}
             </div>
             <p className={styles.aide}>{textes.numeroAuto}</p>
           </fieldset>

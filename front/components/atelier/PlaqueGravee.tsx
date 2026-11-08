@@ -23,7 +23,11 @@ export function PlaqueGravee({
     <div className={[styles.plaque, className].filter(Boolean).join(" ")}>
       <div>
         {label ? <p className={styles.label}>{label}</p> : null}
-        <p className={styles.numero}>
+        {/* key : relance la gravure à chaque nouveau numéro. */}
+        <p
+          key={numero ?? "auto"}
+          className={`${styles.numero} ${numero === null ? "" : styles.grave}`}
+        >
           {`N° ${numero === null ? "––" : String(numero).padStart(2, "0")} `}
           <span className={styles.total}>{`/ ${total}`}</span>
         </p>
