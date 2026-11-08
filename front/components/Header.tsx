@@ -4,6 +4,7 @@ import { SHOP_ENABLED } from "@/lib/env";
 import { localePath } from "@/lib/routes";
 import { BandeauAtelier } from "./atelier/BandeauAtelier";
 import { CartIndicator } from "./CartIndicator";
+import { HeaderVivant } from "./HeaderVivant";
 import { Logo } from "./Logo";
 import { SiteNav } from "./SiteNav";
 import styles from "./Header.module.css";
@@ -25,7 +26,7 @@ export function Header({
   return (
     <>
       <BandeauAtelier className={styles.bandeau} items={dictionary.bandeau} />
-      <header className={styles.header}>
+      <HeaderVivant>
         <div className={styles.inner}>
           <Logo href={`/${locale}`} label={dictionary.home} />
           <div className={styles.actions}>
@@ -45,7 +46,7 @@ export function Header({
             />
           </div>
         </div>
-      </header>
+      </HeaderVivant>
     </>
   );
 }
