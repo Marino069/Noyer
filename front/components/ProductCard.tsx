@@ -44,6 +44,7 @@ export function ProductCard({ produit, locale, className }: ProductCardProps) {
             width={vignette.width}
             height={vignette.height}
             loading="lazy"
+            data-vt-photo=""
           />
         ) : (
           <div className={styles.placeholder} aria-hidden="true" />

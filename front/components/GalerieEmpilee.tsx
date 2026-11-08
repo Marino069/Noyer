@@ -31,11 +31,14 @@ function Photo({
   sizes,
   priority,
   className,
+  transition,
 }: {
   image: Image;
   sizes: string;
   priority?: boolean;
   className: string;
+  /** Photo qui reçoit la transition depuis la carte produit (E9-10). */
+  transition?: boolean;
 }) {
   const sources = sourcesTriees(image);
   if (sources.length === 0) return null;
@@ -51,6 +54,7 @@ function Photo({
       height={image.hauteur_origine}
       loading={priority ? "eager" : "lazy"}
       fetchPriority={priority ? "high" : undefined}
+      data-vt-photo={transition ? "" : undefined}
     />
   );
 }
@@ -94,6 +98,7 @@ export function GalerieEmpilee({
           image={grande}
           sizes={SIZES_GRANDE}
           priority
+          transition
           className={styles.photo}
         />
         {interrupteur ? (
