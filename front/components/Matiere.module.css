@@ -66,6 +66,10 @@
   height: 14.75rem; /* 236 px */
 }
 
+.loupeZone {
+  height: 100%;
+}
+
 .image {
   display: block;
   width: 100%;

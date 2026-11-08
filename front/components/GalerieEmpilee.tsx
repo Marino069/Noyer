@@ -1,6 +1,7 @@
 import { preload } from "react-dom";
 import type { Image } from "@/lib/api/types";
 import { LampeAllumable } from "./LampeAllumable";
+import { Loupe } from "./Loupe";
 import styles from "./GalerieEmpilee.module.css";
 
 type Props = {
@@ -120,11 +121,15 @@ export function GalerieEmpilee({
         </div>
       ) : null}
       {matiere ? (
-        <Photo
-          image={matiere}
-          sizes={SIZES_GRANDE}
-          className={styles.matiere}
-        />
+        <Loupe
+          source={sourcesTriees(matiere).find((s) => s.largeur === 1600)?.url}
+        >
+          <Photo
+            image={matiere}
+            sizes={SIZES_GRANDE}
+            className={styles.matiere}
+          />
+        </Loupe>
       ) : null}
     </div>
   );
