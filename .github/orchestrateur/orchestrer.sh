@@ -169,6 +169,14 @@ for cote in frontend backend; do
     pose=$(gh api "repos/$REPO/issues/$en_cours/events" --paginate \
       --jq '[.[] | select(.event=="labeled" and .label.name=="claude")] | last | .created_at' 2>/dev/null | tail -1)
     age_min=$(( ( $(date +%s) - $(date -d "${pose:-now}" +%s) ) / 60 ))
+    # Exécution de Claude terminée en échec (panne réseau, 504…) depuis la pose du label : on relance sans attendre 90 min.
+    titre_en_cours=$(gh issue view "$en_cours" --repo "$REPO" --json title --jq .title)
+    echec_claude=$(GH_TOKEN="$LECTURE_TOKEN" gh api "repos/$REPO/actions/workflows/claude-dev.yml/runs?event=issues&per_page=20" \
+      --jq "[.workflow_runs[] | select(.display_title == \"$titre_en_cours\" and .created_at >= \"$pose\" and .conclusion != \"skipped\")] | first | .conclusion // empty" 2>/dev/null)
+    if [ "$echec_claude" = "failure" ] || [ "$echec_claude" = "cancelled" ]; then
+      age_min=999
+      log "💥 $cote : l'exécution de Claude sur #$en_cours a échoué"
+    fi
     if [ "$age_min" -lt 90 ]; then
       log "🤖 $cote : Claude travaille sur #$en_cours (depuis $age_min min)"
       continue
