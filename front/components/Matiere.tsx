@@ -1,4 +1,5 @@
 import type { MatiereAccueil } from "@/lib/api/types";
+import { Loupe } from "./Loupe";
 import { Section } from "./Section";
 import styles from "./Matiere.module.css";
 
@@ -90,18 +91,23 @@ function Figure({
       tabIndex={0}
     >
       <div className={styles.media}>
-        {/* eslint-disable-next-line @next/next/no-img-element -- sources WebP fournies par l'API (srcset) */}
-        <img
-          className={styles.image}
-          src={sources[0]?.url}
-          srcSet={sources.map((s) => `${s.url} ${s.largeur}w`).join(", ")}
-          sizes={sizes}
-          alt={image.alt}
-          width={image.largeur_origine}
-          height={image.hauteur_origine}
-          loading="lazy"
-          decoding="async"
-        />
+        <Loupe
+          source={sources.find((s) => s.largeur === 1600)?.url}
+          className={styles.loupeZone}
+        >
+          {/* eslint-disable-next-line @next/next/no-img-element -- sources WebP fournies par l'API (srcset) */}
+          <img
+            className={styles.image}
+            src={sources[0]?.url}
+            srcSet={sources.map((s) => `${s.url} ${s.largeur}w`).join(", ")}
+            sizes={sizes}
+            alt={image.alt}
+            width={image.largeur_origine}
+            height={image.hauteur_origine}
+            loading="lazy"
+            decoding="async"
+          />
+        </Loupe>
       </div>
       <figcaption className={styles.caption}>
         <span className={styles.nom}>
