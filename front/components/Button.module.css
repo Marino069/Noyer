@@ -24,9 +24,44 @@
   line-height: 1.25;
   text-decoration: none;
   cursor: pointer;
+  transform: translate(var(--aimant-x, 0), var(--aimant-y, 0));
   transition:
     background-color 0.15s ease,
-    color 0.15s ease;
+    color 0.15s ease,
+    transform 0.15s ease-out;
+}
+
+/* Le bouton s'enfonce au clic. */
+.button:active {
+  transform: translate(var(--aimant-x, 0), var(--aimant-y, 0)) scale(0.97);
+}
+
+/* Contour de focus laiton animé (accent seulement) : s'ajoute au contour plein.
+   Seuls transform et opacity sont animés. */
+.button::after {
+  content: "";
+  position: absolute;
+  inset: -7px;
+  border: 1px solid var(--brass);
+  border-radius: var(--radius);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.button:focus-visible::after {
+  animation: anneau-focus 0.3s ease-out forwards;
+}
+
+@keyframes anneau-focus {
+  from {
+    opacity: 0;
+    transform: scale(0.94);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 /* Registre sombre (brief §02) : via tone="dark" ou automatiquement dans <Section tone="dark"> */
@@ -95,8 +130,15 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .button {
+  .button,
+  .button:active {
+    transform: none;
     transition: none;
+  }
+
+  .button:focus-visible::after {
+    animation: none;
+    opacity: 1;
   }
 
   .spinner {

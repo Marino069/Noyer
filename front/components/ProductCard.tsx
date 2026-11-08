@@ -32,7 +32,7 @@ export function ProductCard({ produit, locale, className }: ProductCardProps) {
 
   return (
     <article className={classes} data-tone={premium ? "dark" : "light"}>
-      <div className={styles.media}>
+      <div className={styles.media} data-curseur="voir">
         {vignette ? (
           // eslint-disable-next-line @next/next/no-img-element -- sources WebP fournies par l'API (srcset)
           <img

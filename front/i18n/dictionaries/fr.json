@@ -252,6 +252,9 @@
     "errorTitle": "Fiche indisponible",
     "errorMessage": "Cette fiche n'a pas pu être chargée. Rechargez la page dans un instant."
   },
+  "curseur": {
+    "voir": "Voir"
+  },
   "a11y": {
     "skipToContent": "Aller au contenu"
   },

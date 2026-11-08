@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import { notFound } from "next/navigation";
 import { connection } from "next/server";
+import { AimantBoutons } from "@/components/AimantBoutons";
+import { CurseurAtelier } from "@/components/CurseurAtelier";
 import { BandeauDemo } from "@/components/BandeauDemo";
 import { ConsentCookies } from "@/components/ConsentCookies";
 import { Footer } from "@/components/Footer";
@@ -99,6 +101,8 @@ export default async function LocaleLayout({
         <RevealObserver />
         <RevelationTitres />
         <TransitionsPages />
+        <AimantBoutons />
+        <CurseurAtelier libelleVoir={dictionary.curseur.voir} />
         <MocksProvider>{children}</MocksProvider>
         <Footer
           locale={locale}
