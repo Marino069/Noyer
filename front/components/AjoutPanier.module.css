@@ -57,25 +57,79 @@
   color: var(--text-muted);
 }
 
-.numeros {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
+.grille {
+  display: grid;
+  grid-template-columns: repeat(5, 44px);
+  gap: 0.25rem;
+}
+
+@media (min-width: 640px) {
+  .grille {
+    grid-template-columns: repeat(10, 44px);
+  }
 }
 
 .numero {
+  position: relative;
+  display: grid;
+  place-items: center;
   min-width: 44px;
   min-height: 44px;
-  padding: 0.5rem 1rem;
-  border: 1px solid var(--walnut);
-  border-radius: var(--radius);
+  padding: 0;
+  border: 0;
   background: transparent;
   color: var(--text);
   font: inherit;
   cursor: pointer;
 }
 
-.numero[aria-pressed="true"] {
+/* Le point gravé : creux = libre, plein = vendue. */
+.point {
+  width: 1rem;
+  height: 1rem;
+  border: 1px solid var(--walnut);
+  border-radius: 50%;
+  background: transparent;
+  transition:
+    transform 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.vendue {
+  cursor: default;
+}
+
+.vendue .point {
+  background: var(--text-muted);
+  border-color: var(--text-muted);
+}
+
+.numero[aria-pressed="true"] .point {
+  background: var(--walnut);
+  transform: scale(1.25);
+}
+
+/* Le numéro apparaît au survol ou au focus (jamais obligatoire : le nom accessible est toujours là). */
+.etiquette {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  border-radius: var(--radius);
+  background: var(--bg);
+  font-size: 0.75rem;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s ease;
+}
+
+.numero:hover .etiquette,
+.numero:focus-visible .etiquette,
+.numero[aria-pressed="true"] .etiquette {
+  opacity: 1;
+}
+
+.numero[aria-pressed="true"] .etiquette {
   background: var(--walnut);
   color: var(--bg);
 }
@@ -83,6 +137,13 @@
 .numero:focus-visible {
   outline: 2px solid var(--walnut);
   outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .point,
+  .etiquette {
+    transition: none;
+  }
 }
 
 .aide,

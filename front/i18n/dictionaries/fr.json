@@ -180,6 +180,7 @@
       "added": "Ajouté au panier.",
       "choose": "Choisissez votre pièce · {libres} libres sur {total}",
       "numeroButton": "N° {numero}",
+      "numeroSold": "N° {numero}, vendue",
       "numeroAuto": "Sans choix, nous vous attribuons le prochain numéro libre.",
       "plateLabel": "Votre pièce",
       "plateNote": "Numéro gravé sous le pied, certificat signé joint.",
