@@ -11,6 +11,27 @@
   border-block-end: 1px solid var(--border);
 }
 
+.progression {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline: 0;
+  height: 2px;
+  background: var(--brass);
+  transform: scaleX(var(--progression, 0));
+  transform-origin: left;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .header {
+    transition: transform 0.25s ease;
+  }
+}
+
+.header[data-cache="true"] {
+  transform: translateY(-100%);
+}
+
 .inner {
   box-sizing: border-box;
   display: flex;
