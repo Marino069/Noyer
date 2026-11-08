@@ -1,5 +1,6 @@
 .bandeau {
   margin: 0;
+  max-width: none; /* les paragraphes ont une largeur de lecture limitée */
   padding: 0.5rem 1rem;
   background: var(--dark-bg);
   color: var(--dark-text);
