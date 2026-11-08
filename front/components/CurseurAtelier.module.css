@@ -1,0 +1,55 @@
+.curseur {
+  position: fixed;
+  inset: 0 auto auto 0;
+  z-index: 200;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+  will-change: transform;
+}
+
+.anneau {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  margin: -1rem 0 0 -1rem;
+  border: 1px solid var(--walnut);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--dark-text);
+  font-family: var(--sans);
+  font-size: var(--fs-small);
+  font-weight: 500;
+  opacity: 0.7;
+  transition:
+    transform 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.libelle {
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+[data-etat="cache"] .anneau {
+  opacity: 0;
+}
+
+[data-etat="lien"] .anneau {
+  transform: scale(1.75);
+  opacity: 1;
+}
+
+/* « Voir » : le fond sombre garantit le contraste du libellé (≥ 4.5:1) sur toute photo. */
+[data-etat="voir"] .anneau {
+  transform: scale(2.5);
+  opacity: 1;
+  border-color: var(--dark-bg);
+  background: var(--dark-bg);
+}
+
+[data-etat="voir"] .libelle {
+  opacity: 1;
+}

@@ -54,6 +54,7 @@ export function Button(props: ButtonProps | LinkProps) {
       <Link
         {...linkRest}
         className={classes}
+        data-aimant=""
         aria-disabled={inactive || undefined}
         aria-busy={loading || undefined}
         tabIndex={inactive ? -1 : tabIndex}
@@ -73,6 +74,7 @@ export function Button(props: ButtonProps | LinkProps) {
       {...buttonRest}
       type={type}
       className={classes}
+      data-aimant=""
       disabled={inactive}
       aria-busy={loading || undefined}
     >
