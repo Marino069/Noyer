@@ -136,6 +136,7 @@ export function FicheProduit({
                   slug={produit.slug}
                   gamme={produit.gamme}
                   panierHref={localePath(locale, "panier")}
+                  locale={locale}
                   textes={textes.cart}
                   alerte={textes.soldOut}
                 />

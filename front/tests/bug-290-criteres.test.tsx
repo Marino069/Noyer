@@ -1,9 +1,8 @@
 import { render, screen } from "@testing-library/react";
-import { describe, expect, it, vi } from "vitest";
+import { describe, expect, it } from "vitest";
 import fr from "@/i18n/dictionaries/fr.json";
 import { DeuxGammes } from "@/components/DeuxGammes";
 import { Selection } from "@/components/Selection";
-import { ToastAjout } from "@/components/ToastAjout";
 import type { ImagePrincipale, ProduitResume } from "@/lib/api";
 import { detailDe, produits } from "@/mocks/data";
 
@@ -117,34 +116,5 @@ describe("[Bug 290] Accueil : DeuxGammes avec image sans sources", () => {
     );
     expect(container.querySelector("img")).toBeNull();
     expect(screen.getAllByRole("article")).toHaveLength(2);
-  });
-});
-
-describe("[Bug 290] Panier : ToastAjout avec image sans sources", () => {
-  const props = {
-    message: "Ajouté",
-    href: "/fr/panier",
-    viewCart: "Voir",
-    dismiss: "Fermer",
-    onClose: vi.fn(),
-  };
-
-  it("affiche la vignette en repli sur url", () => {
-    render(<ToastAjout {...props} image={sansSources} />);
-    const img = screen.getByTestId("toast-ajout").querySelector("img");
-    expect(img?.getAttribute("src")).toBe("https://example.org/a.jpg");
-  });
-
-  it("utilise la plus petite source quand elle existe", () => {
-    render(<ToastAjout {...props} image={avecSources} />);
-    const img = screen.getByTestId("toast-ajout").querySelector("img");
-    expect(img?.getAttribute("src")).toBe("/a.webp");
-  });
-
-  it("sans image, le toast s'affiche sans vignette", () => {
-    render(<ToastAjout {...props} image={null} />);
-    const toast = screen.getByTestId("toast-ajout");
-    expect(toast.querySelector("img")).toBeNull();
-    expect(toast).toHaveTextContent("Ajouté");
   });
 });

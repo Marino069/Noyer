@@ -188,12 +188,26 @@
       "reserveAuto": "Réserver une pièce",
       "reminder": "Pièce réservée 15 minutes dans votre panier · TWINT, carte ou virement",
       "viewCart": "Voir le panier",
-      "dismiss": "Fermer la confirmation",
       "contact": "Nous contacter",
       "errorGeneric": "L'ajout au panier a échoué. Réessayez dans un instant.",
       "errorUnavailable": "Cette pièce vient d'être réservée. Choisissez un autre numéro.",
       "reserved": "Pièce n° {numero} réservée pour vous, encore {duree}.",
-      "suggest": "Réserver plutôt le n° {numero}"
+      "suggest": "Réserver plutôt le n° {numero}",
+      "drawer": {
+        "title": "Votre panier",
+        "close": "Fermer le panier",
+        "empty": "Votre panier est vide",
+        "numero": "Pièce n° {numero}",
+        "quantity": "Quantité, {nom}",
+        "decrease": "Diminuer la quantité, {nom}",
+        "increase": "Augmenter la quantité, {nom}",
+        "remove": "Retirer",
+        "removeLabel": "Retirer {nom} du panier",
+        "subtotal": "Sous-total",
+        "checkout": "Commander",
+        "updateError": "La modification a échoué. Réessayez dans un instant.",
+        "stockError": "Stock insuffisant pour cette quantité."
+      }
     },
     "soldOut": {
       "title": "Série épuisée",

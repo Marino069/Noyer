@@ -9,12 +9,20 @@ type Props = {
   slug: string;
   gamme: Gamme;
   panierHref: string;
+  locale?: string;
   textes: AjoutPanierTextes;
   alerte: AlerteSerieTextes;
 };
 
 /** Ajout au panier branché sur la disponibilité rafraîchie ; série épuisée → alerte e-mail. */
-export function AchatLive({ slug, gamme, panierHref, textes, alerte }: Props) {
+export function AchatLive({
+  slug,
+  gamme,
+  panierHref,
+  locale,
+  textes,
+  alerte,
+}: Props) {
   const { disponibilite, refresh } = useDisponibilite();
   const numeros =
     disponibilite?.gamme === "Premium"
@@ -35,6 +43,7 @@ export function AchatLive({ slug, gamme, panierHref, textes, alerte }: Props) {
         total={total}
         disabled={epuise}
         panierHref={panierHref}
+        locale={locale}
         textes={textes}
         onUnavailable={refresh}
       />
