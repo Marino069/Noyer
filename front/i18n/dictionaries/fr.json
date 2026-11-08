@@ -216,6 +216,7 @@
       "consent": "J'accepte que Noyer utilise mon adresse e-mail pour me prévenir de la disponibilité de nouvelles pièces. Je peux me désinscrire à tout moment.",
       "submit": "Me prévenir",
       "success": "Merci ! Un e-mail de confirmation vient de vous être envoyé.",
+      "tampon": "Atelier Noyer",
       "errorEmail": "Saisissez une adresse e-mail valide.",
       "errorConsent": "Votre consentement est nécessaire pour être prévenu.",
       "errorServer": "L'inscription n'a pas pu aboutir. Réessayez dans un instant."
@@ -452,6 +453,7 @@
     "consent": "J'accepte de recevoir la newsletter de Noyer et que mon adresse e-mail soit utilisée à cette fin. Je peux me désinscrire à tout moment.",
     "submit": "S'inscrire",
     "success": "Merci ! Un e-mail de confirmation vient de vous être envoyé.",
+    "tampon": "Atelier Noyer",
     "errors": {
       "email": "Saisissez une adresse e-mail valide.",
       "consent": "Votre consentement est nécessaire pour vous inscrire.",
@@ -518,7 +520,13 @@
     "gammesLabel": "Découvrir nos gammes",
     "classic": "Voir la gamme Classic",
     "premium": "Voir la gamme Premium",
-    "home": "Retour à l'accueil"
+    "home": "Retour à l'accueil",
+    "lampe": {
+      "gresille": "La lampe grésille… Allumez-la avec l'interrupteur.",
+      "allumee": "Voilà, la lumière est revenue.",
+      "allumer": "Rallumer la lampe",
+      "eteindre": "Éteindre la lampe"
+    }
   },
   "demo": {
     "bandeau": "Site de démonstration : les lampes, les prix et les stocks sont fictifs. Aucune commande n'est enregistrée et aucun paiement n'est encaissé."

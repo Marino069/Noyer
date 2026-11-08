@@ -130,7 +130,7 @@ export function Confirmation({
         {payee ? textes.paidTitle : textes.pendingTitle}
       </h1>
       <div className={styles.body}>
-        <p>
+        <p role="status" className={styles.ecrit}>
           {interpolate(payee ? textes.paidIntro : textes.pendingIntro, {
             reference: commande.reference,
           })}

@@ -1,0 +1,52 @@
+.lampe {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
+  margin-block: 1.5rem;
+}
+
+.ampoule {
+  width: 3rem;
+  height: 3rem;
+  border: 1px solid var(--brass);
+  border-radius: 50%;
+  background: var(--espresso);
+  opacity: 0.55;
+}
+
+.ampoule[data-allumee="true"] {
+  background: var(--brass);
+  opacity: 1;
+  box-shadow: 0 0 2rem var(--brass);
+}
+
+/* Grésillement : 2 flashs courts par cycle de 2,4 s (≈ 0,8 flash/s, bien sous 3/s). */
+@media (prefers-reduced-motion: no-preference) {
+  .ampoule[data-allumee="false"] {
+    animation: gresille 2.4s steps(1, end) infinite;
+  }
+}
+
+@keyframes gresille {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+  10% {
+    opacity: 0.9;
+  }
+  15% {
+    opacity: 0.55;
+  }
+  60% {
+    opacity: 0.8;
+  }
+  66% {
+    opacity: 0.55;
+  }
+}
+
+.message {
+  margin: 0;
+}

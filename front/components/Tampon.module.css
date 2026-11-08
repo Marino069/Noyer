@@ -1,0 +1,29 @@
+.tampon {
+  display: inline-block;
+  padding: 0.35rem 0.9rem;
+  border: 2px solid var(--brass);
+  border-radius: var(--radius);
+  color: var(--brass);
+  font-family: var(--serif);
+  font-size: var(--fs-eyebrow);
+  letter-spacing: var(--ls-eyebrow);
+  text-transform: uppercase;
+  transform: rotate(-6deg);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .tampon {
+    animation: pose 0.45s ease-out both;
+  }
+}
+
+@keyframes pose {
+  from {
+    opacity: 0;
+    transform: rotate(-6deg) scale(1.6);
+  }
+  to {
+    opacity: 1;
+    transform: rotate(-6deg) scale(1);
+  }
+}
