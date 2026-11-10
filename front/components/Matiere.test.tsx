@@ -41,7 +41,16 @@ describe("Matiere", () => {
     expect(screen.getByText(props.intro)).toBeInTheDocument();
   });
 
-  it("affiche une grande figure et deux petites", () => {
+  it("affiche le surtitre et trois gros plans dans une liste ordonnée", () => {
+    render(<Matiere contenu={contenu} {...props} />);
+    expect(screen.getByText("La matière", { selector: "p" })).toBeVisible();
+    const liste = screen.getByRole("list");
+    expect(liste.tagName).toBe("OL");
+    expect(screen.getAllByRole("listitem")).toHaveLength(3);
+    expect(screen.getAllByRole("figure")).toHaveLength(3);
+  });
+
+  it("affiche trois figures", () => {
     render(<Matiere contenu={contenu} {...props} />);
     expect(screen.getAllByRole("figure")).toHaveLength(3);
     expect(screen.getAllByRole("img")).toHaveLength(3);
@@ -50,9 +59,13 @@ describe("Matiere", () => {
   it("numérote les légendes et affiche le nom latin du noyer", () => {
     render(<Matiere contenu={contenu} {...props} />);
     const legendes = screen
-      .getAllByText("FIG.")
-      .map((el) => el.parentElement?.textContent);
-    expect(legendes).toEqual(["FIG. 01 — Le grain", "FIG. 02", "FIG. 03"]);
+      .getAllByRole("figure")
+      .map((f) => f.querySelector("figcaption")?.textContent);
+    expect(legendes).toEqual([
+      "I · Noyer — Juglans regia",
+      "II · Laiton",
+      "III · Assemblage",
+    ]);
     expect(screen.getByText("Juglans regia")).toBeInTheDocument();
   });
 
@@ -80,9 +93,14 @@ describe("Matiere", () => {
   });
 
   describe("feuille de style", () => {
-    it("grille asymétrique : la grande figure prend le double de la colonne des petites", () => {
-      expect(css).toMatch(/\.grande\s*\{[^}]*flex:\s*2 1/);
-      expect(css).toMatch(/\.petites\s*\{[^}]*flex:\s*1 1/);
+    it("empile les gros plans sur mobile, trois colonnes égales dès 900 px", () => {
+      const base = css.split("@media")[0];
+      expect(base).toMatch(
+        /\.grid\s*\{[^}]*grid-template-columns:\s*minmax\(0, 1fr\)\s*;/,
+      );
+      expect(css).toMatch(
+        /@media \(min-width: 900px\)\s*\{\s*\.grid\s*\{[^}]*repeat\(3, minmax\(0, 1fr\)\)/,
+      );
     });
 
     it("zoome le grain au survol et au focus", () => {

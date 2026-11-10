@@ -21,9 +21,9 @@
       "signature": "[PRÉNOM], ébéniste, fondateur"
     },
     "matiere": {
+      "surtitre": "La matière",
       "intro": "Deux matières, choisies pour vieillir ensemble. Le noyer fonce et se patine, le laiton se voile doucement.",
-      "nomLatin": "Juglans regia",
-      "titreGrain": "Le grain"
+      "nomLatin": "Juglans regia"
     },
     "gammes": {
       "titre": "Une forme,",

@@ -10,7 +10,7 @@
 .title {
   margin: 0;
   font-family: var(--serif);
-  font-weight: 400;
+  font-weight: 300;
   font-size: var(--fs-h2);
   line-height: 1;
   letter-spacing: var(--ls-title);
@@ -18,28 +18,28 @@
 
 .intro {
   margin: 0;
-  max-width: 26.25rem; /* 420 px */
+  max-width: 23.75rem; /* 380 px */
   color: var(--text-muted);
 }
 
-/* Grille asymétrique : une grande figure (2/3) + une colonne de deux petites (1/3). */
+/* Trois gros plans de même taille : empilés sur mobile, 3 colonnes dès 900 px. */
 .grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1.5rem;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 2rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
-.grande {
-  flex: 2 1 32.5rem; /* 520 px */
+.item {
   min-width: 0;
 }
 
-.petites {
-  flex: 1 1 18.75rem; /* 300 px */
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
+@media (min-width: 900px) {
+  .grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
 }
 
 .figure {
@@ -54,16 +54,16 @@
 
 .media {
   overflow: hidden;
+  aspect-ratio: 4 / 3;
   border-radius: var(--radius);
   background: var(--bg);
 }
 
-.grande .media {
-  height: 32.5rem; /* 520 px */
-}
-
-.petite .media {
-  height: 14.75rem; /* 236 px */
+@media (min-width: 900px) {
+  .media {
+    aspect-ratio: auto;
+    height: 32.5rem; /* 520 px */
+  }
 }
 
 .loupeZone {
@@ -95,44 +95,20 @@
   }
 }
 
+/* Légende en petites capitales espacées : « I · NOYER — JUGLANS REGIA ». */
 .caption {
-  display: flex;
-  justify-content: space-between;
-  gap: 1rem;
-  padding-top: 0.75rem;
+  padding-top: 1.125rem;
+  font-size: var(--fs-eyebrow);
+  letter-spacing: var(--ls-eyebrow);
+  text-transform: uppercase;
+  color: var(--text-muted);
 }
 
-.grande .caption {
-  margin-top: 0.875rem;
-  padding-top: 0.875rem;
-  border-top: 1px solid var(--border);
-}
-
-.nom {
-  font-family: var(--serif);
-  font-size: 1.25rem;
-}
-
-.grande .nom {
-  font-size: 1.375rem;
+/* Le laiton n'atteint pas 4,5:1 en petit corps : le numéro reste en texte plein. */
+.numero {
+  color: var(--text);
 }
 
 .latin {
   font-style: italic;
-  color: var(--text-muted);
-}
-
-.numero {
-  font-size: var(--fs-eyebrow);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--text-muted);
-  white-space: nowrap;
-}
-
-@media (max-width: 599px) {
-  .grande .media {
-    height: auto;
-    aspect-ratio: 4 / 3;
-  }
 }
