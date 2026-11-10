@@ -126,7 +126,7 @@ describe("[E10-07] Conforme à fiche-premium.html (testeur)", () => {
     rendre("Premium");
     expect(
       screen.getByRole("link", { name: "La voir à l'atelier sur rendez-vous" }),
-    ).toHaveAttribute("href", "/fr/contact");
+    ).toHaveAttribute("href", "/fr/rendez-vous");
   });
 
   it("caractéristiques en dl avec dimensions et matières", () => {

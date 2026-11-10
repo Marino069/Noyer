@@ -8,9 +8,11 @@
 .label,
 .legend {
   color: var(--text);
-  font-size: 1rem;
+  font-size: var(--fs-eyebrow);
   font-weight: 500;
-  line-height: 1.25;
+  letter-spacing: var(--ls-eyebrow);
+  text-transform: uppercase;
+  line-height: 1.4;
 }
 
 .hint {
@@ -50,7 +52,7 @@
   padding: 0.625rem 0.75rem;
   border: 1px solid var(--brass);
   border-radius: var(--radius);
-  background: var(--bg);
+  background: var(--bg-alt);
   color: var(--text);
   font-family: var(--sans);
   font-size: 1rem;
@@ -63,8 +65,9 @@ textarea.control {
 }
 
 .control:focus-visible {
-  outline: 2px solid var(--text);
+  outline: 2px solid var(--brass);
   outline-offset: 2px;
+  border-color: var(--text);
 }
 
 .control[aria-invalid="true"] {
@@ -156,7 +159,7 @@ textarea.control {
 }
 
 .choice input:focus-visible {
-  outline: 2px solid var(--text);
+  outline: 2px solid var(--brass);
   outline-offset: 2px;
 }
 

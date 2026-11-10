@@ -1,12 +1,16 @@
 .page {
   max-width: 64rem;
   margin: 0 auto;
-  padding: 2rem 1rem 4rem;
+  padding: 5rem var(--gutter) 7.5rem;
 }
 
 .title {
-  margin: 0 0 1.5rem;
+  margin: 0 0 2.5rem;
   font-family: var(--serif);
+  font-weight: 300;
+  font-size: var(--fs-h2);
+  line-height: 1.05;
+  letter-spacing: var(--ls-title);
 }
 
 .message {
@@ -57,7 +61,8 @@
 .nom {
   margin: 0;
   font-family: var(--serif);
-  font-size: 1.125rem;
+  font-weight: 300;
+  font-size: var(--fs-h4);
 }
 
 .detail {
@@ -79,14 +84,16 @@
 }
 
 .summary {
-  padding: 1.5rem;
-  border-radius: var(--radius);
+  padding: 2rem;
+  border-block: 1px solid var(--brass);
   background: var(--bg-alt);
 }
 
 .summary h2 {
   margin: 0 0 1rem;
   font-family: var(--serif);
+  font-weight: 300;
+  font-size: var(--fs-h3);
 }
 
 .totaux {

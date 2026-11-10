@@ -12,8 +12,9 @@
   box-sizing: border-box;
   background: var(--card-bg);
   color: var(--card-fg);
-  border: 1px solid var(--card-rule);
-  border-radius: var(--radius);
+  border: 0;
+  border-block-end: 1px solid var(--card-rule);
+  border-radius: 0;
   overflow: hidden;
 }
 
@@ -52,14 +53,16 @@
 
 .gamme {
   margin: 0;
-  font-size: 0.875rem;
-  font-weight: 600;
-  letter-spacing: 0.04em;
+  font-size: var(--fs-eyebrow);
+  font-weight: 500;
+  letter-spacing: var(--ls-eyebrow);
+  text-transform: uppercase;
   color: var(--card-accent);
 }
 
 .name {
   margin: 0;
+  font-weight: 300;
   font-size: 1.5rem;
 }
 
