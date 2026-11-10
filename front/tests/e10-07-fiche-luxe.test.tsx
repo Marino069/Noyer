@@ -55,7 +55,7 @@ describe("[E10-07] Fiche produit Maison de luxe", () => {
     expect(screen.getByText(fr.fiche.cart.plateLabel)).toBeInTheDocument();
     expect(screen.getByRole("link", { name: fr.fiche.visit })).toHaveAttribute(
       "href",
-      "/fr/contact",
+      "/fr/rendez-vous",
     );
   });
 

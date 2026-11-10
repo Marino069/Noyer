@@ -112,7 +112,7 @@ export function FicheProduit({
               )}
               <Button
                 variant="secondary"
-                href={localePath(locale, "contact")}
+                href={localePath(locale, "rendezVous")}
                 className={styles.visit}
               >
                 {textes.visit}

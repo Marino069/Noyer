@@ -100,6 +100,14 @@
       "title": "L'atelier",
       "text": "Chaque lampe est tournée, assemblée et finie à la main à Genève. Le bois est travaillé à l'outil, le laiton poli à la pièce : ici, les gestes comptent autant que la forme.",
       "cta": "Découvrir l'atelier"
+    },
+    "rendezVous": {
+      "surtitre": "L'atelier",
+      "titre": "Venez voir",
+      "accent": "la lumière",
+      "adresse": "Rue [ADRESSE], Genève · sur rendez-vous",
+      "cta": "Prendre rendez-vous",
+      "image": "/mocks/matiere-assemblage-960.webp"
     }
   },
   "catalogue": {
@@ -498,6 +506,43 @@
       "show": "Afficher le plan",
       "hide": "Masquer le plan",
       "frameTitle": "Plan de Genève (OpenStreetMap)"
+    }
+  },
+  "rendezVous": {
+    "meta": {
+      "title": "Rendez-vous à l'atelier",
+      "description": "Prenez rendez-vous pour voir les lampes Noyer à l'atelier, à Genève."
+    },
+    "surtitre": "L'atelier",
+    "title": "Rendez-vous à l'atelier",
+    "intro": "Venez voir la lumière : nos lampes se découvrent à l'atelier, à Genève, sur rendez-vous. Indiquez-nous le créneau qui vous convient, nous confirmons sous deux jours ouvrés.",
+    "adresse": "Rue [ADRESSE], Genève",
+    "objet": "Rendez-vous",
+    "labels": {
+      "objet": "Objet",
+      "phone": "Téléphone",
+      "slot": "Créneau souhaité"
+    },
+    "form": {
+      "name": "Nom",
+      "email": "Adresse e-mail",
+      "phone": "Téléphone (facultatif)",
+      "slot": "Créneau souhaité",
+      "slotHint": "Par exemple : samedi matin, ou mardi 18 novembre après 17 h.",
+      "message": "Message",
+      "honeypot": "Ne pas remplir ce champ",
+      "consent": "J'accepte que Noyer traite mes données pour répondre à ma demande, conformément à la politique de confidentialité (nLPD).",
+      "submit": "Demander un rendez-vous",
+      "success": "Merci, votre demande de rendez-vous a bien été envoyée. Nous vous répondons rapidement pour confirmer le créneau.",
+      "errors": {
+        "name": "Indiquez votre nom.",
+        "email": "Saisissez une adresse e-mail valide.",
+        "phone": "Saisissez un numéro de téléphone valide ou laissez ce champ vide.",
+        "slot": "Indiquez le créneau souhaité.",
+        "message": "Écrivez votre message.",
+        "consent": "Votre consentement est nécessaire pour envoyer la demande.",
+        "server": "La demande n'a pas pu être envoyée. Réessayez dans un instant."
+      }
     }
   },
   "languageSwitcher": {
