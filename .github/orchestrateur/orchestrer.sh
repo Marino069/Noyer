@@ -7,7 +7,7 @@ LIMITE_JOUR="${LIMITE_JOUR:-8}"
 LECTURE_TOKEN="${LECTURE_TOKEN:-$GH_TOKEN}" # jeton Actions : seul capable de lire les vérifications
 MOI=$(gh api user --jq .login)
 AUJOURDHUI=$(TZ=Europe/Zurich date +%F)
-REGEX_TICKET='^\\[(E[0-9]-[0-9]{2}|B[0-9]-[0-9]{2}|Bug)\\]'
+REGEX_TICKET='^\\[(E[0-9]+-[0-9]{2}|B[0-9]+-[0-9]{2}|Bug)\\]'
 
 log() { echo "$*"; }
 
