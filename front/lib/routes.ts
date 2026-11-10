@@ -6,6 +6,7 @@ export const routes = {
   premium: "/produits/premium",
   atelier: "/atelier",
   contact: "/contact",
+  rendezVous: "/rendez-vous",
   panier: "/panier",
   impressum: "/impressum",
   cgv: "/cgv",

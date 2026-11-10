@@ -6,6 +6,7 @@ import { Frise } from "@/components/Frise";
 import { Hero } from "@/components/Hero";
 import { Manifeste } from "@/components/Manifeste";
 import { Matiere } from "@/components/Matiere";
+import { RendezVous } from "@/components/RendezVous";
 import { Selection } from "@/components/Selection";
 import { Serie } from "@/components/Serie";
 import { getProductPath } from "@/i18n/slugs";
@@ -167,6 +168,10 @@ export default async function HomePage({ params }: Props) {
         title={home.atelier.title}
         text={home.atelier.text}
         cta={home.atelier.cta}
+      />
+      <RendezVous
+        href={localePath(locale, "rendezVous")}
+        textes={home.rendezVous}
       />
     </main>
   );

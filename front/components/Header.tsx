@@ -27,7 +27,7 @@ export function Header({
     { href: localePath(locale, "atelier"), label: dictionary.nav.atelier },
   ];
   const rendezVous = {
-    href: localePath(locale, "contact"),
+    href: localePath(locale, "rendezVous"),
     label: dictionary.nav.rendezVous,
   };
 
