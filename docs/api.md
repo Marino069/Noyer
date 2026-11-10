@@ -140,11 +140,11 @@ Hero de la homepage, modifiable depuis le back-office (source du CMS : point ouv
 
 ```json
 {
-  "titre": "Une lumière qui prend son temps",
-  "mot_italique": "prend son temps",
+  "titre": "La lumière, façonnée",
+  "mot_italique": "façonnée",
   "sous_titre": "Lampes semi-artisanales en noyer et laiton, assemblées à Genève.",
-  "cta_libelle": "Découvrir les lampes",
-  "cta_chemin": "/produits/classic",
+  "cta_libelle": "Découvrir Lucerne Premium",
+  "cta_chemin": "/produits/premium",
   "image": {/* Image, ou null */}
 }
 ```

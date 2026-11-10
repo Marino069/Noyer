@@ -14,7 +14,6 @@ vi.mock("react-dom", async (importOriginal) => ({
 const contenu = {
   titre: heroAccueil.titre,
   mot_italique: heroAccueil.mot_italique,
-  sous_titre: heroAccueil.sous_titre,
   cta_libelle: heroAccueil.cta_libelle,
   image: heroAccueil.image,
 };
@@ -35,7 +34,7 @@ describe("[E3-01] Hero : accroche et CTA", () => {
     );
     const ems = container.querySelectorAll("h1 em");
     expect(ems).toHaveLength(1);
-    expect(ems[0]).toHaveTextContent("prend son temps");
+    expect(ems[0]).toHaveTextContent("façonnée");
   });
 
   it("n'utilise aucun italique sans mot_italique", () => {
@@ -64,11 +63,11 @@ describe("[E3-01] Hero : accroche et CTA", () => {
     );
   });
 
-  it("rend un CTA primaire vers ctaHref", () => {
+  it("rend un CTA cerclé de laiton (secondaire) vers ctaHref", () => {
     render(<Hero contenu={contenu} ctaHref="/fr/produits/classic" />);
     const cta = screen.getByRole("link", { name: heroAccueil.cta_libelle });
     expect(cta).toHaveAttribute("href", "/fr/produits/classic");
-    expect(cta.className).not.toMatch(/secondary/);
+    expect(cta.className).toMatch(/secondary/);
   });
 
   it("utilise Fraunces (token --serif) pour le titre", () => {
