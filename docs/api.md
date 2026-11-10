@@ -93,6 +93,8 @@ l'objet contient en plus `largeur_origine`, `hauteur_origine` et `sources` (WebP
 
 404 si le produit n'existe pas ou est inactif.
 
+`caracteristiques` est `null` quand elles ne sont pas renseignées (champ nullable en base) : le front omet alors les cotes.
+
 ### `GET /modeles/{slug}/`
 
 ```json
