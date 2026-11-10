@@ -5,6 +5,8 @@ import { FriseDefilement } from "./FriseDefilement";
 import { Section } from "./Section";
 import styles from "./Frise.module.css";
 
+const ROMAINS = ["I", "II", "III", "IV"];
+
 export type FriseTextes = Dictionary["home"]["frise"];
 
 /**
@@ -29,7 +31,7 @@ export function Frise({ textes }: { textes: FriseTextes }) {
               <li key={etape.titre} className={styles.etape}>
                 <span aria-hidden="true" className={styles.puce} />
                 <p className={styles.numero} aria-hidden="true">
-                  {String(i + 1).padStart(2, "0")}
+                  {ROMAINS[i] ?? String(i + 1)}
                 </p>
                 <h3 className={styles.etapeTitre}>{etape.titre}</h3>
                 <p className={styles.texte}>{etape.texte}</p>

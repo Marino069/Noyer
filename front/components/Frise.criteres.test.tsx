@@ -23,7 +23,7 @@ describe("E8-05 Frise : critères d'acceptation", () => {
     render(<Frise textes={frDict.home.frise} />);
     const items = within(screen.getByRole("list")).getAllByRole("listitem");
     items.forEach((item, i) => {
-      expect(item).toHaveTextContent(`0${i + 1}`);
+      expect(item).toHaveTextContent(["I", "II", "III", "IV"][i]);
       const etape = frDict.home.frise.etapes[i];
       expect(item).toHaveTextContent(etape.titre);
       expect(item).toHaveTextContent(etape.texte);

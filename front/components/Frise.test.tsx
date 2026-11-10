@@ -18,8 +18,10 @@ describe("Frise", () => {
     expect(liste.tagName).toBe("OL");
     const items = within(liste).getAllByRole("listitem");
     expect(items).toHaveLength(4);
-    expect(items[0]).toHaveTextContent("01");
-    expect(items[3]).toHaveTextContent("04");
+    expect(items[0]).toHaveTextContent(/^I(?!I)/);
+    expect(items[1]).toHaveTextContent(/^II(?!I)/);
+    expect(items[2]).toHaveTextContent(/^III/);
+    expect(items[3]).toHaveTextContent(/^IV/);
     for (const item of items) {
       expect(
         within(item).getByRole("heading", { level: 3 }),

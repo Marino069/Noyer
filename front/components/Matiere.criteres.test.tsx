@@ -36,25 +36,26 @@ describe("E8-04 — Conforme à la maquette", () => {
       "Deux matières, choisies pour vieillir ensemble. Le noyer fonce et se patine, le laiton se voile doucement.",
     );
     const titre = screen.getByRole("heading", { level: 2 });
-    expect(intro.parentElement).toBe(titre.parentElement);
+    expect(intro.parentElement).toBe(titre.parentElement?.parentElement);
     expect(container.querySelector("section")).toHaveAttribute(
       "aria-labelledby",
       titre.id,
     );
   });
 
-  it("la grande figure est la première, les deux petites sont groupées dans une colonne", () => {
+  it("les trois gros plans sont frères, dans une même liste ordonnée", () => {
     render(<Matiere contenu={matiereAccueil} {...props} />);
     const figures = screen.getAllByRole("figure");
     expect(figures).toHaveLength(3);
-    const [grande, petite1, petite2] = figures;
-    expect(within(grande).getByRole("img")).toHaveAttribute(
+    const [premiere, deuxieme, troisieme] = figures;
+    expect(within(premiere).getByRole("img")).toHaveAttribute(
       "alt",
       "Grain de noyer huilé, gros plan",
     );
-    expect(petite1.parentElement).toBe(petite2.parentElement);
-    expect(petite1.parentElement).not.toBe(grande.parentElement);
-    expect(grande.parentElement).toBe(petite1.parentElement?.parentElement);
+    const liste = premiere.closest("ol");
+    expect(liste).not.toBeNull();
+    expect(deuxieme.closest("ol")).toBe(liste);
+    expect(troisieme.closest("ol")).toBe(liste);
   });
 
   it("n'affiche que 3 figures même si l'API en renvoie 4", () => {
@@ -64,18 +65,14 @@ describe("E8-04 — Conforme à la maquette", () => {
     expect(screen.queryByText("Finition")).not.toBeInTheDocument();
   });
 
-  it("légendes : « FIG. 01 — Le grain », « FIG. 02 », « FIG. 03 », nom latin en italique sur la FIG. 01 seulement", () => {
+  it("légendes numérotées I à III, nom latin en italique sur le I seulement", () => {
     render(<Matiere contenu={matiereAccueil} {...props} />);
     const [grande, petite1, petite2] = screen.getAllByRole("figure");
-    expect(within(grande).getByText("FIG.").parentElement?.textContent).toBe(
-      "FIG. 01 — Le grain",
-    );
-    expect(within(petite1).getByText("FIG.").parentElement?.textContent).toBe(
-      "FIG. 02",
-    );
-    expect(within(petite2).getByText("FIG.").parentElement?.textContent).toBe(
-      "FIG. 03",
-    );
+    const legende = (f: HTMLElement) =>
+      f.querySelector("figcaption")?.textContent;
+    expect(legende(grande)).toBe("I · Noyer — Juglans regia");
+    expect(legende(petite1)).toBe("II · Laiton");
+    expect(legende(petite2)).toBe("III · Assemblage");
 
     const latin = within(grande).getByText("Juglans regia");
     expect(latin.tagName).toBe("EM");
@@ -91,11 +88,12 @@ describe("E8-04 — Conforme à la maquette", () => {
     });
   });
 
-  it("la mise en page reprend les proportions de la maquette (2/3 – 1/3, 520 px / 236 px)", () => {
-    expect(css).toMatch(/\.grande\s*\{[^}]*flex:\s*2 1 32\.5rem/);
-    expect(css).toMatch(/\.petites\s*\{[^}]*flex:\s*1 1 18\.75rem/);
-    expect(css).toMatch(/\.grande \.media\s*\{[^}]*height:\s*32\.5rem/);
-    expect(css).toMatch(/\.petite \.media\s*\{[^}]*height:\s*14\.75rem/);
+  it("la mise en page reprend la maquette (3 colonnes égales, 520 px de haut) et s'empile sur mobile", () => {
+    expect(css).toMatch(/repeat\(3, minmax\(0, 1fr\)\)/);
+    expect(css).toMatch(/height:\s*32\.5rem/);
+    expect(css.split("@media")[0]).toMatch(
+      /\.grid\s*\{[^}]*grid-template-columns:\s*minmax\(0, 1fr\)/,
+    );
   });
 
   it("n'utilise que des tokens du brief : pas de couleur ou de police en dur", () => {
