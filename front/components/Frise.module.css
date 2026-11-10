@@ -101,7 +101,7 @@
 .duree {
   margin: 1.125rem 0 0;
   font-size: var(--fs-eyebrow);
-  letter-spacing: 0.08em;
+  letter-spacing: var(--ls-eyebrow);
   text-transform: uppercase;
   color: var(--brass);
 }

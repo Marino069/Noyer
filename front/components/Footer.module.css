@@ -100,6 +100,6 @@
   margin: 0 0 0.5rem;
   color: var(--text-muted);
   font-size: var(--fs-eyebrow);
-  letter-spacing: 0.2em;
+  letter-spacing: var(--ls-eyebrow);
   text-transform: uppercase;
 }

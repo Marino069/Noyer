@@ -63,7 +63,7 @@
   flex-wrap: wrap;
   gap: 2rem;
   font-size: var(--fs-eyebrow);
-  letter-spacing: 0.2em;
+  letter-spacing: var(--ls-eyebrow);
   text-transform: uppercase;
   color: var(--text-muted);
 }

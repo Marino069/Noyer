@@ -1,6 +1,6 @@
 .legende {
   font-size: 0.8125rem;
-  letter-spacing: 0.08em;
+  letter-spacing: var(--ls-eyebrow);
   text-transform: uppercase;
   color: var(--text-muted);
 }
