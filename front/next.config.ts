@@ -1,6 +1,21 @@
 import type { NextConfig } from "next";
 
+// Publication de démonstration : sur Vercel sans back (pas de NEXT_PUBLIC_API_URL),
+// le site passe tout seul en mode démo (données fictives, boutique visible, noindex).
+const demoVercel =
+  process.env.VERCEL === "1" && !process.env.NEXT_PUBLIC_API_URL;
+const envDemo: Record<string, string> = demoVercel
+  ? {
+      NEXT_PUBLIC_API_MOCKS: process.env.NEXT_PUBLIC_API_MOCKS ?? "true",
+      NEXT_PUBLIC_SHOP_ENABLED: process.env.NEXT_PUBLIC_SHOP_ENABLED ?? "true",
+      NEXT_PUBLIC_SITE_URL:
+        process.env.NEXT_PUBLIC_SITE_URL ??
+        `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL ?? process.env.VERCEL_URL}`,
+    }
+  : {};
+
 const nextConfig: NextConfig = {
+  env: envDemo,
   images: {
     // AVIF d'abord, WebP en repli (brief §07 Performance).
     formats: ["image/avif", "image/webp"],
