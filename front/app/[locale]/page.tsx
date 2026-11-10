@@ -46,7 +46,7 @@ export default async function HomePage({ params }: Props) {
         mot_italique: null,
         sous_titre: home.tagline,
         cta_libelle: home.hero.cta,
-        cta_chemin: "/produits/classic",
+        cta_chemin: "/produits/premium",
         image: null,
       };
 
@@ -111,18 +111,7 @@ export default async function HomePage({ params }: Props) {
         ctaHref={`/${locale}${
           contenu.cta_chemin.startsWith("/") ? contenu.cta_chemin : ""
         }`}
-        atelier={{
-          surtitre: home.hero.surtitre,
-          lien: {
-            libelle: home.hero.lien,
-            href: localePath(locale, "atelier"),
-          },
-          coteHauteur: home.hero.coteHauteur,
-          coteDiametre: home.hero.coteDiametre,
-          piece: home.hero.piece,
-          filetsLabel: home.hero.filetsLabel,
-          filets: home.hero.filets,
-        }}
+        surtitre={home.hero.surtitre}
       />
       <Manifeste
         texte={home.manifeste.texte}

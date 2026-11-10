@@ -133,38 +133,28 @@ export default async function DesignSystemPage({ params }: Props) {
 
       <h2 className={styles.heading}>Hero</h2>
       <Hero
-        contenu={{ ...heroAccueil, mot_italique: "prend son temps" }}
+        contenu={heroAccueil}
         ctaHref="#"
+        surtitre={dictionary.home.hero.surtitre}
       />
+      <h3 className={styles.heading}>sans image</h3>
       <Hero
         contenu={{
           titre: dictionary.home.title,
           mot_italique: null,
-          sous_titre: dictionary.home.tagline,
           cta_libelle: dictionary.home.hero.cta,
           image: null,
         }}
         ctaHref="#"
       />
-      <h3 className={styles.heading}>avec habillage d&apos;atelier</h3>
-      <Hero
-        contenu={{ ...heroAccueil, mot_italique: "prend son temps" }}
-        ctaHref="#"
-        atelier={{
-          surtitre: "Hero d'atelier",
-          lien: { libelle: dictionary.home.hero.lien, href: "#" },
-          coteHauteur: dictionary.home.hero.coteHauteur,
-          coteDiametre: dictionary.home.hero.coteDiametre,
-          piece: dictionary.home.hero.piece,
-          filetsLabel: dictionary.home.hero.filetsLabel,
-          filets: dictionary.home.hero.filets,
-        }}
-      />
 
-      <h3 className={styles.heading}>avec interrupteur (allumer la lampe)</h3>
+      <h3 className={styles.heading}>
+        avec interrupteur (lampe allumée par défaut)
+      </h3>
       <Hero
-        contenu={{ ...heroAccueil, mot_italique: "prend son temps" }}
+        contenu={heroAccueil}
         ctaHref="#"
+        surtitre={dictionary.home.hero.surtitre}
         interrupteur={{
           allumee: {
             alt: "",

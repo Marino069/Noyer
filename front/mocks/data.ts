@@ -20,15 +20,16 @@ const image = (alt: string, nom: string): Image => ({
 });
 
 export const heroAccueil: HeroAccueil = {
-  titre: "Une lumière qui prend son temps",
-  mot_italique: "prend son temps",
+  titre: "La lumière, façonnée",
+  mot_italique: "façonnée",
   sous_titre:
     "Lampes semi-artisanales en noyer et laiton, assemblées à Genève. Deux gammes, mêmes formes, matières différentes.",
-  cta_libelle: "Découvrir les lampes",
-  cta_chemin: "/produits/classic",
+  cta_libelle: "Découvrir Lucerne Premium",
+  cta_chemin: "/produits/premium",
+  // Version « jour » ; la version allumée (`lucerne-premium-allumee`) vient des médias de la fiche.
   image: image(
-    "Lampe en noyer posée sur une table, dans la lumière du matin",
-    "hero",
+    "Lampe Lucerne Premium, pièce n° 07, posée dans la pénombre",
+    "lucerne-premium",
   ),
 };
 
