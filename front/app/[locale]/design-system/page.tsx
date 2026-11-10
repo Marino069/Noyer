@@ -15,6 +15,7 @@ import { DeuxGammes } from "@/components/DeuxGammes";
 import { Frise } from "@/components/Frise";
 import { Hero } from "@/components/Hero";
 import { Manifeste } from "@/components/Manifeste";
+import { Serie } from "@/components/Serie";
 import { Logo } from "@/components/Logo";
 import { Matiere } from "@/components/Matiere";
 import { NewsletterForm } from "@/components/NewsletterForm";
@@ -185,6 +186,18 @@ export default async function DesignSystemPage({ params }: Props) {
 
       <h2 className={styles.heading}>Matière</h2>
       <Matiere contenu={matiereAccueil} {...dictionary.home.matiere} />
+
+      <h2 className={styles.heading}>La série</h2>
+      <Serie
+        serie={{
+          id: 1,
+          taille_serie: 50,
+          pieces_restantes: 12,
+          numeros_disponibles: [3, 8, 15, 16, 21, 22, 30, 34, 41, 44, 47, 50],
+        }}
+        href={`/${locale}/produits/premium`}
+        textes={dictionary.home.serie}
+      />
 
       <h2 className={styles.heading}>Frise du processus</h2>
       <Frise textes={dictionary.home.frise} />

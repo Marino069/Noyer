@@ -52,6 +52,17 @@
         "serieComplete": "Série complète"
       }
     },
+    "serie": {
+      "surtitre": "La série · Lucerne Premium",
+      "titre": "Cinquante pièces,",
+      "accent": "pas une de plus",
+      "texte": "Chaque lampe porte son numéro gravé sous le pied et voyage avec un certificat signé. Choisissez le vôtre parmi les pièces encore libres.",
+      "cta": "Choisir ma pièce",
+      "resume": "{libres} pièces libres sur {total}",
+      "resumeUne": "{libres} pièce libre sur {total}",
+      "vendue": "Vendue",
+      "libre": "Libre"
+    },
     "frise": {
       "surtitre": "De la planche à la lampe",
       "titre": "Quatre gestes,",

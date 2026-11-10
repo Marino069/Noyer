@@ -7,6 +7,8 @@ import { Hero } from "@/components/Hero";
 import { Manifeste } from "@/components/Manifeste";
 import { Matiere } from "@/components/Matiere";
 import { Selection } from "@/components/Selection";
+import { Serie } from "@/components/Serie";
+import { getProductPath } from "@/i18n/slugs";
 import { defaultLocale, hasLocale, locales } from "@/i18n/config";
 import { getDictionary } from "@/i18n/get-dictionary";
 import { api, type Disponibilite } from "@/lib/api";
@@ -99,6 +101,11 @@ export default async function HomePage({ params }: Props) {
     .flatMap((d) => (d?.ok ? d.data.medias : []))
     .find((m) => m.sources.some((s) => s.url.includes("-allumee")));
 
+  // Série Premium en cours : disponibilités de l'API.
+  const dispoPremium = premium ? disponibilites[premium.slug] : undefined;
+  const serie =
+    dispoPremium?.gamme === "Premium" ? dispoPremium.series[0] : undefined;
+
   return (
     <main id="contenu" tabIndex={-1}>
       <Hero
@@ -147,6 +154,13 @@ export default async function HomePage({ params }: Props) {
           href: localePath(locale, "classic"),
         }}
       />
+      {premium && serie ? (
+        <Serie
+          serie={serie}
+          href={getProductPath(premium.slug, locale)}
+          textes={home.serie}
+        />
+      ) : null}
       <Frise textes={home.frise} />
       <Atelier
         href={localePath(locale, "atelier")}
