@@ -404,16 +404,11 @@
   },
   "header": {
     "home": "Noyer, retour à l'accueil",
-    "bandeau": [
-      "ATELIER · RUE DES [ADRESSE], GENÈVE",
-      "46°12′ N — 6°09′ E",
-      "Livraison offerte en Suisse · Retrait à l'atelier"
-    ],
     "nav": {
-      "classic": "Classic",
-      "premium": "Premium",
+      "collections": "Collections",
+      "maison": "La maison",
       "atelier": "L'atelier",
-      "contact": "Nous contacter"
+      "rendezVous": "Rendez-vous"
     },
     "menu": {
       "label": "Navigation principale",
@@ -424,11 +419,24 @@
       "empty": "Panier, vide",
       "one": "Panier, {count} article",
       "other": "Panier, {count} articles"
-    }
+    },
+    "panier": "Panier"
   },
   "footer": {
+    "tagline": "Lampes en noyer et laiton, Genève.",
     "address": ["Noyer", "Genève, Suisse"],
     "contact": "Nous écrire",
+    "collections": {
+      "titre": "Collections",
+      "classic": "Classic",
+      "premium": "Premium"
+    },
+    "maison": {
+      "titre": "La maison",
+      "atelier": "L'atelier",
+      "contact": "Contact"
+    },
+    "copyright": "© Noyer, Genève",
     "legal": {
       "label": "Informations légales",
       "impressum": "Impressum",

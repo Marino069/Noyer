@@ -63,7 +63,9 @@ test("accueil → fiche → panier → paiement, au clavier, sans violation axe"
   await focusVisible(page);
 
   // 2. Gamme Classic via la navigation, puis fiche Lucerne Classic
-  const nav = page.getByRole("banner").getByRole("link", { name: "Classic" });
+  const nav = page
+    .getByRole("banner")
+    .getByRole("link", { name: "Collections" });
   await tabJusqua(page, nav);
   await page.keyboard.press("Enter");
   await expect(page).toHaveURL(/\/fr\/produits\?gamme=Classic$/);

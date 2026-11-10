@@ -31,3 +31,30 @@
   line-height: 1.125rem;
   text-align: center;
 }
+
+/* Variante de l'en-tête : « PANIER (n) » en petites capitales sur desktop, icône + pastille sur mobile. */
+.texte {
+  display: none;
+}
+
+@media (min-width: 800px) {
+  .avecTexte {
+    width: auto;
+  }
+
+  .avecTexte .icon,
+  .avecTexte .count {
+    display: none;
+  }
+
+  .avecTexte .texte {
+    display: inline;
+    font-size: var(--fs-eyebrow);
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+  }
+
+  .avecTexte:hover .texte {
+    color: var(--brass);
+  }
+}

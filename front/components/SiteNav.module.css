@@ -6,8 +6,7 @@
   width: 44px;
   height: 44px;
   padding: 0;
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
+  border: 0;
   background: transparent;
   color: var(--text);
   cursor: pointer;
@@ -57,7 +56,7 @@
   transform: rotate(-45deg);
 }
 
-/* Mobile : panneau plein écran sous l'en-tête (4rem = hauteur minimale de l'en-tête). */
+/* Mobile : panneau plein écran sous l'en-tête (4rem = hauteur de l'en-tête). */
 .menu {
   position: fixed;
   inset: 4rem 0 0;
@@ -87,7 +86,21 @@
   color: var(--text);
   font-family: var(--serif);
   font-size: 1.75rem;
+  font-weight: 300;
   text-decoration: none;
+}
+
+.ctaLink {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0.75rem 1.5rem;
+  border: 1px solid var(--brass);
+  color: var(--text);
+  font-size: var(--fs-eyebrow);
+  letter-spacing: 0.28em;
+  text-decoration: none;
+  text-transform: uppercase;
 }
 
 .link[aria-current="page"] {
@@ -140,14 +153,16 @@
   .list {
     flex-direction: row;
     align-items: center;
-    gap: 2rem;
+    gap: 2.5rem;
   }
 
   .link {
     position: relative;
     font-family: var(--sans);
-    font-size: 1rem;
-    font-weight: 500;
+    font-size: var(--fs-eyebrow);
+    font-weight: 400;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
   }
 
   /* Trait laiton qui se dessine sous le lien (transform seul : aucun décalage de mise en page). */
@@ -174,7 +189,7 @@
   }
 
   .cta {
-    margin-block-start: 0;
+    display: none;
   }
 }
 

@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useId, useRef, useState } from "react";
-import { Button } from "./Button";
 import styles from "./SiteNav.module.css";
 
 type NavLink = { href: string; label: string };
@@ -116,14 +115,16 @@ export function SiteNav({
               </Link>
             </li>
           ))}
+          {/* Sous 800 px seulement : sur desktop, Rendez-vous est dans la colonne de droite. */}
           <li className={styles.cta}>
-            <Button
+            <Link
               href={cta.href}
+              className={styles.ctaLink}
               aria-current={isActive(cta.href) ? "page" : undefined}
               onClick={() => setOpen(false)}
             >
               {cta.label}
-            </Button>
+            </Link>
           </li>
         </ul>
       </nav>
