@@ -61,7 +61,9 @@ export function FicheProduit({
         <div className={styles.layout}>
           <GalerieEmpilee
             medias={mediasGalerie}
-            cote={`${textes.details.heightShort} ${c.hauteur_cm} cm`}
+            cote={
+              c ? `${textes.details.heightShort} ${c.hauteur_cm} cm` : undefined
+            }
             label={textes.gallery.label}
             vide={textes.gallery.empty}
             interrupteur={
@@ -90,14 +92,16 @@ export function FicheProduit({
             />
 
             <dl className={styles.details}>
-              <div>
-                <dt>{textes.details.dimensions}</dt>
-                <dd>
-                  {textes.details.height} {c.hauteur_cm} cm ·{" "}
-                  {textes.details.diameter} {c.diametre_cm} cm ·{" "}
-                  {textes.details.socket} {c.culot}
-                </dd>
-              </div>
+              {c ? (
+                <div>
+                  <dt>{textes.details.dimensions}</dt>
+                  <dd>
+                    {textes.details.height} {c.hauteur_cm} cm ·{" "}
+                    {textes.details.diameter} {c.diametre_cm} cm ·{" "}
+                    {textes.details.socket} {c.culot}
+                  </dd>
+                </div>
+              ) : null}
               <div>
                 <dt>{textes.details.materials}</dt>
                 <dd>

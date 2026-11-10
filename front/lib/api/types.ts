@@ -81,7 +81,11 @@ export type ProduitDetail = {
   modele: { slug: string; nom: string; description: string };
   gamme: Gamme;
   prix_ttc_centimes: number;
-  caracteristiques: { hauteur_cm: number; diametre_cm: number; culot: string };
+  caracteristiques: {
+    hauteur_cm: number;
+    diametre_cm: number;
+    culot: string;
+  } | null;
   matieres: { nom: string; role: string; entretien: string }[];
   medias: Image[];
   autre_gamme: string | null;

@@ -45,8 +45,18 @@ describe("[E8-07] Galerie empilée", () => {
   it("affiche la cote sur la grande vue", () => {
     rendre();
     expect(
-      screen.getByText(`H ${premium.caracteristiques.hauteur_cm} cm`),
+      screen.getByText(`H ${premium.caracteristiques?.hauteur_cm} cm`),
     ).toBeInTheDocument();
+  });
+
+  it("s'affiche sans cotes quand caracteristiques est null", () => {
+    rendre({ ...premium, caracteristiques: null });
+    expect(
+      screen.getByRole("heading", { level: 1, name: "Lucerne" }),
+    ).toBeInTheDocument();
+    expect(screen.queryByText(/^H \d/)).toBeNull();
+    expect(screen.queryByText(/E27/)).toBeNull();
+    expect(screen.queryByText("Dimensions")).toBeNull();
   });
 
   it("charge la grande vue en priorité et les autres en différé", () => {
