@@ -23,13 +23,18 @@ function mockMatchMedia(matches: boolean) {
 
 beforeEach(() => mockMatchMedia(false));
 
-describe("E8-10 En-tête : bandeau, liens, panier", () => {
-  it("affiche le bandeau d'atelier et les liens", () => {
+describe("E10-02 En-tête : menus, logo, rendez-vous", () => {
+  it("affiche les menus de la maison, sans bandeau d'atelier", () => {
     render(<Header locale="fr" dictionary={frDict.header} />);
-    expect(screen.getByText(frDict.header.bandeau[1])).toBeInTheDocument();
+    for (const nom of ["Collections", "La maison", "L'atelier"]) {
+      expect(
+        screen.getByRole("link", { name: nom, hidden: true }),
+      ).toBeInTheDocument();
+    }
+    expect(screen.queryByText(/46°12/)).not.toBeInTheDocument();
     expect(
-      screen.getByRole("link", { name: "Classic", hidden: true }),
-    ).toBeInTheDocument();
+      screen.getAllByRole("link", { name: "Rendez-vous", hidden: true }).length,
+    ).toBeGreaterThan(0);
   });
 });
 

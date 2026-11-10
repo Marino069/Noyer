@@ -1,15 +1,19 @@
+import Link from "next/link";
 import type { Locale } from "@/i18n/config";
 import type { Dictionary } from "@/i18n/get-dictionary";
 import { SHOP_ENABLED } from "@/lib/env";
 import { localePath } from "@/lib/routes";
-import { BandeauAtelier } from "./atelier/BandeauAtelier";
 import { CartIndicator } from "./CartIndicator";
 import { HeaderVivant } from "./HeaderVivant";
 import { Logo } from "./Logo";
 import { SiteNav } from "./SiteNav";
 import styles from "./Header.module.css";
 
-/** En-tête sticky : logo + navigation (burger sous 800 px, brief §07). */
+/**
+ * En-tête à 3 colonnes (maquette « Maison de luxe ») : menus à gauche, logo centré,
+ * Rendez-vous et Panier à droite. Sous 800 px : burger, logo, panier ; le menu plein
+ * écran reprend tous les liens.
+ */
 export function Header({
   locale,
   dictionary,
@@ -18,35 +22,35 @@ export function Header({
   dictionary: Dictionary["header"];
 }) {
   const links = [
-    { href: localePath(locale, "classic"), label: dictionary.nav.classic },
-    { href: localePath(locale, "premium"), label: dictionary.nav.premium },
+    { href: localePath(locale, "classic"), label: dictionary.nav.collections },
+    { href: `/${locale}#maison`, label: dictionary.nav.maison },
     { href: localePath(locale, "atelier"), label: dictionary.nav.atelier },
   ];
+  const rendezVous = {
+    href: localePath(locale, "contact"),
+    label: dictionary.nav.rendezVous,
+  };
 
   return (
-    <>
-      <BandeauAtelier className={styles.bandeau} items={dictionary.bandeau} />
-      <HeaderVivant>
-        <div className={styles.inner}>
-          <Logo href={`/${locale}`} label={dictionary.home} />
-          <div className={styles.actions}>
-            {SHOP_ENABLED && (
-              <CartIndicator
-                href={localePath(locale, "panier")}
-                labels={dictionary.cart}
-              />
-            )}
-            <SiteNav
-              links={links}
-              cta={{
-                href: localePath(locale, "contact"),
-                label: dictionary.nav.contact,
-              }}
-              labels={dictionary.menu}
-            />
-          </div>
+    <HeaderVivant>
+      <div className={styles.inner}>
+        <div className={styles.gauche}>
+          <SiteNav links={links} cta={rendezVous} labels={dictionary.menu} />
         </div>
-      </HeaderVivant>
-    </>
+        <Logo href={`/${locale}`} label={dictionary.home} />
+        <div className={styles.droite}>
+          <Link href={rendezVous.href} className={styles.rendezVous}>
+            {rendezVous.label}
+          </Link>
+          {SHOP_ENABLED && (
+            <CartIndicator
+              href={localePath(locale, "panier")}
+              labels={dictionary.cart}
+              texte={dictionary.panier}
+            />
+          )}
+        </div>
+      </div>
+    </HeaderVivant>
   );
 }

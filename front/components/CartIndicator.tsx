@@ -18,9 +18,12 @@ type Labels = { empty: string; one: string; other: string };
 export function CartIndicator({
   href,
   labels,
+  texte,
 }: {
   href: string;
   labels: Labels;
+  /** Libellé visible « Panier » (desktop) : affiché en petites capitales avec « (n) ». */
+  texte?: string;
 }) {
   const count = useCartCount();
 
@@ -68,7 +71,11 @@ export function CartIndicator({
       : interpolate(n === 1 ? labels.one : labels.other, { count: n });
 
   return (
-    <Link href={href} className={styles.link} {...{ [CIBLE_PANIER]: "" }}>
+    <Link
+      href={href}
+      className={texte ? `${styles.link} ${styles.avecTexte}` : styles.link}
+      {...{ [CIBLE_PANIER]: "" }}
+    >
       <svg
         className={styles.icon}
         viewBox="0 0 24 24"
@@ -94,6 +101,11 @@ export function CartIndicator({
           {n}
         </span>
       )}
+      {texte ? (
+        <span className={styles.texte} aria-hidden="true">
+          {texte} ({n})
+        </span>
+      ) : null}
     </Link>
   );
 }

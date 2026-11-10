@@ -1,8 +1,3 @@
-/* Bandeau d'atelier : masqué sous 800 px pour que le menu plein écran reste calé sous l'en-tête. */
-.bandeau {
-  display: none;
-}
-
 .header {
   position: sticky;
   inset-block-start: 0;
@@ -34,28 +29,49 @@
 
 .inner {
   box-sizing: border-box;
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   align-items: center;
-  justify-content: space-between;
-  gap: 1.5rem;
+  gap: 1rem;
   max-width: var(--container);
   min-height: 4rem;
   margin-inline: auto;
   padding-inline: var(--gutter);
 }
 
-.actions {
+.gauche {
+  justify-self: start;
+}
+
+.droite {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  justify-self: end;
+  gap: 2.5rem;
+}
+
+/* Petites capitales espacées (brief §03) ; masqué sous 800 px : le menu plein écran le porte. */
+.rendezVous {
+  display: none;
+  align-items: center;
+  min-height: 44px;
+  color: var(--text);
+  font-size: var(--fs-eyebrow);
+  letter-spacing: 0.22em;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.rendezVous:hover {
+  color: var(--brass);
 }
 
 @media (min-width: 800px) {
-  .bandeau {
-    display: block;
+  .inner {
+    min-height: 6rem;
   }
 
-  .actions {
-    gap: 2rem;
+  .rendezVous {
+    display: inline-flex;
   }
 }
