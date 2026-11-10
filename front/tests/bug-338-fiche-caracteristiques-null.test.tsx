@@ -10,7 +10,7 @@ const rendre = (produit: ReturnType<typeof detailDe>) =>
   render(
     <FicheProduit
       produit={produit}
-      disponibilite={{ ok: true, data: { gamme: produit.gamme, series: [] } }}
+      disponibilite={{ ok: true, data: { gamme: "Premium", series: [] } }}
       locale="fr"
       shopEnabled
       textes={fr.fiche}
