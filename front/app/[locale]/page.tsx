@@ -84,11 +84,15 @@ export default async function HomePage({ params }: Props) {
   for (const [slug, r] of dispoEntrees) {
     if (r?.ok) disponibilites[slug] = r.data;
   }
-  const dispoPremium = premium ? disponibilites[premium.slug] : undefined;
-  const tirage =
-    dispoPremium?.gamme === "Premium" && dispoPremium.series.length > 0
-      ? Math.max(...dispoPremium.series.map((s) => s.taille_serie))
-      : null;
+
+  // « À partir de » : prix TTC le plus bas de chaque gamme dans le catalogue (API).
+  const catalogue = classic && premium ? await api.produits() : null;
+  const aPartirDe = (gamme: "Classic" | "Premium") => {
+    const prix = (catalogue?.ok ? catalogue.data.results : [])
+      .filter((p) => p.gamme === gamme)
+      .map((p) => p.prix_ttc_centimes);
+    return prix.length > 0 ? Math.min(...prix) : undefined;
+  };
 
   // Version allumée de la lampe (média « <slug>-allumee » de la fiche), si l'API la fournit.
   const imageAllumee = [detailPremium, detailClassic]
@@ -123,16 +127,8 @@ export default async function HomePage({ params }: Props) {
       ) : null}
       {classic && premium ? (
         <DeuxGammes
-          classic={{
-            produit: classic,
-            detail: detailClassic?.ok ? detailClassic.data : null,
-            tirage: null,
-          }}
-          premium={{
-            produit: premium,
-            detail: detailPremium?.ok ? detailPremium.data : null,
-            tirage,
-          }}
+          classic={{ produit: classic, aPartirDe: aPartirDe("Classic") }}
+          premium={{ produit: premium, aPartirDe: aPartirDe("Premium") }}
           locale={locale}
           textes={home.gammes}
         />

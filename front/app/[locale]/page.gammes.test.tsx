@@ -63,8 +63,9 @@ describe("[E8-06] Homepage : comparaison des gammes", () => {
       "/fr/produits/lucerne-classic",
       "/fr/produits/lucerne-premium",
     ]);
-    expect(region).toHaveTextContent("Série numérotée de 50");
-    expect(region).toHaveTextContent("H 42 · Ø 28 cm · E27");
+    // « À partir de » : prix le plus bas de la gamme dans le catalogue (Léman Classic, 390 CHF).
+    expect(region).toHaveTextContent(/À partir de\s+CHF 390\.–/);
+    expect(region).toHaveTextContent(/À partir de\s+CHF 1.?240\.–/);
   });
 
   it("masque la section si aucun Premium ne correspond au Classic", async () => {
