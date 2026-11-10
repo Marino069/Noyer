@@ -1,22 +1,21 @@
+import Link from "next/link";
 import type { Locale } from "@/i18n/config";
 import { vignetteDe } from "@/lib/image";
 import type { Dictionary } from "@/i18n/get-dictionary";
 import { getProductPath } from "@/i18n/slugs";
-import type { ProduitDetail, ProduitResume } from "@/lib/api/types";
+import type { ProduitResume } from "@/lib/api/types";
 import { formatPrice } from "@/lib/format";
-import { Button } from "./Button";
 import { Comparateur } from "./Comparateur";
 import { Section } from "./Section";
 import styles from "./DeuxGammes.module.css";
 
 export type DeuxGammesTextes = Dictionary["home"]["gammes"];
 
-/** Une gamme à comparer : le résumé du catalogue, sa fiche (pied, finition, dimensions) et la taille de série. */
+/** Une collection : le produit mis en avant (image, lien) et le prix le plus bas de la gamme. */
 export type GammeComparee = {
   produit: ProduitResume;
-  detail: ProduitDetail | null;
-  /** Taille de la série Premium (`disponibilite`), `null` si inconnue. */
-  tirage: number | null;
+  /** Prix TTC « à partir de », en centimes ; à défaut, le prix du produit mis en avant. */
+  aPartirDe?: number;
 };
 
 type DeuxGammesProps = {
@@ -26,48 +25,7 @@ type DeuxGammesProps = {
   textes: DeuxGammesTextes;
 };
 
-const gabarit = (modele: string, valeurs: Record<string, string | number>) =>
-  Object.entries(valeurs).reduce(
-    (texte, [cle, valeur]) => texte.replace(`{${cle}}`, String(valeur)),
-    modele,
-  );
-
-type Ligne = { terme: string; valeur: string };
-
-function lignes(
-  { produit, detail, tirage }: GammeComparee,
-  textes: DeuxGammesTextes,
-): Ligne[] {
-  const matiere = (role: string) =>
-    detail?.matieres.find((m) => m.role === role)?.nom;
-  const pied = matiere("Pied");
-  const finition = matiere("Finition");
-  const tirageTexte =
-    produit.gamme === "Classic"
-      ? textes.tirageClassic
-      : tirage !== null
-        ? gabarit(textes.tirageSerie, { taille: tirage })
-        : null;
-  const c = detail?.caracteristiques;
-  const toutes: (Ligne | null | undefined | "")[] = [
-    pied ? { terme: textes.lignes.pied, valeur: pied } : null,
-    finition ? { terme: textes.lignes.finition, valeur: finition } : null,
-    tirageTexte ? { terme: textes.lignes.tirage, valeur: tirageTexte } : null,
-    c
-      ? {
-          terme: textes.lignes.dimensions,
-          valeur: gabarit(textes.dimensions, {
-            hauteur: c.hauteur_cm,
-            diametre: c.diametre_cm,
-            culot: c.culot,
-          }),
-        }
-      : null,
-  ];
-  return toutes.filter((l): l is Ligne => Boolean(l));
-}
-
-function CarteGamme({
+function Panneau({
   gamme,
   locale,
   textes,
@@ -78,70 +36,55 @@ function CarteGamme({
 }) {
   const { produit } = gamme;
   const premium = produit.gamme === "Premium";
-  const image = produit.image_principale;
-  const vignette = vignetteDe(image);
-  const rangees = lignes(gamme, textes);
+  const vignette = vignetteDe(produit.image_principale);
+  const prix = gamme.aPartirDe ?? produit.prix_ttc_centimes;
 
   return (
     <article
-      className={`${styles.carte} ${premium ? styles.premium : ""}`}
-      data-tone={premium ? "dark" : "light"}
+      className={`${styles.panneau} ${premium ? styles.premium : ""}`}
+      data-gamme={produit.gamme}
     >
-      <div className={styles.media}>
-        {vignette ? (
-          // eslint-disable-next-line @next/next/no-img-element -- sources WebP fournies par l'API (srcset)
-          <img
-            src={vignette.src}
-            srcSet={vignette.srcSet}
-            sizes="(min-width: 900px) 50vw, 100vw"
-            alt={vignette.alt}
-            width={vignette.width}
-            height={vignette.height}
-            loading="lazy"
-          />
-        ) : (
-          <div className={styles.placeholder} aria-hidden="true" />
-        )}
-      </div>
-      <div className={styles.corps}>
-        <p className={styles.gamme}>{produit.gamme.toUpperCase()}</p>
-        <h3 className={styles.nom}>{produit.modele}</h3>
-        {rangees.length > 0 ? (
-          <dl className={styles.liste}>
-            {rangees.map((l) => (
-              <div key={l.terme} className={styles.ligne}>
-                <dt>{l.terme}</dt>
-                <dd>{l.valeur}</dd>
-              </div>
-            ))}
-          </dl>
-        ) : null}
-        <div className={styles.pied}>
-          <p className={styles.prix}>
-            {formatPrice(produit.prix_ttc_centimes, locale)}
+      {vignette ? (
+        // eslint-disable-next-line @next/next/no-img-element -- sources WebP fournies par l'API (srcset)
+        <img
+          className={styles.image}
+          src={vignette.src}
+          srcSet={vignette.srcSet}
+          sizes="(min-width: 900px) 50vw, 100vw"
+          alt={vignette.alt}
+          width={vignette.width}
+          height={vignette.height}
+          loading="lazy"
+        />
+      ) : (
+        <div className={styles.placeholder} aria-hidden="true" />
+      )}
+      <div className={styles.legende}>
+        <div>
+          <p className={styles.surtitre}>
+            {premium ? textes.surtitrePremium : textes.surtitreClassic}
           </p>
-          <Button
-            href={getProductPath(produit.slug, locale)}
-            variant={premium ? "primary" : "secondary"}
-            tone={premium ? "dark" : "light"}
-            className={styles.cta}
-          >
-            {premium ? textes.ctaPremium : textes.ctaClassic}
-            <span className={styles.srOnly}>
-              {" "}
-              — {produit.modele} {produit.gamme}
-            </span>
-          </Button>
+          <h3 className={styles.nom}>
+            <Link
+              href={getProductPath(produit.slug, locale)}
+              className={styles.lien}
+            >
+              {produit.gamme}
+            </Link>
+          </h3>
         </div>
+        <p className={styles.prix}>
+          {textes.aPartirDe} {formatPrice(prix, locale)}
+        </p>
       </div>
     </article>
   );
 }
 
 /**
- * Comparaison des gammes (maquette carnet d'atelier) : Classic en clair, Premium en sombre,
- * mêmes lignes dans une liste de définitions, prix et appel. Cartes entièrement cliquables
- * (lien du bouton étendu à la carte). Aucune valeur en dur : tout vient de l'API.
+ * Les deux collections (maquette « Maison de luxe ») : deux grands panneaux côte à côte,
+ * Classic puis Premium, empilés sur mobile. Chaque panneau est entièrement cliquable (un seul
+ * lien, étendu par ::after) et le comparateur suit sous les panneaux. Prix : toujours l'API.
  */
 export function DeuxGammes({
   classic,
@@ -154,29 +97,28 @@ export function DeuxGammes({
 
   return (
     <Section aria-labelledby="gammes-titre">
-      <div className={styles.entete}>
-        <h2 id="gammes-titre" className={styles.title}>
-          {textes.titre} <em>{textes.accent}</em>
-        </h2>
-        <p className={styles.intro}>{textes.intro}</p>
+      <h2 id="gammes-titre" className={styles.titre}>
+        {textes.titre} <em>{textes.accent}</em>
+      </h2>
+      <div className={styles.grille}>
+        <Panneau gamme={classic} locale={locale} textes={textes} />
+        <Panneau gamme={premium} locale={locale} textes={textes} />
       </div>
       {vignetteClassic && vignettePremium ? (
-        <Comparateur
-          classic={{
-            vignette: vignetteClassic,
-            prix: formatPrice(classic.produit.prix_ttc_centimes, locale),
-          }}
-          premium={{
-            vignette: vignettePremium,
-            prix: formatPrice(premium.produit.prix_ttc_centimes, locale),
-          }}
-          textes={textes.comparateur}
-        />
+        <div className={styles.comparateur}>
+          <Comparateur
+            classic={{
+              vignette: vignetteClassic,
+              prix: formatPrice(classic.produit.prix_ttc_centimes, locale),
+            }}
+            premium={{
+              vignette: vignettePremium,
+              prix: formatPrice(premium.produit.prix_ttc_centimes, locale),
+            }}
+            textes={textes.comparateur}
+          />
+        </div>
       ) : null}
-      <div className={styles.grille}>
-        <CarteGamme gamme={classic} locale={locale} textes={textes} />
-        <CarteGamme gamme={premium} locale={locale} textes={textes} />
-      </div>
     </Section>
   );
 }

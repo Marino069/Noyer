@@ -4,7 +4,7 @@ import fr from "@/i18n/dictionaries/fr.json";
 import { DeuxGammes } from "@/components/DeuxGammes";
 import { Selection } from "@/components/Selection";
 import type { ImagePrincipale, ProduitResume } from "@/lib/api";
-import { detailDe, produits } from "@/mocks/data";
+import { produits } from "@/mocks/data";
 
 // Contrat docs/api.md : image_principale = { url, alt } ; sources et dimensions seulement
 // pour une photo téléversée.
@@ -74,18 +74,12 @@ describe("[Bug 290] Accueil : DeuxGammes avec image sans sources", () => {
   it("affiche les deux cartes avec repli sur url", () => {
     const { container } = render(
       <DeuxGammes
-        classic={{
-          produit: avec(classic, sansSources),
-          detail: detailDe(classic),
-          tirage: null,
-        }}
+        classic={{ produit: avec(classic, sansSources) }}
         premium={{
           produit: avec(premium, {
             url: "https://example.org/p.jpg",
             alt: "Premium",
           }),
-          detail: detailDe(premium),
-          tirage: 50,
         }}
         locale="fr"
         textes={fr.home.gammes}
@@ -104,12 +98,8 @@ describe("[Bug 290] Accueil : DeuxGammes avec image sans sources", () => {
   it("tolère une image absente ou sans url ni sources", () => {
     const { container } = render(
       <DeuxGammes
-        classic={{ produit: avec(classic, null), detail: null, tirage: null }}
-        premium={{
-          produit: avec(premium, { alt: "sans rien" }),
-          detail: null,
-          tirage: null,
-        }}
+        classic={{ produit: avec(classic, null) }}
+        premium={{ produit: avec(premium, { alt: "sans rien" }) }}
         locale="fr"
         textes={fr.home.gammes}
       />,

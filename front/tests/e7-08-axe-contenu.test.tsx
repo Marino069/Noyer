@@ -11,7 +11,6 @@ import { Selection } from "@/components/Selection";
 import fr from "@/i18n/dictionaries/fr.json";
 import { formatDateLongue } from "@/lib/format";
 import {
-  detailDe,
   heroAccueil,
   matiereAccueil,
   pagesContenu,
@@ -48,16 +47,8 @@ describe("E7-08 · axe sur les pages de contenu", () => {
         <Hero contenu={heroAccueil} ctaHref="/fr/produits/classic" />
         <Matiere contenu={matiereAccueil} {...fr.home.matiere} />
         <DeuxGammes
-          classic={{
-            produit: classic,
-            detail: detailDe(classic),
-            tirage: null,
-          }}
-          premium={{
-            produit: premium,
-            detail: detailDe(premium),
-            tirage: 50,
-          }}
+          classic={{ produit: classic }}
+          premium={{ produit: premium }}
           locale="fr"
           textes={fr.home.gammes}
         />

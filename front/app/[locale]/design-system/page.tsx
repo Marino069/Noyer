@@ -194,16 +194,8 @@ export default async function DesignSystemPage({ params }: Props) {
 
       <h2 className={styles.heading}>Comparaison des gammes</h2>
       <DeuxGammes
-        classic={{
-          produit: produits[0],
-          detail: detailDe(produits[0]),
-          tirage: null,
-        }}
-        premium={{
-          produit: produits[1],
-          detail: detailDe(produits[1]),
-          tirage: 50,
-        }}
+        classic={{ produit: produits[0], aPartirDe: 39000 }}
+        premium={{ produit: produits[1] }}
         locale={locale}
         textes={dictionary.home.gammes}
       />
