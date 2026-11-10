@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Noyer · Accueil Maison de luxe</title>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300&family=Hanken+Grotesk:wght@400;500&display=swap" rel="stylesheet">
+<style>body{margin:0}a{color:#F5F1E8;text-decoration:none}a:hover{color:#DED3C2}</style>
+</helmet>
+<div style="width: 1440px; background: #29251F; color: #F5F1E8; font-family: 'Hanken Grotesk', sans-serif; font-size: 15px; line-height: 1.7;">
+
+  <!-- En-tête -->
+  <header style="height: 96px; padding: 0 64px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); align-items: center; border-bottom: 1px solid rgba(176,141,87,0.25);">
+    <nav aria-label="Collections" style="display: flex; gap: 40px; letter-spacing: 0.22em; font-size: 11px;"><a href="#">COLLECTIONS</a><a href="#">LA MAISON</a><a href="#">L'ATELIER</a></nav>
+    <a href="#" style="justify-self: center; font-family: 'Fraunces', serif; font-size: 22px; font-weight: 300; letter-spacing: 0.6em; padding-left: 0.6em;">NOYER</a>
+    <nav aria-label="Compte" style="justify-self: end; display: flex; gap: 40px; letter-spacing: 0.22em; font-size: 11px;"><a href="#">RENDEZ-VOUS</a><a href="#">PANIER (0)</a></nav>
+  </header>
+
+  <!-- Hero : lampe en scène, interrupteur -->
+  <section style="position: relative; height: 860px; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; text-align: center; overflow: hidden;">
+    <img src="{{heroImg}}" alt="Lampe Lucerne Premium, pièce n° 07, posée dans la pénombre" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.9;">
+    <div aria-hidden="true" style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(41,37,31,0) 45%, rgba(41,37,31,0.92) 100%);"></div>
+    <div style="position: relative; padding-bottom: 88px; display: flex; flex-direction: column; align-items: center; gap: 26px;">
+      <p style="margin: 0; letter-spacing: 0.4em; font-size: 11px; color: #B08D57;">GENÈVE · SÉRIE LIMITÉE DE CINQUANTE PIÈCES</p>
+      <h1 style="margin: 0; font-family: 'Fraunces', serif; font-weight: 300; font-size: 96px; line-height: 1; letter-spacing: 0.005em;">La lumière, <em>façonnée</em></h1>
+      <div aria-hidden="true" style="width: 72px; height: 1px; background: #B08D57;"></div>
+      <a href="fiche-premium.html" style="border: 1px solid #B08D57; padding: 18px 40px; letter-spacing: 0.28em; font-size: 11px;">DÉCOUVRIR LUCERNE PREMIUM</a>
+    </div>
+    <button type="button" onClick="{{basculer}}" aria-pressed="{{allumeeAria}}" style="position: absolute; right: 64px; bottom: 88px; display: flex; align-items: center; gap: 14px; background: transparent; border: 0; color: #DED3C2; font: inherit; font-size: 11px; letter-spacing: 0.22em; cursor: pointer; min-height: 44px;">
+      <span style="{{interrupteurStyle}}"><span style="{{plotStyle}}"></span></span>
+      {{libelleInterrupteur}}
+    </button>
+  </section>
+
+  <!-- Manifeste -->
+  <section style="padding: 180px 64px; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 36px;">
+    <p style="margin: 0; letter-spacing: 0.4em; font-size: 11px; color: #B08D57;">LA MAISON</p>
+    <p style="margin: 0; max-width: 880px; font-family: 'Fraunces', serif; font-weight: 300; font-size: 44px; line-height: 1.3;">Nous ne fabriquons qu'un petit nombre de lampes, <em>chacune tournée, huilée et signée à la main</em> dans notre atelier de Genève.</p>
+    <p style="margin: 0; letter-spacing: 0.3em; font-size: 11px; color: #DED3C2;">— [PRÉNOM], FONDATEUR</p>
+  </section>
+
+  <!-- Les deux collections -->
+  <section style="padding: 0 64px 180px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2px;">
+    <a href="#" style="position: relative; height: 760px; display: block; overflow: hidden; background: #3A3028;">
+      <img src="/mocks/lucerne-classic-960.webp" alt="Lucerne Classic" style="width: 100%; height: 100%; object-fit: cover; opacity: 0.85;">
+      <div style="position: absolute; left: 48px; right: 48px; bottom: 48px; display: flex; justify-content: space-between; align-items: flex-end;">
+        <div><p style="margin: 0 0 10px; letter-spacing: 0.4em; font-size: 11px; color: #DED3C2;">COLLECTION</p><p style="margin: 0; font-family: 'Fraunces', serif; font-weight: 300; font-size: 48px; line-height: 1;">Classic</p></div>
+        <span style="letter-spacing: 0.22em; font-size: 11px;">À PARTIR DE CHF 390</span>
+      </div>
+    </a>
+    <a href="fiche-premium.html" style="position: relative; height: 760px; display: block; overflow: hidden; background: #3A3028;">
+      <img src="/mocks/lucerne-premium-960.webp" alt="Lucerne Premium, bagues en laiton" style="width: 100%; height: 100%; object-fit: cover; opacity: 0.85;">
+      <div style="position: absolute; left: 48px; right: 48px; bottom: 48px; display: flex; justify-content: space-between; align-items: flex-end;">
+        <div><p style="margin: 0 0 10px; letter-spacing: 0.4em; font-size: 11px; color: #B08D57;">SÉRIE NUMÉROTÉE</p><p style="margin: 0; font-family: 'Fraunces', serif; font-weight: 300; font-size: 48px; line-height: 1;">Premium</p></div>
+        <span style="letter-spacing: 0.22em; font-size: 11px;">CHF 1 240</span>
+      </div>
+    </a>
+  </section>
+
+  <!-- La matière -->
+  <section style="background: #3A3028; padding: 160px 64px;">
+    <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 72px;">
+      <div><p style="margin: 0 0 18px; letter-spacing: 0.4em; font-size: 11px; color: #B08D57;">LA MATIÈRE</p><h2 style="margin: 0; font-family: 'Fraunces', serif; font-weight: 300; font-size: 64px; line-height: 1;">Noyer &amp; laiton</h2></div>
+      <p style="margin: 0; max-width: 380px; color: #DED3C2;">Le noyer fonce et se patine, le laiton se voile doucement. Deux matières choisies pour vieillir ensemble.</p>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px;">
+      <figure style="margin: 0; position: relative;">
+        <img src="/mocks/matiere-noyer-960.webp" alt="Grain de noyer huilé" style="width: 100%; height: 520px; object-fit: cover;">
+        <div aria-hidden="true" style="position: absolute; left: 38%; top: 34%; width: 150px; height: 150px; border-radius: 50%; border: 1px solid #B08D57; box-shadow: 0 0 0 6px rgba(41,37,31,0.35);"></div>
+        <figcaption style="padding-top: 18px; letter-spacing: 0.3em; font-size: 11px; color: #DED3C2;">I · NOYER — JUGLANS REGIA</figcaption>
+      </figure>
+      <figure style="margin: 0;">
+        <img src="/mocks/matiere-laiton-960.webp" alt="Laiton brossé" style="width: 100%; height: 520px; object-fit: cover;">
+        <figcaption style="padding-top: 18px; letter-spacing: 0.3em; font-size: 11px; color: #DED3C2;">II · LAITON BROSSÉ</figcaption>
+      </figure>
+      <figure style="margin: 0;">
+        <img src="/mocks/matiere-finition-960.webp" alt="Noyer huilé à la main" style="width: 100%; height: 520px; object-fit: cover;">
+        <figcaption style="padding-top: 18px; letter-spacing: 0.3em; font-size: 11px; color: #DED3C2;">III · HUILÉ À LA MAIN</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- Le geste -->
+  <section style="padding: 180px 64px;">
+    <p style="margin: 0 0 18px; letter-spacing: 0.4em; font-size: 11px; color: #B08D57; text-align: center;">LE GESTE</p>
+    <h2 style="margin: 0 0 96px; font-family: 'Fraunces', serif; font-weight: 300; font-size: 64px; line-height: 1; text-align: center;">Quatre étapes, <em>aucun raccourci</em></h2>
+    <div aria-hidden="true" style="height: 1px; background: linear-gradient(90deg, #B08D57 0%, #B08D57 38%, rgba(176,141,87,0.25) 38%);"></div>
+    <ol style="list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 48px;">
+      <li style="padding-top: 40px;"><p style="margin: 0 0 18px; font-family: 'Fraunces', serif; font-size: 40px; font-weight: 300; color: #B08D57;">I</p><h3 style="margin: 0 0 12px; font-family: 'Fraunces', serif; font-weight: 400; font-size: 24px;">Le bois</h3><p style="margin: 0; color: #DED3C2;">Un noyer choisi pour son grain, séché lentement.</p></li>
+      <li style="padding-top: 40px;"><p style="margin: 0 0 18px; font-family: 'Fraunces', serif; font-size: 40px; font-weight: 300; color: #B08D57;">II</p><h3 style="margin: 0 0 12px; font-family: 'Fraunces', serif; font-weight: 400; font-size: 24px;">Le tour</h3><p style="margin: 0; color: #DED3C2;">Le pied est tourné et poncé à la main.</p></li>
+      <li style="padding-top: 40px; opacity: 0.55;"><p style="margin: 0 0 18px; font-family: 'Fraunces', serif; font-size: 40px; font-weight: 300; color: #B08D57;">III</p><h3 style="margin: 0 0 12px; font-family: 'Fraunces', serif; font-weight: 400; font-size: 24px;">La finition</h3><p style="margin: 0; color: #DED3C2;">Huile sur le bois, laiton poli.</p></li>
+      <li style="padding-top: 40px; opacity: 0.55;"><p style="margin: 0 0 18px; font-family: 'Fraunces', serif; font-size: 40px; font-weight: 300; color: #B08D57;">IV</p><h3 style="margin: 0 0 12px; font-family: 'Fraunces', serif; font-weight: 400; font-size: 24px;">La signature</h3><p style="margin: 0; color: #DED3C2;">Assemblée, numérotée et signée à Genève.</p></li>
+    </ol>
+  </section>
+
+  <!-- La série -->
+  <section style="background: #3A3028; padding: 160px 64px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 96px; align-items: center;">
+    <div>
+      <p style="margin: 0 0 18px; letter-spacing: 0.4em; font-size: 11px; color: #B08D57;">LA SÉRIE · LUCERNE PREMIUM</p>
+      <h2 style="margin: 0 0 28px; font-family: 'Fraunces', serif; font-weight: 300; font-size: 56px; line-height: 1.05;">Cinquante pièces, <em>pas une de plus</em></h2>
+      <p style="margin: 0 0 40px; max-width: 460px; color: #DED3C2;">Chaque lampe porte son numéro gravé sous le pied et voyage avec un certificat signé. Choisissez le vôtre parmi les pièces encore libres.</p>
+      <a href="fiche-premium.html" style="background: #B08D57; color: #29251F; padding: 18px 40px; letter-spacing: 0.28em; font-size: 11px; font-weight: 500;">CHOISIR MA PIÈCE</a>
+    </div>
+    <div>
+      <div style="display: grid; grid-template-columns: repeat(10, minmax(0, 1fr)); gap: 18px;">
+        <sc-for list="{{pieces}}" as="p" hint-placeholder-count="50">
+          <span title="{{p.titre}}" style="{{p.style}}"></span>
+        </sc-for>
+      </div>
+      <p style="margin: 28px 0 0; display: flex; gap: 32px; letter-spacing: 0.2em; font-size: 11px; color: #DED3C2;"><span>● VENDUE</span><span>○ LIBRE · 12 PIÈCES</span></p>
+    </div>
+  </section>
+
+  <!-- Rendez-vous -->
+  <section style="position: relative; height: 640px; overflow: hidden; display: flex; align-items: center; justify-content: center; text-align: center;">
+    <img src="/mocks/matiere-assemblage-960.webp" alt="" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.35;">
+    <div style="position: relative; display: flex; flex-direction: column; align-items: center; gap: 26px;">
+      <p style="margin: 0; letter-spacing: 0.4em; font-size: 11px; color: #B08D57;">L'ATELIER</p>
+      <h2 style="margin: 0; font-family: 'Fraunces', serif; font-weight: 300; font-size: 64px; line-height: 1.05;">Venez voir <em>la lumière</em></h2>
+      <p style="margin: 0; color: #DED3C2;">Rue [ADRESSE], Genève · sur rendez-vous</p>
+      <a href="#" style="border: 1px solid #B08D57; padding: 18px 40px; letter-spacing: 0.28em; font-size: 11px;">PRENDRE RENDEZ-VOUS</a>
+    </div>
+  </section>
+
+  <!-- Pied de page -->
+  <footer style="padding: 96px 64px 48px; border-top: 1px solid rgba(176,141,87,0.25);">
+    <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 48px; font-size: 13px;">
+      <div><p style="margin: 0 0 20px; font-family: 'Fraunces', serif; font-size: 22px; font-weight: 300; letter-spacing: 0.6em;">NOYER</p><p style="margin: 0; color: #DED3C2;">Lampes en noyer et laiton, Genève.</p></div>
+      <div style="display: flex; flex-direction: column; gap: 10px;"><p style="margin: 0 0 8px; letter-spacing: 0.3em; font-size: 11px; color: #B08D57;">COLLECTIONS</p><a href="#">Classic</a><a href="#">Premium</a></div>
+      <div style="display: flex; flex-direction: column; gap: 10px;"><p style="margin: 0 0 8px; letter-spacing: 0.3em; font-size: 11px; color: #B08D57;">LA MAISON</p><a href="#">L'atelier</a><a href="#">Entretien</a><a href="#">Contact</a></div>
+      <form style="display: flex; flex-direction: column; gap: 12px;">
+        <label for="nl" style="letter-spacing: 0.3em; font-size: 11px; color: #B08D57;">LETTRE DE L'ATELIER</label>
+        <div style="display: flex; border-bottom: 1px solid rgba(176,141,87,0.5);"><input id="nl" type="email" placeholder="Votre adresse e-mail" style="flex: 1 1 auto; min-width: 0; background: transparent; border: 0; color: #F5F1E8; font: inherit; padding: 12px 0;"><button type="button" style="background: transparent; border: 0; color: #F5F1E8; font: inherit; letter-spacing: 0.2em; font-size: 11px; cursor: pointer;">S'INSCRIRE</button></div>
+      </form>
+    </div>
+    <p style="margin: 80px 0 0; display: flex; justify-content: space-between; letter-spacing: 0.2em; font-size: 11px; color: #DED3C2;"><span>© NOYER, GENÈVE</span><span>CGV · CONFIDENTIALITÉ · IMPRESSUM</span></p>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":5200}}'>
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = { allumee: true }; }
+  renderVals() {
+    const libres = [3, 7, 8, 15, 21, 26, 33, 38, 41, 44, 47, 49];
+    const pieces = Array.from({ length: 50 }, (_, i) => {
+      const n = i + 1; const libre = libres.includes(n);
+      return { titre: 'N° ' + n + (libre ? ' · libre' : ' · vendue'), style: 'display: block; width: 14px; height: 14px; border-radius: 50%; justify-self: center; ' + (libre ? 'border: 1px solid #B08D57;' : 'background: #B08D57;') };
+    });
+    const a = this.state.allumee;
+    return {
+      pieces,
+      heroImg: a ? '/mocks/lucerne-premium-allumee-1600.webp' : '/mocks/lucerne-premium-1600.webp',
+      allumeeAria: a ? 'true' : 'false',
+      libelleInterrupteur: a ? 'ÉTEINDRE' : 'ALLUMER',
+      interrupteurStyle: 'position: relative; display: inline-block; width: 40px; height: 20px; border-radius: 10px; border: 1px solid #B08D57; background: ' + (a ? '#B08D57' : 'transparent') + ';',
+      plotStyle: 'position: absolute; top: 3px; left: ' + (a ? '23px' : '3px') + '; width: 12px; height: 12px; border-radius: 50%; background: ' + (a ? '#29251F' : '#B08D57') + ';',
+      basculer: () => this.setState({ allumee: !this.state.allumee }),
+    };
+  }
+}
+</script>
+</body>
+</html>

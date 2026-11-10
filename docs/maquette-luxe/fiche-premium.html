@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Noyer · Lucerne Premium, Maison de luxe</title>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300&family=Hanken+Grotesk:wght@400;500&display=swap" rel="stylesheet">
+<style>body{margin:0}a{color:#F5F1E8;text-decoration:none}a:hover{color:#DED3C2}</style>
+</helmet>
+<div style="width: 1440px; background: #29251F; color: #F5F1E8; font-family: 'Hanken Grotesk', sans-serif; font-size: 15px; line-height: 1.7;">
+
+  <header style="height: 96px; padding: 0 64px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); align-items: center; border-bottom: 1px solid rgba(176,141,87,0.25);">
+    <nav aria-label="Collections" style="display: flex; gap: 40px; letter-spacing: 0.22em; font-size: 11px;"><a href="#">COLLECTIONS</a><a href="#">LA MAISON</a><a href="#">L'ATELIER</a></nav>
+    <a href="accueil.html" style="justify-self: center; font-family: 'Fraunces', serif; font-size: 22px; font-weight: 300; letter-spacing: 0.6em; padding-left: 0.6em;">NOYER</a>
+    <nav aria-label="Compte" style="justify-self: end; display: flex; gap: 40px; letter-spacing: 0.22em; font-size: 11px;"><a href="#">RENDEZ-VOUS</a><a href="#">PANIER ({{nbPanier}})</a></nav>
+  </header>
+
+  <section style="display: grid; grid-template-columns: 7fr 5fr; min-height: 1300px;">
+    <!-- Galerie -->
+    <div style="display: flex; flex-direction: column; gap: 2px;">
+      <div style="position: relative;">
+        <img src="{{imgPrincipale}}" alt="Lucerne Premium" style="display: block; width: 100%; height: 820px; object-fit: cover;">
+        <button type="button" onClick="{{basculer}}" aria-pressed="{{allumeeAria}}" style="position: absolute; left: 40px; bottom: 36px; display: flex; align-items: center; gap: 14px; background: rgba(41,37,31,0.6); border: 0; color: #F5F1E8; font: inherit; font-size: 11px; letter-spacing: 0.22em; padding: 12px 18px; cursor: pointer; min-height: 44px;">
+          <span style="{{interrupteurStyle}}"><span style="{{plotStyle}}"></span></span>{{libelleInterrupteur}}
+        </button>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2px;">
+        <img src="/mocks/lucerne-premium-detail-960.webp" alt="Détail du pied cerclé de laiton" style="width: 100%; height: 480px; object-fit: cover;">
+        <img src="/mocks/matiere-noyer-960.webp" alt="Grain du noyer" style="width: 100%; height: 480px; object-fit: cover;">
+      </div>
+    </div>
+
+    <!-- Colonne d'achat -->
+    <aside aria-label="Achat" style="padding: 80px 64px; display: flex; flex-direction: column; gap: 0;">
+      <p style="margin: 0; letter-spacing: 0.4em; font-size: 11px; color: #B08D57;">SÉRIE LIMITÉE · CINQUANTE PIÈCES</p>
+      <h1 style="margin: 18px 0 0; font-family: 'Fraunces', serif; font-weight: 300; font-size: 80px; line-height: 1;">Lucerne</h1>
+      <p style="margin: 6px 0 0; font-family: 'Fraunces', serif; font-style: italic; font-weight: 300; font-size: 26px; color: #DED3C2;">Premium</p>
+      <div aria-hidden="true" style="width: 72px; height: 1px; background: #B08D57; margin: 36px 0;"></div>
+      <p style="margin: 0; color: #DED3C2; max-width: 420px;">Pied en noyer massif cerclé de laiton poli, abat-jour en lin. Tournée, huilée et signée à la main à Genève.</p>
+      <p style="margin: 36px 0 0; font-family: 'Fraunces', serif; font-weight: 300; font-size: 34px;">CHF 1 240</p>
+      <p style="margin: 2px 0 0; font-size: 12px; letter-spacing: 0.08em; color: #DED3C2;">TVA incluse · livraison offerte en Suisse</p>
+
+      <fieldset style="margin: 48px 0 0; padding: 0; border: 0;">
+        <legend style="letter-spacing: 0.3em; font-size: 11px; color: #B08D57; margin-bottom: 20px;">CHOISISSEZ VOTRE PIÈCE · 12 LIBRES</legend>
+        <div style="display: grid; grid-template-columns: repeat(10, minmax(0, 1fr)); gap: 12px;">
+          <sc-for list="{{pieces}}" as="p" hint-placeholder-count="50">
+            <button type="button" onClick="{{p.choisir}}" disabled="{{p.vendue}}" aria-label="{{p.titre}}" aria-pressed="{{p.actif}}" style="{{p.style}}"></button>
+          </sc-for>
+        </div>
+      </fieldset>
+
+      <div style="margin-top: 36px; border: 1px solid rgba(176,141,87,0.45); padding: 28px; display: flex; justify-content: space-between; align-items: center;">
+        <div><p style="margin: 0; letter-spacing: 0.3em; font-size: 11px; color: #DED3C2;">VOTRE PIÈCE</p><p style="margin: 6px 0 0; font-family: 'Fraunces', serif; font-weight: 300; font-size: 48px; line-height: 1;">N° {{choisi}} <span style="color: #B08D57;">/ 50</span></p></div>
+        <p style="margin: 0; max-width: 160px; font-size: 12px; color: #DED3C2; text-align: right;">Gravé sous le pied, certificat signé joint.</p>
+      </div>
+
+      <button type="button" onClick="{{reserver}}" style="margin-top: 20px; width: 100%; background: #B08D57; color: #29251F; border: 0; padding: 22px; font: inherit; font-size: 11px; font-weight: 500; letter-spacing: 0.28em; cursor: pointer;">{{libelleBouton}}</button>
+      <a href="#" style="margin-top: 14px; text-align: center; border: 1px solid rgba(176,141,87,0.45); padding: 18px; font-size: 11px; letter-spacing: 0.28em;">LA VOIR À L'ATELIER SUR RENDEZ-VOUS</a>
+
+      <dl style="margin: 56px 0 0; font-size: 13px;">
+        <div style="display: flex; justify-content: space-between; padding: 16px 0; border-top: 1px solid rgba(176,141,87,0.25);"><dt style="letter-spacing: 0.2em; font-size: 11px; color: #DED3C2;">DIMENSIONS</dt><dd style="margin: 0;">H 42 · Ø 28 cm</dd></div>
+        <div style="display: flex; justify-content: space-between; padding: 16px 0; border-top: 1px solid rgba(176,141,87,0.25);"><dt style="letter-spacing: 0.2em; font-size: 11px; color: #DED3C2;">MATIÈRES</dt><dd style="margin: 0;">Noyer massif · laiton · lin</dd></div>
+        <div style="display: flex; justify-content: space-between; padding: 16px 0; border-top: 1px solid rgba(176,141,87,0.25);"><dt style="letter-spacing: 0.2em; font-size: 11px; color: #DED3C2;">CULOT</dt><dd style="margin: 0;">E27</dd></div>
+        <div style="display: flex; justify-content: space-between; padding: 16px 0; border-top: 1px solid rgba(176,141,87,0.25); border-bottom: 1px solid rgba(176,141,87,0.25);"><dt style="letter-spacing: 0.2em; font-size: 11px; color: #DED3C2;">ENTRETIEN</dt><dd style="margin: 0;">Huiler le noyer une fois par an</dd></div>
+      </dl>
+    </aside>
+  </section>
+
+  <sc-if value="{{reservee}}" hint-placeholder-val="{{ false }}">
+    <div role="status" style="position: fixed; right: 40px; bottom: 40px; background: #3A3028; border: 1px solid #B08D57; padding: 22px 28px; letter-spacing: 0.2em; font-size: 11px;">PIÈCE N° {{choisi}} RÉSERVÉE · 15 MINUTES</div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":2400}}'>
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = { allumee: false, choisi: 7, reservee: false }; }
+  renderVals() {
+    const libres = [3, 7, 8, 15, 21, 26, 33, 38, 41, 44, 47, 49];
+    const s = this.state;
+    const pieces = Array.from({ length: 50 }, (_, i) => {
+      const n = i + 1; const libre = libres.includes(n); const actif = n === s.choisi;
+      let style = 'width: 100%; aspect-ratio: 1; min-height: 28px; padding: 0; border-radius: 50%; cursor: ' + (libre ? 'pointer' : 'default') + '; ';
+      if (!libre) style += 'background: rgba(176,141,87,0.35); border: 0;';
+      else if (actif) style += 'background: #B08D57; border: 1px solid #B08D57; box-shadow: 0 0 0 4px rgba(176,141,87,0.25);';
+      else style += 'background: transparent; border: 1px solid #B08D57;';
+      return { titre: 'Pièce ' + n + (libre ? ', libre' : ', vendue'), vendue: !libre, actif: actif ? 'true' : 'false', style, choisir: () => libre && this.setState({ choisi: n, reservee: false }) };
+    });
+    const a = s.allumee;
+    const num = String(s.choisi).padStart(2, '0');
+    return {
+      pieces, choisi: num, reservee: s.reservee, nbPanier: s.reservee ? 1 : 0,
+      libelleBouton: s.reservee ? 'PIÈCE RÉSERVÉE' : 'RÉSERVER LA PIÈCE N° ' + num,
+      reserver: () => this.setState({ reservee: true }),
+      imgPrincipale: a ? '/mocks/lucerne-premium-allumee-1600.webp' : '/mocks/lucerne-premium-1600.webp',
+      allumeeAria: a ? 'true' : 'false',
+      libelleInterrupteur: a ? 'ÉTEINDRE' : 'ALLUMER',
+      interrupteurStyle: 'position: relative; display: inline-block; width: 40px; height: 20px; border-radius: 10px; border: 1px solid #B08D57; background: ' + (a ? '#B08D57' : 'transparent') + ';',
+      plotStyle: 'position: absolute; top: 3px; left: ' + (a ? '23px' : '3px') + '; width: 12px; height: 12px; border-radius: 50%; background: ' + (a ? '#29251F' : '#B08D57') + ';',
+      basculer: () => this.setState({ allumee: !s.allumee }),
+    };
+  }
+}
+</script>
+</body>
+</html>
