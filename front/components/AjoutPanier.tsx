@@ -236,6 +236,7 @@ export function AjoutPanier({
         </>
       ) : null}
       <Button
+        className={styles.cta}
         onClick={() => ajouter()}
         loading={etat === "envoi"}
         disabled={disabled || sansPiece}
@@ -265,7 +266,11 @@ export function AjoutPanier({
         retourFocus={declencheur}
       />
       {etat === "erreur" && suggestion !== null ? (
-        <Button variant="secondary" onClick={() => ajouter(suggestion)}>
+        <Button
+          variant="secondary"
+          className={styles.cta}
+          onClick={() => ajouter(suggestion)}
+        >
           {interpolate(textes.suggest, { numero: suggestion })}
         </Button>
       ) : null}

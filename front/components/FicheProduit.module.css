@@ -1,13 +1,21 @@
+/* Fiche en pleine largeur (maquette « Maison de luxe ») : pas de marges de section. */
+.fiche[data-tone] {
+  padding-block: 0;
+}
+
+.fiche > :first-child {
+  max-width: none;
+  padding-inline: 0;
+}
+
 .layout {
   display: grid;
-  gap: 2rem;
-  grid-template-columns: 1fr;
+  grid-template-columns: minmax(0, 1fr);
 }
 
 @media (min-width: 900px) {
   .layout {
-    grid-template-columns: 3fr 2fr;
-    gap: 4rem;
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
     align-items: start;
   }
 
@@ -21,27 +29,46 @@
 .infos {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  padding: 3rem var(--gutter);
 }
 
-.gamme {
+@media (min-width: 900px) {
+  .infos {
+    padding: 5rem var(--gutter);
+  }
+}
+
+.eyebrow {
   margin: 0;
-  font-size: 0.875rem;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  color: var(--text-muted);
-}
-
-[data-tone="dark"] .gamme {
+  font-size: var(--fs-eyebrow);
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
   color: var(--brass);
 }
 
 .title {
-  margin: 0;
+  margin: 1.125rem 0 0;
   font-family: var(--serif);
-  font-weight: 500;
+  font-weight: 300;
   font-size: var(--fs-h2);
-  line-height: 1.1;
+  line-height: 1;
+  letter-spacing: var(--ls-title);
+}
+
+.gamme {
+  margin: 0.375rem 0 0;
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 300;
+  font-size: 1.625rem;
+  color: var(--text-muted);
+}
+
+.filet {
+  width: 4.5rem;
+  height: 1px;
+  margin: 2.25rem 0;
+  background: var(--brass);
 }
 
 .description {
@@ -49,25 +76,66 @@
   color: var(--text-muted);
 }
 
+.price {
+  margin: 2.25rem 0 0;
+}
+
+.price :first-child {
+  font-family: var(--serif);
+  font-weight: 300;
+  font-size: 2.125rem;
+}
+
+.cta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+  margin-top: 2.25rem;
+}
+
+.visit {
+  width: 100%;
+}
+
 .details {
-  display: grid;
-  gap: 1rem;
-  margin: 0;
+  display: block;
+  margin: 3.5rem 0 0;
+  font-size: 0.8125rem;
+}
+
+.details > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding: 1rem 0;
+  border-top: 1px solid var(--border);
+}
+
+.details > div:last-child {
+  border-bottom: 1px solid var(--border);
 }
 
 .details dt {
-  font-weight: 600;
+  font-size: var(--fs-eyebrow);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-muted);
 }
 
 .details dd {
-  margin: 0.25rem 0 0;
-  color: var(--text-muted);
+  margin: 0;
+  text-align: right;
+  color: var(--text);
 }
 
 .list {
   margin: 0;
   padding: 0;
   list-style: none;
+}
+
+.bascule {
+  margin: 1.5rem 0 0;
 }
 
 .bascule a {
@@ -78,4 +146,11 @@
 .bascule a:focus-visible {
   outline: 2px solid currentColor;
   outline-offset: 2px;
+}
+
+/* h1 de la maquette ≈ 80 px sur grand écran. */
+@media (min-width: 1200px) {
+  .title {
+    font-size: 5rem;
+  }
 }

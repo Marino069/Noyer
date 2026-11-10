@@ -54,7 +54,7 @@ export function FicheProduit({
   return (
     <DisponibiliteLive slug={produit.slug} initial={disponibilite}>
       <Section
-        tone={premium ? "dark" : "light"}
+        tone="dark"
         aria-labelledby="fiche-titre"
         className={styles.fiche}
       >
@@ -78,10 +78,14 @@ export function FicheProduit({
           />
 
           <aside className={styles.infos} aria-label={textes.buyColumn}>
-            <p className={styles.gamme}>{produit.gamme}</p>
+            <p className={styles.eyebrow}>
+              {premium ? textes.eyebrow.premium : textes.eyebrow.classic}
+            </p>
             <h1 id="fiche-titre" className={styles.title}>
               {produit.modele.nom}
             </h1>
+            <p className={styles.gamme}>{produit.gamme}</p>
+            <div className={styles.filet} aria-hidden="true" />
             <p className={styles.description}>{produit.modele.description}</p>
 
             <Price
@@ -90,6 +94,30 @@ export function FicheProduit({
               vatLabel={prix.vatIncluded}
               className={styles.price}
             />
+
+            <div className={styles.cta}>
+              {shopEnabled ? (
+                <AchatLive
+                  slug={produit.slug}
+                  gamme={produit.gamme}
+                  panierHref={localePath(locale, "panier")}
+                  locale={locale}
+                  textes={textes.cart}
+                  alerte={textes.soldOut}
+                />
+              ) : (
+                <Button href={localePath(locale, "contact")}>
+                  {textes.cart.contact}
+                </Button>
+              )}
+              <Button
+                variant="secondary"
+                href={localePath(locale, "contact")}
+                className={styles.visit}
+              >
+                {textes.visit}
+              </Button>
+            </div>
 
             <dl className={styles.details}>
               {c ? (
@@ -133,23 +161,6 @@ export function FicheProduit({
                 </dd>
               </div>
             </dl>
-
-            <div className={styles.cta}>
-              {shopEnabled ? (
-                <AchatLive
-                  slug={produit.slug}
-                  gamme={produit.gamme}
-                  panierHref={localePath(locale, "panier")}
-                  locale={locale}
-                  textes={textes.cart}
-                  alerte={textes.soldOut}
-                />
-              ) : (
-                <Button href={localePath(locale, "contact")}>
-                  {textes.cart.contact}
-                </Button>
-              )}
-            </div>
 
             {produit.autre_gamme ? (
               <p className={styles.bascule}>
