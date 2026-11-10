@@ -76,7 +76,7 @@
 }
 
 .carte:has(.lien:focus-visible) {
-  outline: 2px solid var(--walnut);
+  outline: 2px solid var(--text);
   outline-offset: 4px;
 }
 

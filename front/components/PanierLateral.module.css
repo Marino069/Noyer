@@ -52,7 +52,7 @@
 .pas:focus-visible,
 .retirer:focus-visible,
 .lien:focus-visible {
-  outline: 2px solid var(--walnut);
+  outline: 2px solid var(--text);
   outline-offset: 2px;
 }
 
@@ -126,7 +126,7 @@
 .pas {
   min-width: 44px;
   min-height: 44px;
-  border: 1px solid var(--walnut);
+  border: 1px solid var(--brass);
   border-radius: var(--radius);
   background: var(--bg);
   color: var(--text);
@@ -145,7 +145,7 @@
   padding: 0;
   border: 0;
   background: transparent;
-  color: var(--walnut);
+  color: var(--text-muted);
   font: inherit;
   font-size: var(--fs-small);
   text-decoration: underline;
@@ -167,7 +167,7 @@
 }
 
 .lien {
-  color: var(--walnut);
+  color: var(--text-muted);
   text-align: center;
   text-decoration: underline;
   text-underline-offset: 3px;

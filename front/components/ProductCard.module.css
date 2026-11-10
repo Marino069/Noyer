@@ -3,7 +3,7 @@
   --card-bg: var(--bg);
   --card-fg: var(--text);
   --card-muted: var(--text-muted);
-  --card-accent: var(--walnut);
+  --card-accent: var(--brass);
   --card-rule: var(--border);
 
   position: relative;
@@ -21,7 +21,7 @@
 .premium {
   --card-bg: var(--dark-bg);
   --card-fg: var(--dark-text);
-  --card-muted: color-mix(in srgb, var(--bg-alt) 80%, transparent);
+  --card-muted: var(--dark-text-muted);
   --card-accent: var(--brass);
   --card-rule: var(--brass);
 }

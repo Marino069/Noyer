@@ -38,7 +38,7 @@ h2,
 h3,
 h4 {
   font-family: var(--serif);
-  font-weight: 400;
+  font-weight: 300;
   line-height: 1.15;
   text-transform: none;
   text-wrap: balance;
@@ -46,7 +46,7 @@ h4 {
 
 h1 {
   font-size: var(--fs-display);
-  font-weight: 400;
+  font-weight: 300;
   line-height: 1;
   letter-spacing: var(--ls-display);
 }
@@ -83,6 +83,13 @@ blockquote {
   letter-spacing: var(--ls-eyebrow);
   text-transform: uppercase;
   color: var(--text-muted);
+}
+
+/* Filet laiton 1 px (brief §02). */
+.filet-laiton {
+  height: 1px;
+  border: 0;
+  background: var(--brass);
 }
 
 @media (max-width: 599px) {
@@ -122,8 +129,8 @@ main:focus {
   z-index: 100;
   padding: 0.75rem 1.25rem;
   border-radius: var(--radius);
-  background: var(--dark-bg);
-  color: var(--dark-text);
+  background: var(--brass);
+  color: var(--dark-bg);
   font-weight: 600;
   text-decoration: none;
   transform: translateY(-200%);
@@ -131,7 +138,7 @@ main:focus {
 
 .skip-link:focus-visible {
   transform: none;
-  outline-color: var(--brass);
+  outline-color: var(--text);
 }
 
 @media (prefers-reduced-motion: reduce) {

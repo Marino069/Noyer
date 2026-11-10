@@ -244,6 +244,13 @@ describe("E7-02 · contrastes du registre sombre (brief §07, AA 4.5:1)", () => 
     return (x + 0.05) / (y + 0.05);
   };
 
+  it("le sombre est la règle : --bg, --bg-alt, --text, --text-muted (E10-01)", () => {
+    expect(token("bg")).toBe(token("dark-bg"));
+    expect(token("bg-alt")).toBe(token("dark-bg-alt"));
+    expect(token("text")).toBe(token("dark-text"));
+    expect(token("text-muted")).toBe(token("dark-text-muted"));
+  });
+
   // Écart connu (rapport docs/a11y-audit.md) : --brass sur --dark-bg-alt = 4.16:1,
   // suffisant pour les éléments non textuels (3:1) mais pas pour du texte courant.
   it("--brass sur --dark-bg-alt ≥ 3:1 (bordures, focus, grand texte)", () => {
@@ -258,8 +265,11 @@ describe("E7-02 · contrastes du registre sombre (brief §07, AA 4.5:1)", () => 
     ["brass", "dark-bg"], // .gamme en registre sombre
     ["dark-bg", "brass"], // bouton laiton, texte sombre
     ["text", "bg"],
+    ["text", "bg-alt"],
     ["text-muted", "bg"],
     ["text-muted", "bg-alt"],
+    ["dark-text-muted", "dark-bg"],
+    ["dark-text-muted", "dark-bg-alt"],
   ])("--%s sur --%s ≥ 4.5:1", (fg, bg) => {
     expect(ratio(token(fg), token(bg))).toBeGreaterThanOrEqual(4.5);
   });

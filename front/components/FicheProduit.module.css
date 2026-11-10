@@ -29,7 +29,7 @@
   font-size: 0.875rem;
   font-weight: 600;
   letter-spacing: 0.04em;
-  color: var(--walnut);
+  color: var(--text-muted);
 }
 
 [data-tone="dark"] .gamme {

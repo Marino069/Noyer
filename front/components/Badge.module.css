@@ -2,7 +2,7 @@
 .badge {
   display: inline-block;
   padding: 0.125rem 0.5rem;
-  border: 1px solid var(--badge-accent, var(--walnut));
+  border: 1px solid var(--badge-accent, var(--brass));
   border-radius: var(--radius);
   font-size: 0.875rem;
   font-weight: 600;

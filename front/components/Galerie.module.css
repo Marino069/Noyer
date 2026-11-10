@@ -28,7 +28,7 @@
 .open:focus-visible,
 .thumb:focus-visible,
 .nav:focus-visible {
-  outline: 2px solid var(--walnut);
+  outline: 2px solid var(--text);
   outline-offset: -4px;
 }
 
@@ -90,8 +90,8 @@
 }
 
 .thumb[aria-current="true"] {
-  border-color: var(--walnut);
-  outline: 1px solid var(--walnut);
+  border-color: var(--brass);
+  outline: 1px solid var(--text);
 }
 
 .thumbImg {

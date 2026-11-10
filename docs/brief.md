@@ -10,42 +10,41 @@ Maquette de référence (homepage) : claude.ai/artifact/1iffYuSDiy5kg68Nkgt2aG
 Artisanat + design contemporain + sobriété suisse. Éviter tout ce qui fait « marché artisanal » (trop rustique) ou « produit industriel » (trop froid). Le
 Premium doit se lire comme une montée en gamme du Classic — même silhouette, matière et finition supérieures — jamais comme une gamme à part.
 02 Palette de couleurs
-Rôle Registre clair (par défaut) Registre sombre (sections ponctuelles)
-Fond principal #F5F1E8 #29251F
-Fond section alternée #DED3C2 #3A3028
-Texte principal #29251F #F5F1E8
-Texte secondaire #604735 (75% opacité) #DED3C2 (80% opacité)
-Bouton primaire fond #29251F , texte #F5F1E8 fond #B08D57 , texte #29251F
-Bouton primaire — hover fond #3A3028 fond #DED3C2
-Bouton secondaire (outline) bordure #604735 bordure #B08D57
-Bordures / séparateurs #604735 à 15% #B08D57 à 20%
+Décision client du 10.11.2026 : le registre sombre devient la règle sur tout le site (maquette : docs/maquette-luxe/). Le registre clair n'est plus utilisé par défaut.
+Rôle Registre sombre (par défaut) Registre clair (rare, héritage)
+Fond principal #29251F #F5F1E8
+Fond section alternée #3A3028 #DED3C2
+Texte principal #F5F1E8 #29251F
+Texte secondaire #DED3C2 #604735
+Bouton primaire fond #B08D57 (laiton), texte #29251F fond #29251F, texte #F5F1E8
+Bouton primaire — hover fond #DED3C2 fond #3A3028
+Bouton secondaire (outline) bordure #B08D57 bordure #604735
+Bordures / séparateurs #B08D57 à 20% #604735 à 15%
 Accent Classic #604735 (noyer)
 Accent Premium #B08D57 (laiton)
-Règle stricte : le laiton ( #B08D57 ) est un accent, jamais un aplat de fond. Filet 1px, icône, soulignement au survol, mot « Premium » — pas plus de 2-3 occurrences par
-écran.
-Le site reste très majoritairement clair (fond ivoire). Le registre sombre est réservé à 1-2 moments forts (section atelier, carte produit Premium, footer
-éventuellement) pour créer un contraste entre les deux gammes sans ajouter de nouvelles couleurs.
+Règle stricte : le laiton ( #B08D57 ) n'est jamais un aplat de fond de section. Il sert aux filets 1px, aux surtitres, aux icônes, au bouton principal (aplat laiton, texte sombre) et au cerclage du bouton secondaire.
+Contraste : tous les textes ≥ 4.5:1 sur #29251F et #3A3028 (vérifié par tests). Le laiton en texte n'est utilisé que sur #29251F.
 03 Typographie
-Titres / logo : Fraunces (Google Fonts) — serif contemporain, poids 400 à 600, utiliser aussi l'italique (poids 400-500) pour quelques accents ponctuels.
+Titres / logo : Fraunces (Google Fonts) — serif contemporain, poids 300 pour les titres (très grands), 400 à 600 ailleurs, utiliser aussi l'italique (poids 400-500) pour quelques accents ponctuels.
 Texte courant / UI : Hanken Grotesk (Google Fonts) — poids 400, 500, 600.
 Import Google Fonts :
 <link href="https://fonts.googleapis.com/css2?
 family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Hanken+Grotesk:wght@400;500;600;700&displa
 y=swap" rel="stylesheet">
-Titres en Fraunces, jamais en majuscules systématiques. Corps de texte en Hanken Grotesk, taille de base ~16-17px, lignes de texte < 80 caractères.
+Titres en Fraunces, jamais en majuscules systématiques. Surtitres, menus et boutons : petites capitales Hanken Grotesk 11px, espacées (0.22 à 0.4em). Logo en capitales espacées. Corps de texte en Hanken Grotesk, taille de base ~16-17px, lignes de texte < 80 caractères.
 04 Design tokens CSS
 :root{
---bg:#F5F1E8;
---bg-alt:#DED3C2;
---text:#29251F;
---text-muted:#604735;
+--bg:#29251F; /* sombre par défaut */
+--bg-alt:#3A3028;
+--text:#F5F1E8;
+--text-muted:#DED3C2;
 --walnut:#604735;
 --brass:#B08D57;
 --espresso:#3A3028;
 --dark-bg:#29251F;
 --dark-bg-alt:#3A3028;
 --dark-text:#F5F1E8;
---border:rgba(96,71,53,0.16);
+--border:rgba(176,141,87,0.2);
 --radius:2px;
 --serif:'Fraunces'
 , Georgia, serif;
@@ -75,7 +74,7 @@ Lumière naturelle et douce, jamais de studio froid type catalogue.
 Gros plans matière (grain du bois, laiton) au moins aussi présents que les photos produit entier.
 Photos atelier : gestes, outils, mains au travail — documentaire, pas posé.
 Produits toujours en contexte (intérieur, matériaux bruts), jamais sur fond blanc pur.
-Cohérence colorimétrique : les photos doivent se fondre visuellement dans le fond ivoire du site (éviter le très contrasté / froid).
+Cohérence colorimétrique : les photos doivent se fondre visuellement dans le fond sombre du site (éviter le très contrasté / froid).
 Point critique : sans photos réelles de qualité, le site perdra une grande partie de son effet « marque premium ». C'est le point le plus structurant à budgéter avant le
 développement.
 07 Points techniques à ne pas oublier
@@ -83,7 +82,7 @@ Responsive
 Breakpoints suggérés : mobile < 600px, tablette 600-900px, desktop > 900px. Vérifier particulièrement les cartes Classic/Premium (empilées en mobile) et la
 navigation (menu burger < 800px).
 Accessibilité
-Contraste texte/fond à vérifier (le texte secondaire brun clair sur fond ivoire doit rester ≥ 4.5:1).
+Contraste texte/fond à vérifier (le texte secondaire #DED3C2 sur #29251F et #3A3028 doit rester ≥ 4.5:1).
 États de focus clavier visibles (pas de outline:none sans remplacement).
 Alt text descriptif sur toutes les photos produit/matière.
 Performance
@@ -111,8 +110,7 @@ Recommandé : un CMS permettant de gérer facilement l'ajout de nouvelles photos
 Nom de domaine
 Privilégier un .ch en plus d'un .com si le nom de marque final est disponible.
 Dark mode
-Le registre sombre de la charte (section 02) est un choix de marque, pas un mode sombre système à proprement parler — le site reste toujours en fond clair par
-défaut, indépendamment des préférences système du visiteur.
+Le registre sombre est un choix de marque, pas un mode sombre système : le site est toujours sombre, indépendamment des préférences système du visiteur.
 08 Décisions encore ouvertes
 Nom de marque définitif (« Noyer » est un placeholder utilisé pour la maquette).
 Logo final (actuellement : nom en typographie Fraunces, pas de pictogramme).

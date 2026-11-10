@@ -48,7 +48,7 @@
   width: 100%;
   min-height: 44px;
   padding: 0.625rem 0.75rem;
-  border: 1px solid var(--walnut);
+  border: 1px solid var(--brass);
   border-radius: var(--radius);
   background: var(--bg);
   color: var(--text);
@@ -63,7 +63,7 @@ textarea.control {
 }
 
 .control:focus-visible {
-  outline: 2px solid var(--walnut);
+  outline: 2px solid var(--text);
   outline-offset: 2px;
 }
 
@@ -99,7 +99,7 @@ textarea.control {
 }
 
 :global([data-tone="dark"]) .hint {
-  color: var(--bg-alt);
+  color: var(--dark-text-muted);
 }
 
 .select {
@@ -152,11 +152,11 @@ textarea.control {
   width: 1.25rem;
   height: 1.25rem;
   margin: 0.125rem 0 0;
-  accent-color: var(--walnut);
+  accent-color: var(--brass);
 }
 
 .choice input:focus-visible {
-  outline: 2px solid var(--walnut);
+  outline: 2px solid var(--text);
   outline-offset: 2px;
 }
 
