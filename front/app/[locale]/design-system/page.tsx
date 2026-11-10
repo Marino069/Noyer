@@ -97,16 +97,37 @@ export default async function DesignSystemPage({ params }: Props) {
       </Section>
 
       <Section>
+        <h2>Charte sombre</h2>
+        <p className="eyebrow">Surtitre en petites capitales 11 px</p>
+        <hr className="filet-laiton" />
+        <h3>Titres Fraunces 300, texte Hanken Grotesk</h3>
+        <p>Texte principal #F5F1E8 sur #29251F.</p>
+        <p style={{ color: "var(--text-muted)" }}>
+          Texte secondaire #DED3C2 sur #29251F.
+        </p>
+      </Section>
+
+      <Section tone="alt">
+        <h2>Section alternée</h2>
+        <p>Texte principal #F5F1E8 sur #3A3028.</p>
+        <p style={{ color: "var(--text-muted)" }}>
+          Texte secondaire #DED3C2 sur #3A3028.
+        </p>
+      </Section>
+
+      <Section>
         <h2>Button</h2>
-        <h3>tone=&quot;light&quot;</h3>
+        <h3>
+          Principal (laiton, texte sombre) et secondaire (cerclé de laiton)
+        </h3>
         <ButtonVariants tone="light" />
-        <h3>tone=&quot;dark&quot; (forcé, sur fond clair)</h3>
+        <h3>tone=&quot;dark&quot; (identique : le sombre est la règle)</h3>
         <ButtonVariants tone="dark" />
       </Section>
 
       <Section tone="dark">
         <h2>Button dans une section sombre</h2>
-        <p>Le bouton prend automatiquement le registre sombre.</p>
+        <p>Le bouton garde le registre sombre.</p>
         <ButtonVariants tone="light" />
       </Section>
 

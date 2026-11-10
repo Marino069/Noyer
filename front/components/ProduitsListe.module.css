@@ -34,14 +34,14 @@
 
 .filter[aria-current="page"],
 .pagination a[aria-current="page"] {
-  background: var(--walnut);
-  border-color: var(--walnut);
+  background: var(--brass);
+  border-color: var(--brass);
   color: var(--bg);
 }
 
 .filter:focus-visible,
 .pagination a:focus-visible {
-  outline: 2px solid var(--walnut);
+  outline: 2px solid var(--text);
   outline-offset: 2px;
 }
 

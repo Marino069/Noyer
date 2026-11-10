@@ -31,7 +31,7 @@
 .carte {
   --carte-fg: var(--text);
   --carte-muted: var(--text-muted);
-  --carte-accent: var(--walnut);
+  --carte-accent: var(--brass);
   --carte-rule: var(--border);
 
   position: relative;
@@ -45,7 +45,7 @@
 /* Registre sombre : le laiton n'est qu'un filet et le mot « Premium », jamais un aplat. */
 .premium {
   --carte-fg: var(--dark-text);
-  --carte-muted: var(--bg-alt);
+  --carte-muted: var(--dark-text-muted);
   --carte-accent: var(--brass);
   --carte-rule: color-mix(in srgb, var(--brass) 20%, transparent);
 

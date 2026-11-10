@@ -110,9 +110,9 @@ describe("Grain de papier", () => {
     const bloc = css.match(/body::before\s*\{[^}]*\}/)![0];
     expect(bloc).toContain("/grain.svg");
     const opacite = parseFloat(bloc.match(/opacity:\s*([\d.]+)/)![1]);
-    // Pire cas : grain opaque de la couleur --text sur le fond, à l'opacité déclarée.
-    const fond = [0xf5, 0xf1, 0xe8];
-    const grain = [0x29, 0x25, 0x1f];
+    // Pire cas (registre sombre) : grain opaque de la couleur --text sur le fond --bg, à l'opacité déclarée.
+    const fond = [0x29, 0x25, 0x1f];
+    const grain = [0xf5, 0xf1, 0xe8];
     const mix = fond.map((v, i) =>
       Math.round(v * (1 - opacite) + grain[i] * opacite),
     );

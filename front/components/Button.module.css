@@ -1,9 +1,9 @@
 .button {
-  --btn-bg: var(--dark-bg);
-  --btn-fg: var(--dark-text);
-  --btn-hover-bg: var(--espresso);
-  --btn-border: var(--walnut);
-  --btn-focus: var(--walnut);
+  --btn-bg: var(--brass);
+  --btn-fg: var(--dark-bg);
+  --btn-hover-bg: var(--dark-text-muted);
+  --btn-border: var(--brass);
+  --btn-focus: var(--text);
 
   position: relative;
   display: inline-flex;
@@ -19,8 +19,10 @@
   background: var(--btn-bg);
   color: var(--btn-fg);
   font-family: var(--sans);
-  font-size: 1rem;
-  font-weight: 500;
+  font-size: var(--fs-eyebrow); /* 11 px, petites capitales espacées */
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
   line-height: 1.25;
   text-decoration: none;
   cursor: pointer;
@@ -69,9 +71,9 @@
 :global([data-tone="dark"]) .button {
   --btn-bg: var(--brass);
   --btn-fg: var(--dark-bg);
-  --btn-hover-bg: var(--bg-alt);
+  --btn-hover-bg: var(--dark-text-muted);
   --btn-border: var(--brass);
-  --btn-focus: var(--brass);
+  --btn-focus: var(--text);
 }
 
 .button:hover {
@@ -83,7 +85,11 @@
 .secondary:hover {
   background: transparent;
   color: var(--text);
-  border-color: var(--btn-border);
+  border-color: var(--brass);
+}
+
+.secondary:hover {
+  background: var(--bg-alt);
 }
 
 .secondary.dark,

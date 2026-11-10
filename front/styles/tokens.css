@@ -1,13 +1,14 @@
 /* Couleurs, polices et rayon : tokens de docs/brief.md §04 uniquement. */
 /* Échelle typographique, conteneur et rythme (E8-01) : tokens de mise en page, sans couleur ni police. */
-/* --text-muted : #604735 plein (pas d'opacité) → 7.6:1 sur --bg, 5.8:1 sur --bg-alt (seuil 4.5:1, brief §07). */
+/* Registre sombre par défaut (décision client du 10.11.2026, brief §02) : --bg, --bg-alt, --text et --text-muted
+   portent les valeurs sombres. --text-muted : #ded3c2 plein, bien au-dessus de 4.5:1 sur --bg et --bg-alt. */
 /* Pas de prefers-color-scheme : le registre sombre est un choix de marque (brief §07). */
 :root {
-  color-scheme: light;
-  --bg: #f5f1e8;
-  --bg-alt: #ded3c2;
-  --text: #29251f;
-  --text-muted: #604735;
+  color-scheme: dark;
+  --bg: #29251f;
+  --bg-alt: #3a3028;
+  --text: #f5f1e8;
+  --text-muted: #ded3c2;
   --walnut: #604735;
   --brass: #b08d57;
   --espresso: #3a3028;
@@ -15,7 +16,7 @@
   --dark-bg-alt: #3a3028;
   --dark-text: #f5f1e8;
   --dark-text-muted: #ded3c2; /* texte secondaire du registre sombre (brief §02), jamais redéfini */
-  --border: rgba(96, 71, 53, 0.16);
+  --border: rgba(176, 141, 87, 0.2); /* filet laiton 20 % (brief §02) */
   --radius: 2px;
   --serif: var(--font-fraunces), Georgia, serif;
   --sans: var(--font-hanken), -apple-system, sans-serif;
@@ -33,8 +34,8 @@
   ); /* citation manifeste ≈ 44 px */
   --fs-body: 1.0625rem; /* 17 px */
   --fs-small: 0.875rem;
-  --fs-eyebrow: 0.8125rem; /* surtitres, petites capitales */
-  --ls-eyebrow: 0.14em;
+  --fs-eyebrow: 0.6875rem; /* 11 px : surtitres, menus et boutons en petites capitales */
+  --ls-eyebrow: 0.28em;
   --ls-display: -0.025em;
   --ls-title: -0.02em;
 
