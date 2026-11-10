@@ -50,16 +50,20 @@ describe("[E8-07] Critère : colonne sticky seulement au-dessus de 900 px", () =
 
   it("le seuil est 900 px, en min-width uniquement", () => {
     expect(css).toMatch(/@media\s*\(min-width:\s*900px\)/);
-    expect(css).not.toMatch(/max-width/);
+    expect(css).not.toMatch(/max-width:\s*[^n\s]/);
   });
 
   it("le sticky a un décalage top (sinon il ne colle pas)", () => {
     expect(css).toMatch(/position:\s*sticky;\s*top:\s*[^;]+;/);
   });
 
-  it("la grille passe de 1 colonne (mobile) à 3fr 2fr (desktop)", () => {
-    expect(horsMedia900(css)).toMatch(/grid-template-columns:\s*1fr\s*;/);
-    expect(css).toMatch(/grid-template-columns:\s*3fr\s+2fr/);
+  it("la grille passe de 1 colonne (mobile) à 7fr 5fr (desktop)", () => {
+    expect(horsMedia900(css)).toMatch(
+      /grid-template-columns:\s*minmax\(0,\s*1fr\)\s*;/,
+    );
+    expect(css).toMatch(
+      /grid-template-columns:\s*minmax\(0,\s*7fr\)\s*minmax\(0,\s*5fr\)/,
+    );
     expect(css).toMatch(/align-items:\s*start/);
   });
 
@@ -74,9 +78,9 @@ describe("[E8-07] Critère : colonne sticky seulement au-dessus de 900 px", () =
 });
 
 describe("[E8-07] Critère : conforme à la maquette fiche-premium", () => {
-  it("galerie : grande vue 4/3, deux carrées 1/1 côte à côte, gros plan 16/9", () => {
+  it("galerie : grande vue 21/20, deux carrées 1/1 côte à côte, gros plan 16/9", () => {
     const css = lire("GalerieEmpilee.module.css");
-    expect(css).toMatch(/\.photo\s*\{[^}]*aspect-ratio:\s*4\s*\/\s*3/);
+    expect(css).toMatch(/\.photo\s*\{[^}]*aspect-ratio:\s*21\s*\/\s*20/);
     expect(css).toMatch(/\.carree\s*\{[^}]*aspect-ratio:\s*1\s*;/);
     expect(css).toMatch(/\.matiere\s*\{[^}]*aspect-ratio:\s*16\s*\/\s*9/);
     expect(css).toMatch(

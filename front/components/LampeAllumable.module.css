@@ -31,8 +31,8 @@
 
 .interrupteur {
   position: absolute;
-  right: 0.5rem;
-  bottom: 0.5rem;
+  left: 2.5rem;
+  bottom: 2.25rem;
 }
 
 @media (prefers-reduced-motion: reduce) {

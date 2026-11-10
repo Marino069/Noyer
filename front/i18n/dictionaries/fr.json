@@ -121,6 +121,11 @@
   },
   "fiche": {
     "buyColumn": "Achat",
+    "eyebrow": {
+      "premium": "Série limitée · cinquante pièces",
+      "classic": "Pièce d'atelier"
+    },
+    "visit": "La voir à l'atelier sur rendez-vous",
     "gallery": {
       "label": "Galerie photo",
       "thumbnails": "Choisir une photo",
