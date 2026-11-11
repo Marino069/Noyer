@@ -95,7 +95,7 @@ describe("[E8-07] Critère : conforme à la maquette fiche-premium", () => {
       screen.getByRole("group", { name: "Galerie photo" }),
     ).getAllByRole("img");
     const plusPetite = (m: (typeof produit.medias)[number]) =>
-      [...m.sources].sort((a, b) => a.largeur - b.largeur)[0].url;
+      [...m.sources!].sort((a, b) => a.largeur - b.largeur)[0].url;
     expect(imgs.map((i) => i.getAttribute("src"))).toEqual(
       produit.medias.map(plusPetite),
     );

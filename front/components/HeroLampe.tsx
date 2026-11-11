@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import type { Image } from "@/lib/api/types";
+import type { Image, Media } from "@/lib/api/types";
 import { Interrupteur } from "./Interrupteur";
 import styles from "./HeroLampe.module.css";
 
@@ -9,14 +9,14 @@ type Props = {
   /** Version jour de la lampe (image du contenu éditable), chargée à la demande. */
   jour: Image;
   /** Version allumée : état par défaut, image LCP (eager, priorité haute). */
-  allumee: Image;
+  allumee: Media;
   sizes: string;
   libelleAllumer: string;
   libelleEteindre: string;
 };
 
-const srcSetDe = (image: Image) =>
-  [...image.sources]
+const srcSetDe = (image: Media) =>
+  [...(image.sources ?? [])]
     .sort((a, b) => a.largeur - b.largeur)
     .map((s) => `${s.url} ${s.largeur}w`)
     .join(", ");
@@ -36,7 +36,7 @@ export function HeroLampe({
   const [on, setOn] = useState(true);
   const [jourCharge, setJourCharge] = useState(false);
 
-  const sourcesAllumee = [...allumee.sources].sort(
+  const sourcesAllumee = [...(allumee.sources ?? [])].sort(
     (a, b) => a.largeur - b.largeur,
   );
   const sourcesJour = [...jour.sources].sort((a, b) => a.largeur - b.largeur);
@@ -48,7 +48,7 @@ export function HeroLampe({
         className={styles.image}
         data-parallaxe=""
         data-visible={on}
-        src={sourcesAllumee[0].url}
+        src={sourcesAllumee[0]?.url ?? allumee.url}
         srcSet={srcSetDe(allumee)}
         sizes={sizes}
         alt={on ? jour.alt : ""}

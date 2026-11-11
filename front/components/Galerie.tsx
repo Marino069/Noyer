@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { preload } from "react-dom";
-import type { Image } from "@/lib/api/types";
+import type { Media } from "@/lib/api/types";
 import { interpolate } from "@/lib/format";
 import styles from "./Galerie.module.css";
 
@@ -22,7 +22,7 @@ export type GalerieTextes = {
 };
 
 type Props = {
-  medias: Image[];
+  medias: Media[];
   textes: GalerieTextes;
   className?: string;
 };
@@ -37,15 +37,32 @@ function Photo({
   priority,
   className,
 }: {
-  image: Image;
+  image: Media;
   sizes: string;
   eager?: boolean;
   /** Image LCP : priorité de chargement haute. */
   priority?: boolean;
   className?: string;
 }) {
-  const sources = [...image.sources].sort((a, b) => a.largeur - b.largeur);
-  if (sources.length === 0) return null;
+  const sources = [...(image.sources ?? [])].sort(
+    (a, b) => a.largeur - b.largeur,
+  );
+  if (sources.length === 0) {
+    if (!image.url) return null;
+    return (
+      // eslint-disable-next-line @next/next/no-img-element -- image externe sans sources (contrat API)
+      <img
+        className={className}
+        src={image.url}
+        alt={image.alt}
+        width={image.largeur_origine}
+        height={image.hauteur_origine}
+        loading={eager ? "eager" : "lazy"}
+        fetchPriority={priority ? "high" : undefined}
+        draggable={false}
+      />
+    );
+  }
   return (
     // eslint-disable-next-line @next/next/no-img-element -- sources WebP fournies par l'API (srcset)
     <img
@@ -99,7 +116,9 @@ export function Galerie({ medias, textes, className }: Props) {
   const courante = medias[index];
   if (index === 0) {
     // Image LCP de la fiche : préchargée dès le rendu serveur, en priorité haute.
-    const sources = [...courante.sources].sort((a, b) => a.largeur - b.largeur);
+    const sources = [...(courante.sources ?? [])].sort(
+      (a, b) => a.largeur - b.largeur,
+    );
     if (sources.length > 0) {
       preload(sources[0].url, {
         as: "image",
@@ -194,7 +213,7 @@ export function Galerie({ medias, textes, className }: Props) {
       {total > 1 ? (
         <ul className={styles.thumbs} aria-label={textes.thumbnails}>
           {medias.map((m, i) => (
-            <li key={`${i}-${m.sources[0]?.url}`}>
+            <li key={`${i}-${m.sources?.[0]?.url ?? m.url}`}>
               <button
                 type="button"
                 className={styles.thumb}

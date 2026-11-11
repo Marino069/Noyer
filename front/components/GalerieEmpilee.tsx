@@ -1,11 +1,11 @@
 import { preload } from "react-dom";
-import type { Image } from "@/lib/api/types";
+import type { Media } from "@/lib/api/types";
 import { LampeAllumable } from "./LampeAllumable";
 import { Loupe } from "./Loupe";
 import styles from "./GalerieEmpilee.module.css";
 
 type Props = {
-  medias: Image[];
+  medias: Media[];
   /** Cote affichée sur la grande vue (« H 42 cm »), absente si inconnue. */
   cote?: string;
   /** Message quand il n'y a aucune photo. */
@@ -13,7 +13,7 @@ type Props = {
   label: string;
   /** Interrupteur sur la grande vue (absent = pas d'interrupteur). */
   interrupteur?: {
-    allumee: Image;
+    allumee: Media;
     libelleAllumer: string;
     libelleEteindre: string;
   };
@@ -22,8 +22,8 @@ type Props = {
 const SIZES_GRANDE = "(min-width: 900px) 60vw, 100vw";
 const SIZES_CARREE = "(min-width: 900px) 30vw, 50vw";
 
-function sourcesTriees(image: Image) {
-  return [...image.sources].sort((a, b) => a.largeur - b.largeur);
+function sourcesTriees(image: Media) {
+  return [...(image.sources ?? [])].sort((a, b) => a.largeur - b.largeur);
 }
 
 function Photo({
@@ -33,7 +33,7 @@ function Photo({
   className,
   transition,
 }: {
-  image: Image;
+  image: Media;
   sizes: string;
   priority?: boolean;
   className: string;
@@ -41,7 +41,22 @@ function Photo({
   transition?: boolean;
 }) {
   const sources = sourcesTriees(image);
-  if (sources.length === 0) return null;
+  if (sources.length === 0) {
+    if (!image.url) return null;
+    return (
+      // eslint-disable-next-line @next/next/no-img-element -- image externe sans sources (contrat API)
+      <img
+        className={className}
+        src={image.url}
+        alt={image.alt}
+        width={image.largeur_origine}
+        height={image.hauteur_origine}
+        loading={priority ? "eager" : "lazy"}
+        fetchPriority={priority ? "high" : undefined}
+        data-vt-photo={transition ? "" : undefined}
+      />
+    );
+  }
   return (
     // eslint-disable-next-line @next/next/no-img-element -- sources WebP fournies par l'API (srcset)
     <img
@@ -117,7 +132,7 @@ export function GalerieEmpilee({
         <div className={styles.carrees}>
           {carrees.map((m, i) => (
             <Photo
-              key={`${i}-${m.sources[0]?.url}`}
+              key={`${i}-${m.sources?.[0]?.url ?? m.url}`}
               image={m}
               sizes={SIZES_CARREE}
               className={styles.carree}

@@ -9,7 +9,16 @@ export type Image = {
   sources: { largeur: 480 | 960 | 1600; url: string }[];
 };
 
-/** `image_principale` : `url` + `alt` seulement pour une image externe, le reste pour une photo téléversée. */
+/** Média d'une fiche produit : `{ url, alt }` seul pour une image non téléversée. */
+export type Media = {
+  alt: string;
+  url?: string;
+  largeur_origine?: number;
+  hauteur_origine?: number;
+  sources?: Image["sources"];
+};
+
+/** `image_principale` :`url` + `alt` seulement pour une image externe, le reste pour une photo téléversée. */
 export type ImagePrincipale = {
   alt: string;
   url?: string;
@@ -87,7 +96,7 @@ export type ProduitDetail = {
     culot: string;
   } | null;
   matieres: { nom: string; role: string; entretien: string }[];
-  medias: Image[];
+  medias: Media[];
   autre_gamme: string | null;
 };
 

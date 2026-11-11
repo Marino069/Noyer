@@ -1,5 +1,5 @@
 import { preload } from "react-dom";
-import type { HeroAccueil, Image } from "@/lib/api/types";
+import type { HeroAccueil, Image, Media } from "@/lib/api/types";
 import { Button } from "./Button";
 import { HeroLampe } from "./HeroLampe";
 import styles from "./Hero.module.css";
@@ -20,7 +20,7 @@ type HeroProps = {
    * Absent = pas d'interrupteur, seule l'image du contenu s'affiche.
    */
   interrupteur?: {
-    allumee: Image;
+    allumee: Media;
     libelleAllumer: string;
     libelleEteindre: string;
   };
@@ -39,8 +39,8 @@ function Titre({ titre, accent }: { titre: string; accent: string | null }) {
   );
 }
 
-const trier = (image: Image) =>
-  [...image.sources].sort((a, b) => a.largeur - b.largeur);
+const trier = (image: Image | Media) =>
+  [...(image.sources ?? [])].sort((a, b) => a.largeur - b.largeur);
 
 /**
  * Hero de la homepage : lampe en plein écran (≈ 860 px), dégradé vers le fond,
