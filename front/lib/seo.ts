@@ -1,6 +1,6 @@
 import { locales, type Locale } from "@/i18n/config";
 import { SITE_URL } from "@/lib/env";
-import type { Disponibilite, Image, ProduitDetail } from "@/lib/api";
+import type { Disponibilite, Media, ProduitDetail } from "@/lib/api";
 
 // hreflang : une entrée par langue active (+ x-default). `pathFor` donne le
 // chemin public d'une page pour une langue donnée.
@@ -15,13 +15,13 @@ export function languageAlternates(
 }
 
 // Image Open Graph : la plus grande source disponible.
-export function ogImage(image: Image | undefined | null) {
-  if (!image || image.sources.length === 0) return [];
-  const source = image.sources.reduce((a, b) =>
-    b.largeur > a.largeur ? b : a,
-  );
+export function ogImage(image: Media | undefined | null) {
+  const sources = image?.sources ?? [];
+  if (!image || sources.length === 0) return [];
+  const source = sources.reduce((a, b) => (b.largeur > a.largeur ? b : a));
   const height = Math.round(
-    (source.largeur * image.hauteur_origine) / image.largeur_origine,
+    (source.largeur * (image.hauteur_origine ?? 0)) /
+      (image.largeur_origine || 1),
   );
   return [{ url: source.url, width: source.largeur, height, alt: image.alt }];
 }
@@ -63,7 +63,7 @@ export function productJsonLd({
     name: `${produit.modele.nom} ${produit.gamme}`,
     description,
     image: produit.medias.flatMap((m) =>
-      m.sources.length === 0
+      !m.sources || m.sources.length === 0
         ? []
         : [
             absoluteUrl(

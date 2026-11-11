@@ -102,7 +102,7 @@ describe("[E4-02] Galerie accessible, alt par photo", () => {
     // L'image « allumée » est décorative et chargée à la demande (#311) :
     // elle n'est pas dans la galerie au rendu initial.
     const affichees = classic.medias.filter(
-      (m) => !m.sources.some((s) => s.url.includes("-allumee")),
+      (m) => !m.sources?.some((s) => s.url.includes("-allumee")),
     );
     for (const { alt } of affichees) {
       expect(screen.getAllByRole("img", { name: alt }).length).toBeGreaterThan(

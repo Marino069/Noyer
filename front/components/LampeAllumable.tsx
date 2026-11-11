@@ -1,13 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import type { Image } from "@/lib/api/types";
+import type { Media } from "@/lib/api/types";
 import { Interrupteur } from "./Interrupteur";
 import styles from "./LampeAllumable.module.css";
 
 type Props = {
   /** Version allumée de la lampe (`<slug>-allumee`), chargée seulement à la demande. */
-  allumee: Image;
+  allumee: Media;
   sizes: string;
   libelleAllumer: string;
   libelleEteindre: string;
@@ -38,7 +38,9 @@ export function LampeAllumable({
     };
   }, [allumeeOn]);
 
-  const sources = [...allumee.sources].sort((a, b) => a.largeur - b.largeur);
+  const sources = [...(allumee.sources ?? [])].sort(
+    (a, b) => a.largeur - b.largeur,
+  );
 
   return (
     <>

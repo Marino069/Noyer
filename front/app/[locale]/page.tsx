@@ -100,7 +100,7 @@ export default async function HomePage({ params }: Props) {
   // Version allumée de la lampe (média « <slug>-allumee » de la fiche), si l'API la fournit.
   const imageAllumee = [detailPremium, detailClassic]
     .flatMap((d) => (d?.ok ? d.data.medias : []))
-    .find((m) => m.sources.some((s) => s.url.includes("-allumee")));
+    .find((m) => m.sources?.some((s) => s.url.includes("-allumee")));
 
   // Série Premium en cours : disponibilités de l'API.
   const dispoPremium = premium ? disponibilites[premium.slug] : undefined;

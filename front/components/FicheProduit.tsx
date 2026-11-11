@@ -41,7 +41,7 @@ export function FicheProduit({
   const premium = produit.gamme === "Premium";
   const imageAllumee = interrupteur
     ? produit.medias.find((m) =>
-        m.sources.some((s) => s.url.includes("-allumee")),
+        m.sources?.some((s) => s.url.includes("-allumee")),
       )
     : undefined;
   // Le média allumé n'est pas dans la galerie : LampeAllumable ne le charge

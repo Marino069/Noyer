@@ -86,7 +86,7 @@ describe("E4-05 – critères d'acceptation", () => {
     });
     expect(ld.image).toHaveLength(produit.medias.length);
     produit.medias.forEach((m, i) => {
-      const largest = m.sources.reduce((a, b) =>
+      const largest = m.sources!.reduce((a, b) =>
         b.largeur > a.largeur ? b : a,
       );
       const expected = /^https?:\/\//.test(largest.url)
