@@ -8,7 +8,9 @@ import type {
   ProduitResume,
 } from "@/lib/api/types";
 
-// Illustrations de démonstration (front/public/mocks/<nom>-<largeur>.webp), en attendant les vraies photos.
+// Images de démonstration (front/public/mocks/<nom>-<largeur>.webp). Lucerne : photo officielle du
+// lampadaire (« -jour ») et ses retouches (abat-jour éteint, pénombre « -allumee », laiton du
+// Premium). Le reste : illustrations, en attendant les vraies photos.
 const image = (alt: string, nom: string): Image => ({
   alt,
   largeur_origine: 1600,
@@ -28,7 +30,7 @@ export const heroAccueil: HeroAccueil = {
   cta_chemin: "/produits/premium",
   // Version « jour » ; la version allumée (`lucerne-premium-allumee`) vient des médias de la fiche.
   image: image(
-    "Lampe Lucerne Premium, pièce n° 07, posée dans la pénombre",
+    "Lampadaire Lucerne Premium : trépied en noyer chaussé de laiton, abat-jour en toile tissée",
     "lucerne-premium",
   ),
 };
@@ -67,14 +69,20 @@ export const produits: ProduitResume[] = [
     modele: "Lucerne",
     gamme: "Classic",
     prix_ttc_centimes: 48000,
-    image_principale: image("Lampe Lucerne Classic", "lucerne-classic"),
+    image_principale: image(
+      "Lampadaire Lucerne Classic : trépied en noyer, abat-jour en toile tissée",
+      "lucerne-classic",
+    ),
   },
   {
     slug: "lucerne-premium",
     modele: "Lucerne",
     gamme: "Premium",
     prix_ttc_centimes: 124000,
-    image_principale: image("Lampe Lucerne Premium", "lucerne-premium"),
+    image_principale: image(
+      "Lampadaire Lucerne Premium : trépied en noyer chaussé de laiton, abat-jour cerclé de laiton",
+      "lucerne-premium",
+    ),
   },
   {
     slug: "leman-classic",
@@ -92,7 +100,8 @@ const modeles: Record<string, Omit<Modele, "produits">> = {
   lucerne: {
     slug: "lucerne",
     nom: "Lucerne",
-    description: "Pied en noyer massif, finition laiton.",
+    description:
+      "Lampadaire trépied en noyer massif, abat-jour cylindrique en toile tissée.",
   },
   leman: {
     slug: "leman",
@@ -104,6 +113,61 @@ const modeles: Record<string, Omit<Modele, "produits">> = {
 export const modeleDe = (nom: string) =>
   Object.values(modeles).find((m) => m.nom === nom)!;
 
+// Lucerne : hauteur estimée d'après la photo officielle (abat-jour Ø 28 cm), à confirmer.
+const caracteristiquesDe = (modele: string) =>
+  modele === "lucerne"
+    ? { hauteur_cm: 150, diametre_cm: 28, culot: "E27" }
+    : { hauteur_cm: 42, diametre_cm: 28, culot: "E27" };
+
+function matieresDe(modele: string, gamme: ProduitResume["gamme"]) {
+  if (modele !== "lucerne") {
+    return [
+      { nom: "Noyer", role: "Pied", entretien: "Huiler une fois par an." },
+      { nom: "Laiton", role: "Finition", entretien: "Chiffon doux et sec." },
+    ];
+  }
+  const matieres = [
+    { nom: "Noyer", role: "Pieds", entretien: "Huiler une fois par an." },
+    {
+      nom: "Toile tissée",
+      role: "Abat-jour",
+      entretien: "Dépoussiérer avec une brosse douce.",
+    },
+  ];
+  return gamme === "Premium"
+    ? [
+        ...matieres,
+        {
+          nom: "Laiton",
+          role: "Sabots et cerclages",
+          entretien: "Chiffon doux et sec.",
+        },
+      ]
+    : matieres;
+}
+
+// Lucerne : la photo officielle (« -jour ») prend la place du gros plan illustré.
+function mediasDe(modele: string, slug: string, principale: Image): Image[] {
+  const { alt } = principale;
+  if (modele === "lucerne") {
+    return [
+      principale,
+      image(
+        `${alt}, vue rapprochée de l'abat-jour et des pieds`,
+        `${slug}-detail`,
+      ),
+      image(`${alt}, allumé en journée`, `${slug}-jour`),
+      image(`${alt}, allumé dans la pénombre`, `${slug}-allumee`),
+    ];
+  }
+  return [
+    principale,
+    image(`${alt}, vue de détail du pied en noyer`, `${slug}-detail`),
+    image(`${alt}, allumée dans une pièce`, `${slug}-allumee`),
+    image("Grain du noyer, gros plan", "matiere-noyer"),
+  ];
+}
+
 export function detailDe(p: ProduitResume): ProduitDetail {
   const modele = modeleDe(p.modele);
   const autre = produits.find(
@@ -114,24 +178,10 @@ export function detailDe(p: ProduitResume): ProduitDetail {
     modele,
     gamme: p.gamme,
     prix_ttc_centimes: p.prix_ttc_centimes,
-    caracteristiques: { hauteur_cm: 42, diametre_cm: 28, culot: "E27" },
-    matieres: [
-      { nom: "Noyer", role: "Pied", entretien: "Huiler une fois par an." },
-      { nom: "Laiton", role: "Finition", entretien: "Chiffon doux et sec." },
-    ],
+    caracteristiques: caracteristiquesDe(modele.slug),
+    matieres: matieresDe(modele.slug, p.gamme),
     medias: p.image_principale
-      ? [
-          p.image_principale as Image,
-          image(
-            `${p.image_principale.alt}, vue de détail du pied en noyer`,
-            `${p.slug}-detail`,
-          ),
-          image(
-            `${p.image_principale.alt}, allumée dans une pièce`,
-            `${p.slug}-allumee`,
-          ),
-          image("Grain du noyer, gros plan", "matiere-noyer"),
-        ]
+      ? mediasDe(modele.slug, p.slug, p.image_principale as Image)
       : [],
     autre_gamme: autre?.slug ?? null,
   };

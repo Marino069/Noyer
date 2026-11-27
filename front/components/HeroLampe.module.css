@@ -14,6 +14,11 @@
   opacity: 0.9;
 }
 
+/* Lampe éteinte : la pièce s'assombrit, et le texte posé dessus reste lisible. */
+.image[data-jour] {
+  filter: brightness(0.62);
+}
+
 /* Interrupteur discret : en haut à droite sur mobile (hors du texte), en bas à droite dès 900 px. */
 .interrupteur {
   position: absolute;
