@@ -64,6 +64,7 @@ export function HeroLampe({
         <img
           className={styles.image}
           data-parallaxe=""
+          data-jour=""
           data-visible={!on}
           src={sourcesJour[0].url}
           srcSet={srcSetDe(jour)}

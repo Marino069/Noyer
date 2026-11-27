@@ -38,11 +38,12 @@
   aspect-ratio: 16 / 9;
 }
 
-/* Cote d'atelier : filet vertical et mesure en italique. */
+/* Cote d'atelier : filet vertical et mesure en italique.
+   Le filet couvre la hauteur de la lampe telle qu'elle est cadrée sur la photo. */
 .coteTrait {
   position: absolute;
-  top: 10%;
-  bottom: 17%;
+  top: 21%;
+  bottom: 19%;
   right: 22%;
   width: 1px;
   background: var(--brass);
@@ -51,7 +52,7 @@
 
 .cote {
   position: absolute;
-  top: 44%;
+  top: 49%;
   right: calc(22% - 4rem);
   font-family: var(--serif);
   font-style: italic;

@@ -125,7 +125,7 @@ describe("[E4-02] Fiche produit — bloc infos", () => {
 
   it("affiche dimensions, matières, entretien, prix et disponibilité", () => {
     rendre();
-    expect(screen.getByText(/Hauteur 42 cm/)).toBeInTheDocument();
+    expect(screen.getByText(/Hauteur 150 cm/)).toBeInTheDocument();
     expect(screen.getByText(/Diamètre 28 cm/)).toBeInTheDocument();
     expect(screen.getByText(/Noyer — Pied/)).toBeInTheDocument();
     expect(screen.getByText(/Huiler une fois par an/)).toBeInTheDocument();
